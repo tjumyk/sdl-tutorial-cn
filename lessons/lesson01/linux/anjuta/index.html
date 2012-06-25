@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+ <head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> 
+  <title>Lazy Foo' Productions</title> 
+  <link rel="stylesheet" type="text/css" href="../../../../layout/lazy.css" /> 
+  <script src="../../../../layout/lazy.js">
+</script> 
+ </head> 
+ <body> 
+  <div class="header"> 
+   <h1>Lazy Foo' Productions</h1> 
+   <div class="nav"> 
+    <a class="nav" href="../../../../index.php">News</a> 
+    <a class="nav" href="../../../../faq.php">FAQs</a> 
+    <a class="nav" href="../../../../games/index.php">Games</a> 
+    <a class="nav" href="../../../index.php">Tutorials</a> 
+    <a class="nav" href="../../../../articles/index.php">Articles</a> 
+    <a class="nav" href="../../../../../forums.libsdl.org/default.htm">SDL Forums</a> 
+    <a class="nav" href="../../../../contact.php">Contact</a> 
+    <a class="nav" href="../../../../donate.php">Donations</a> 
+   </div> 
+   <div class="ads"> 
+    <script type="text/javascript"><!--
+google_ad_client = "pub-5880704953225255";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "text_image";
+google_ad_channel ="";
+google_color_border = "6699CC";
+google_color_bg = "003366";
+google_color_link = "FFFFFF";
+google_color_url = "AECCEB";
+google_color_text = "AECCEB";
+//--></script> 
+    <acript type="text/javascript" src="../../../../../pagead2.googlesyndication.com/pagead/show_ads.js"> 
+    </acript> 
+   </div> 
+  </div> 
+  <div class="content"> 
+   <div class="tutPreface"> 
+    <h1 class="tutHead">Setting up SDL in Anjuta</h1> 
+    <h6>Last Updated 9/26/09</h6> 
+   </div> 
+   <div class="tutText"> 
+    <a class="tutLink" name="1" href="#1">1)</a>Start up Anjuta and start a new project. 
+    <br /> 
+    <div class="tutImg"> 
+     <img src="new_project.png" /> 
+    </div> This will start up the application wizard. 
+    <br /> 
+    <br /> 
+    <a class="tutLink" name="2" href="#2">2)</a>Set your new project to be a generic/terminal project. 
+    <br /> 
+    <div class="tutImg"> 
+     <img src="project_type.png" /> 
+    </div> 
+    <br /> 
+    <a class="tutLink" name="3" href="#3">3)</a>Hit next then make sure it's a C++ project: 
+    <br /> 
+    <div class="tutImg"> 
+     <img src="cpp.png" /> 
+    </div> Everything else with the application wizard should be self explanatory. 
+    <br /> 
+    <br /> 
+    <a class="tutLink" name="4" href="#4">4)</a>Once the application wizard is done creating your project go to the compiler and linker settings: 
+    <br /> 
+    <div class="tutImg"> 
+     <img src="settings.png" /> 
+    </div> 
+    <br /> 
+    <a class="tutLink" name="5" href="#5">5)</a>Under the libraries tab, type in: 
+    <h6>SDL</h6> 
+    <div class="tutImg"> 
+     <img src="link.png" /> 
+    </div> 
+    <br /> 
+    <a class="tutLink" name="6" href="#6">6)</a>Then hit add: 
+    <br /> 
+    <div class="tutImg"> 
+     <img src="add.png" /> 
+    </div> 
+    <br /> 
+    <a class="tutLink" name="7" href="#7">7)</a>The close the window and hit yes on the prompt that pops up: 
+    <br /> 
+    <div class="tutImg"> 
+     <img src="yes.png" /> 
+    </div> 
+    <br /> 
+    <a class="tutLink" name="8" href="#8">8)</a>Paste the following code into the source file Anjuta provided for you: 
+   </div> 
+   <div class="tutCode">
+     #include &quot;SDL/SDL.h&quot; int main( int argc, char* args[] ) { //Start SDL SDL_Init( SDL_INIT_EVERYTHING ); //Quit SDL SDL_Quit(); return 0; } 
+   </div> 
+   <div class="tutText"> 
+    <a class="tutLink" name="9" href="#9">9)</a>Now save the source file and build your project. If there's no errors, you're finished. Otherwise go back and make sure you didn't skip a step. 
+   </div> 
+   <div class="tutFooter">
+     The RPM also installed the SDL documentation on your computer. 
+    <br /> 
+    <br /> It should be at usr/doc/SDL-devel-1.2.9/index.html, 
+    <br /> usr/doc/SDL-devel-1.2.10/index.html if you're using SDL 1.2.10, 
+    <br /> usr/doc/SDL-devel-1.2.11/index.html if you're using SDL 1.2.11, etc, etc. 
+    <br /> 
+    <br /> Bookmark it and keep it handy for reference. 
+    <br /> 
+    <br /> 
+    <a class="leftNav" href="../../../index.php">Tutorial Index</a> 
+    <a class="rightNav" href="../../index2.php">Part 2: Getting an Image on the Screen</a> 
+    <br /> 
+   </div> 
+  </div> 
+  <div class="footer"> 
+   <div class="ads"> 
+    <script type="text/javascript"><!--
+google_ad_client = "pub-5880704953225255";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "text_image";
+google_ad_channel ="";
+google_color_border = "6699CC";
+google_color_bg = "003366";
+google_color_link = "FFFFFF";
+google_color_url = "AECCEB";
+google_color_text = "AECCEB";
+//--></script> 
+    <acript type="text/javascript" src="../../../../../pagead2.googlesyndication.com/pagead/show_ads.js"> 
+    </acript> 
+   </div> 
+   <div class="nav"> 
+    <a class="nav" href="../../../../index.php">News</a> 
+    <a class="nav" href="../../../../faq.php">FAQs</a> 
+    <a class="nav" href="../../../../games/index.php">Games</a> 
+    <a class="nav" href="../../../index.php">Tutorials</a> 
+    <a class="nav" href="../../../../articles/index.php">Articles</a> 
+    <a class="nav" href="../../../../../forums.libsdl.org/default.htm">SDL Forums</a> 
+    <a class="nav" href="../../../../contact.php">Contact</a> 
+    <a class="nav" href="../../../../donate.php">Donations</a> 
+   </div> 
+   <h6> Copyright Lazy Foo' Productions 2004-2011 </h6> 
+  </div>  
+ </body>
+</html>

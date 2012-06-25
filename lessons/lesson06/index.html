@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第6课 - 局部Blit和拼贴图 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第6课 - 局部Blit和拼贴图</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson06/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson05/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson07/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Clip Blitting and Sprite Sheets</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/28/09</h6> Sprite sheets are collections of images held in a single image file. They're useful for when you have large amounts of images but don't want to have to deal with many image files. 
+       <br /> 
+       <br /> In order to get the individual images you have to be able to clip the part you want when blitting. Now in this lesson we have a sprite sheet with 4 different dot sprites on it. This tutorial covers how to clip a sprite from a sprite sheet. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The surfaces
+SDL_Surface *dots = NULL;
+SDL_Surface *screen = NULL;
+
+//The event structure
+SDL_Event event;
+
+//The portions of the sprite map to be blitted
+SDL_Rect clip[ 4 ];
+</pre> 
+      <div class="tutText">
+        Here we have some global variables. There's the screen surface, and the event structure from before. We also have the &quot;dots&quot; surface which is the sprite sheet that contains all the dot sprites. 
+       <br /> 
+       <br /> There's also an array of four SDL_Rects. These hold the offsets and dimensions of the 4 dot sprites. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:10 lang-cpp">void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL )
+{
+    //Holds offsets
+    SDL_Rect offset;
+    
+    //Get offsets
+    offset.x = x;
+    offset.y = y;
+    
+    //Blit
+    SDL_BlitSurface( source, clip, destination, &amp;offset );
+}
+</pre> 
+      <div class="tutText">
+        Here's the surface blitting function from before but with some adjustments. 
+       <br /> 
+       <br /> The new argument is the SDL_Rect called &quot;clip&quot; that defines the rectangular piece of the surface we want to blit. 
+       <br /> 
+       <br /> We set NULL to be the default argument, which means 
+       <br /> apply_surface( 0, 0, image, screen, NULL ); 
+       <br /> 
+       <br /> and 
+       <br /> 
+       <br /> apply_surface( 0, 0, image, screen ); 
+       <br /> do the exact same thing. 
+       <br /> 
+       <br /> We also changed the way we call SDL_BlitSurface(). We no longer just set the second argument to NULL, we now put the &quot;clip&quot; argument in it. 
+       <br /> 
+       <br /> Now SDL_BlitSurface() will blit the region of the source surface defined by &quot;clip&quot;. If &quot;clip&quot; is NULL, then it will blit the entire source surface. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:22 lang-cpp">    //Clip range for the top left
+    clip[ 0 ].x = 0;
+    clip[ 0 ].y = 0;
+    clip[ 0 ].w = 100;
+    clip[ 0 ].h = 100;
+    
+    //Clip range for the top right
+    clip[ 1 ].x = 100;
+    clip[ 1 ].y = 0;
+    clip[ 1 ].w = 100;
+    clip[ 1 ].h = 100;
+    
+    //Clip range for the bottom left
+    clip[ 2 ].x = 0;
+    clip[ 2 ].y = 100;
+    clip[ 2 ].w = 100;
+    clip[ 2 ].h = 100;
+    
+    //Clip range for the bottom right
+    clip[ 3 ].x = 100;
+    clip[ 3 ].y = 100;
+    clip[ 3 ].w = 100;
+    clip[ 3 ].h = 100;
+</pre> 
+      <div class="tutText">
+        In the main function after everything is initialized and the files are loaded, we set the clip rectangles. 
+       <br /> 
+       <br /> We're going to take this sprite sheet: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="sheet.jpg" /> 
+       </div> 
+       <br /> and set the clip rectangles to their designated regions: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="sprites.jpg" /> 
+       </div> like so. 
+       <br /> 
+       <br /> Now we're ready to blit the individual sprites from the sprite sheet. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:45 lang-cpp">    //Fill the screen white
+    SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+</pre> 
+      <div class="tutText">
+        Now we fill the screen white using SDL_FillRect(). What SDL_FillRect() does is take the surface in the first argument, and fill the region in the second argument with color in the third argument. 
+       <br /> 
+       <br /> The region in the second argument is the surface's clip_rect or the entire region of the surface. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:47 lang-cpp">    //Apply the images to the screen
+    apply_surface( 0, 0, dots, screen, &amp;clip[ 0 ] );
+    apply_surface( 540, 0, dots, screen, &amp;clip[ 1 ] );
+    apply_surface( 0, 380, dots, screen, &amp;clip[ 2 ] );
+    apply_surface( 540, 380, dots, screen, &amp;clip[ 3 ] );
+    
+    //Update the screen
+    if( SDL_Flip( screen ) == -1 )
+    {
+        return 1;    
+    }
+</pre> 
+      <div class="tutText">
+        Now we actually blit the sprites. Notice that every time we're blitting the same surface. The only difference is that we're blitting a different piece of the surface. 
+       <br /> 
+       <br /> The final result should look like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="result.jpg" /> 
+       </div> 
+       <br /> Now when you have many images you want to use, you don't have to keep thousands of image files. You can put collections of sprites in a single image and just blit the portion you want to use. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson06">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson05/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson07/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

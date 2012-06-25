@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第34课 - 信号 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第34课 - 信号</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson34/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson33/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson35/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Semaphores</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> When you have multiple threads running you have to make sure that they don't try to manipulate the same piece of data at the same time. In this tutorial we'll use semaphores to lock threads to prevent them from crashing into each other. 
+      </div> 
+      <div class="tutText">
+        Before we start there's something that has to be said. In this tutorial we have video functions running in separate threads. You should never do this in a real application. It's just bad software design and in some cases can cause your OS to become unstable. The only reason we're doing it here is because it's a small program and nothing's going to go wrong. We're doing it here just as a simple demonstration of semaphores in action. 
+       <br /> 
+       <br /> Now with that out of the way let's start with the tutorial. In this program we're going to have two threads trying to blit surfaces to screen and update the screen at the same time. Having two threads trying to manipulate the same data at the same time is a recipe for disaster. This is where the semaphores come into play. What the semaphore will do is allow only one thread to manipulate to the screen at a time. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The threads that will be used
+SDL_Thread *threadA = NULL;
+SDL_Thread *threadB = NULL;
+
+//The protective semaphore
+SDL_sem *videoLock = NULL;
+</pre> 
+      <div class="tutText">
+        At the top of our program we have our two threads we're going to have running along with our semaphore. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:7 lang-cpp">bool init()
+{
+    //Initialize all SDL subsystems
+    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+    {
+        return false;    
+    }
+    
+    //Set up the screen
+    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+    
+    //If there was an error in setting up the screen
+    if( screen == NULL )
+    {
+        return false;    
+    }
+    
+    //Initialize SDL_ttf
+    if( TTF_Init() == -1 )
+    {
+        return false;    
+    }
+    
+    //Create the semaphore
+    videoLock = SDL_CreateSemaphore( 1 );
+    
+    //Set the window caption
+    SDL_WM_SetCaption( &quot;Testing Threads&quot;, NULL );
+    
+    //If everything initialized fine
+    return true;
+}
+</pre> 
+      <div class="tutText">
+        Before we can use a semaphore you have to create it using SDL_CreateSemaphore(). 
+       <br /> 
+       <br /> You may be wondering what that 1 argument does. I'll explain later. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:39 lang-cpp">int blitter_a( void *data )
+{
+    //Y offset
+    int y = 10;
+    
+    //Go through the surface
+    for( int b = 0; b &lt; 5; b++ )
+    {
+        //Wait
+        SDL_Delay( 200 );
+    
+        //Show surface
+        show_surface( ( ( SCREEN_WIDTH / 2 ) - text[ b ]-&gt;w ) / 2, y, text[ b ] );
+        
+        //Move down
+        y += 100;
+    }
+    
+    return 0;
+}
+
+int blitter_b( void *data )
+{
+    //Y offset
+    int y = 10;
+    
+    //Go through the surface
+    for( int b = 0; b &lt; 5; b++ )
+    {
+        //Wait
+        SDL_Delay( 200 );
+    
+        //Show surface
+        show_surface( ( SCREEN_WIDTH / 2 ) + ( ( ( SCREEN_WIDTH / 2 ) - text[ b ]-&gt;w ) / 2 ), y, text[ b ] );
+        
+        //Move down
+        y += 100;
+    }
+    
+    return 0;
+}
+</pre> 
+      <div class="tutText">
+        Here are our threads functions. All they do is go through an array of surfaces and show them on the screen. blitter_a() blits surfaces on the left of the screen and blitter_b() blits surfaces on the right. 
+       <br /> 
+       <br /> As you can see we're not using our usual apply_surface() function. We're using show_surface(), a modified version of apply_surface() which applies the surface using SDL_BlitSurface() and updates the screen using SDL_Flip() all in one function. You'll see it in a little bit. 
+       <br /> 
+       <br /> Since we're going to have the threads run at the same time we have prevent them from trying to manipulate the screen at the same time. To do this we're going to have to protect the show_surface() function using our semaphore. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">void show_surface( int x, int y, SDL_Surface* source )
+{
+    //Lock
+    SDL_SemWait( videoLock );
+    
+    //Holds offsets
+    SDL_Rect offset;
+    
+    //Get offsets
+    offset.x = x;
+    offset.y = y;
+    
+    //Blit
+    SDL_BlitSurface( source, NULL, screen, &amp;offset );
+    
+    //Update the screen
+    SDL_Flip( screen );
+
+    //Unlock
+    SDL_SemPost( videoLock );
+}
+</pre> 
+      <div class="tutText">
+        Here's our show_surface() function which blits a surface then updates the screen. We also put SDL_SemWait() at the top of our function and SDL_SemPost() at the bottom. 
+       <br /> 
+       <br /> What SDL_SemWait() does is lock the semaphore: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="lock.png" /> 
+       </div> 
+       <br /> So when another thread tries to get through, it has to wait: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="wait.png" /> 
+       </div> 
+       <br /> Until SDL_SemPost() is called to unlock the semaphore: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="unlock.png" /> 
+       </div> 
+       <br /> Then the next thread does its thing and locks the semaphore behind it: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="nextthread.png" /> 
+       </div> 
+       <br /> Because SDL_BlitSurface() and SDL_Flip() are protected by the semaphore, only one thread can call video functions at a time so there's no conflict. 
+       <br /> 
+       <br /> As I mentioned earlier we passed 1 argument in SDL_CreateSemaphore() in our init() function. That 1 is how many threads can get past the semaphore before it locks. If we wanted to we could have allowed 2 threads to pass, but that would be pointless in this case. Most of the time you will only want one thread to pass through a semaphore before locking. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:101 lang-cpp">    //Show the background
+    show_surface( 0, 0, background );
+        
+    //Create and run the threads
+    threadA = SDL_CreateThread( blitter_a, NULL );
+    threadB = SDL_CreateThread( blitter_b, NULL );
+    
+    //Wait for the threads to finish
+    SDL_WaitThread( threadA, NULL );
+    SDL_WaitThread( threadB, NULL );
+    
+    //While the user hasn't quit
+    while( quit == false )
+    {
+        //If there's an event to handle
+        if( SDL_PollEvent( &amp;event ) )
+        {
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+    }
+</pre> 
+      <div class="tutText">
+        In the main() thread after everything is loaded and initialized we show the background on the screen. 
+       <br /> 
+       <br /> Then we run our two threads and wait for them to finish by using SDL_WaitThread(). After the threads are finished we simply wait for the user to quit. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:126 lang-cpp">void clean_up()
+{
+    //Destroy semaphore
+    SDL_DestroySemaphore( videoLock );
+    
+    //Free the surfaces
+    SDL_FreeSurface( background );
+    
+    //Free text
+    for( int t = 0; t &lt; 5; t++ )
+    {
+        SDL_FreeSurface( text[ t ] );
+    }
+    
+    //Close the font
+    TTF_CloseFont( font );
+    
+    //Quit SDL_ttf
+    TTF_Quit();
+    
+    //Quit SDL
+    SDL_Quit();
+}
+</pre> 
+      <div class="tutText">
+        Don't forget to clean up your semaphore when you're done with it. 
+       <br /> 
+       <br /> We do that in our clean up function using SDL_DestroySemaphore(). 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson34">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson33/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson35/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第31课 - 像素处理和表面翻转 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第31课 - 像素处理和表面翻转</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson31/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson30/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson32/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Pixel Manipulation and Surface Flipping</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> SDL has no built in functions to flip surfaces. So we'll just have to flip surfaces ourselves by playing with the pixels. In this tutorial we will read/write pixels to make our own surface flipping function. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">bool load_files()
+{
+    //Load the image
+    topLeft = load_image( &quot;corner.png&quot; );
+    
+    //If there was an problem loading the image
+    if( topLeft == NULL )
+    {
+        return false;    
+    }
+    
+    //If everything loaded fine
+    return true;    
+}
+</pre> 
+      <div class="tutText">
+        In our loading function we only load one image: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="corner.png" /> 
+       </div> 
+       <br /> In order to show all four corners we will have to create them ourselves by flipping the image we loaded. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:15 lang-cpp">Uint32 get_pixel32( SDL_Surface *surface, int x, int y )
+{
+    //Convert the pixels to 32 bit
+    Uint32 *pixels = (Uint32 *)surface-&gt;pixels;
+    
+    //Get the requested pixel
+    return pixels[ ( y * surface-&gt;w ) + x ];
+}
+
+void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel )
+{
+    //Convert the pixels to 32 bit
+    Uint32 *pixels = (Uint32 *)surface-&gt;pixels;
+    
+    //Set the pixel
+    pixels[ ( y * surface-&gt;w ) + x ] = pixel;
+}
+</pre> 
+      <div class="tutText">
+        Here's our functions to get and put pixels. In case you missed the bitmap font tutorial, here's a quick review on how pixel access works: 
+       <br /> 
+       <br /> First thing we do is convert the pixel pointer from type void to 32bit integer so we can properly access them. After all, a surface's pixels are nothing more than an array of 32bit integers. Then we get or set the requested pixel. 
+       <br /> 
+       <br /> You maybe be wondering why I don't just go &quot;return pixels[ x ][ y ]&quot;. 
+       <br /> 
+       <br /> The thing is the pixels aren't stored like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="2d.jpg" /> 
+       </div> 
+       <br /> They're stored like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="1d.jpg" /> 
+       </div> in a single dimensional array. It's because different operating systems store 2D arrays differently (At least I think that's why). 
+       <br /> 
+       <br /> So to retrieve the red pixel from the array we multiply the y offset by the width and add the x offset. 
+       <br /> 
+       <br /> These functions only work for 32-bit surfaces. You'll have to make one of your own if you're using a different format. 
+       <br /> 
+       <br /> You can learn more about pixels in 
+       <a class="tutLink" href="../../articles/article03/index.php">article 3</a>. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:32 lang-cpp">SDL_Surface *flip_surface( SDL_Surface *surface, int flags )
+{
+    //Pointer to the soon to be flipped surface
+    SDL_Surface *flipped = NULL;
+    
+    //If the image is color keyed
+    if( surface-&gt;flags &amp; SDL_SRCCOLORKEY )
+    {
+        flipped = SDL_CreateRGBSurface( SDL_SWSURFACE, surface-&gt;w, surface-&gt;h, surface-&gt;format-&gt;BitsPerPixel, surface-&gt;format-&gt;Rmask, surface-&gt;format-&gt;Gmask, surface-&gt;format-&gt;Bmask, 0 );
+    }
+    //Otherwise
+    else
+    {
+        flipped = SDL_CreateRGBSurface( SDL_SWSURFACE, surface-&gt;w, surface-&gt;h, surface-&gt;format-&gt;BitsPerPixel, surface-&gt;format-&gt;Rmask, surface-&gt;format-&gt;Gmask, surface-&gt;format-&gt;Bmask, surface-&gt;format-&gt;Amask );
+    }
+</pre> 
+      <div class="tutText">
+        Now here's our surface flipping function. 
+       <br /> 
+       <br /> At the top we create a blank surface using SDL_CreateRGBSurface(). It may look complicated, but ultimately we're just creating a surface of the same size and format as the surface we are given. 
+       <br /> 
+       <br /> Before we can create the blank surface, we have to check if the surface is color keyed. If it is, we set the alpha mask to 0 on the new blank surface. The reason is if the alpha mask is anything but 0, the color key gets ignored. If the source surface is not color keyed, we just copy its alpha mask to the new blank surface. 
+       <br /> 
+       <br /> Take a look at the SDL Documentation to see how SDL_CreateRGBSurface() works. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:47 lang-cpp">    //If the surface must be locked
+    if( SDL_MUSTLOCK( surface ) )
+    {
+        //Lock the surface
+        SDL_LockSurface( surface );
+    }
+</pre> 
+      <div class="tutText">
+        Before we can start altering pixels we have to check if the surface has to be locked before accessing the pixels using SDL_MUSTLOCK(). If SDL_MUSTLOCK() says we have to lock the surface, we use SDL_LockSurface() to lock the surface. 
+       <br /> 
+       <br /> Now that the surface is locked it's time to mess with the pixels. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:53 lang-cpp">    //Go through columns
+    for( int x = 0, rx = flipped-&gt;w - 1; x &lt; flipped-&gt;w; x++, rx-- )
+    {
+        //Go through rows
+        for( int y = 0, ry = flipped-&gt;h - 1; y &lt; flipped-&gt;h; y++, ry-- )
+        {
+</pre> 
+      <div class="tutText">
+        Here is our nested loops used for going through the pixels. You may be wondering why we declare 2 integers in our for loops. The reason is that when you flip pixels, you have to read them in one direction and write them in reverse. 
+       <br /> 
+       <br /> In the x loop, we declare &quot;x&quot; and &quot;rx&quot;. &quot;x&quot; is initialized to 0, and &quot;rx&quot; (which stands for reverse x) is initialized to the width minus 1 which is the end of the surface. 
+       <br /> 
+       <br /> Then in the middle the condition is normal. At the end &quot;x&quot; is incremented and &quot;rx&quot; is decremented. &quot;x&quot; will start at the beginning and go forward, &quot;rx&quot; starts at the end and goes backward. 
+       <br /> 
+       <br /> So if the surface's width was 10, the for loop will cycle like so: 
+       <br /> &quot;x&quot;&nbsp; : 0 1 2 3 4 5 6 7 8 9 
+       <br /> &quot;rx&quot; : 9 8 7 6 5 4 3 2 1 0 
+       <br /> 
+       <br /> I'm pretty sure you can now figure out what &quot;y&quot; and &quot;ry&quot; do. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:59 lang-cpp">            //Get pixel
+            Uint32 pixel = get_pixel32( surface, x, y );
+            
+            //Copy pixel
+            if( ( flags &amp; FLIP_VERTICAL ) &amp;&amp; ( flags &amp; FLIP_HORIZONTAL ) )
+            {
+                put_pixel32( flipped, rx, ry, pixel );
+            }
+            else if( flags &amp; FLIP_HORIZONTAL )
+            {
+                put_pixel32( flipped, rx, y, pixel );
+            }
+            else if( flags &amp; FLIP_VERTICAL )
+            {
+                put_pixel32( flipped, x, ry, pixel );
+            }
+        }    
+    }
+</pre> 
+      <div class="tutText">
+        Here's the middle of the nested loops. 
+       <br /> 
+       <br /> First we read in a pixel from the source surface. Then if the user passed in the FLIP_VERTICAL and the FLIP_HORIZONTAL flags, we write the pixels to the blank surface right to left, bottom to top. 
+       <br /> 
+       <br /> If the user just passed the FLIP_VERTICAL flag, we write the pixels to the blank surface left to right, bottom to top. 
+       <br /> 
+       <br /> If the user just passed the FLIP_HORIZONTAL flag, we write the pixels to the blank surface right to left, top to bottom. 
+       <br /> 
+       <br /> If you're wondering what the flag values are, they're near the top of the source. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:77 lang-cpp">    //Unlock surface
+    if( SDL_MUSTLOCK( surface ) )
+    {
+        SDL_UnlockSurface( surface );
+    }
+    
+    //Copy color key
+    if( surface-&gt;flags &amp; SDL_SRCCOLORKEY )
+    {
+        SDL_SetColorKey( flipped, SDL_RLEACCEL | SDL_SRCCOLORKEY, surface-&gt;format-&gt;colorkey );
+    }
+	
+    //Return flipped surface
+    return flipped;
+}
+</pre> 
+      <div class="tutText">
+        At the end of our surface flipping function, we check if the surface had to be locked. If it did, we unlock it using SDL_UnlockSurface(). 
+       <br /> 
+       <br /> Then if the surface we had to flip was color keyed, we copy the color key from the original surface to the new flipped surface we made. 
+       <br /> 
+       <br /> Lastly we return a pointer to our newly created flipped surface. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:92 lang-cpp">    //Flip surfaces
+    topRight = flip_surface( topLeft, FLIP_HORIZONTAL );
+    bottomLeft = flip_surface( topLeft, FLIP_VERTICAL );
+    bottomRight = flip_surface( topLeft, FLIP_HORIZONTAL | FLIP_VERTICAL );
+    
+    //Apply the images to the screen
+    apply_surface( 0, 0, topLeft, screen );
+    apply_surface( 320, 0, topRight, screen );
+    apply_surface( 0, 240, bottomLeft, screen );
+    apply_surface( 320, 240, bottomRight, screen );
+        
+    //Update the screen
+    if( SDL_Flip( screen ) == -1 )
+    {
+        return 1;    
+    }
+    
+</pre> 
+      <div class="tutText">
+        and here's the surface flipping function in action. Then the surfaces are applied and the screen is updated to show the diamond pattern. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson31">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson30/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson32/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

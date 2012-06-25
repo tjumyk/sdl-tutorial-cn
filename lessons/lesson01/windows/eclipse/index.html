@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8" /> 
+  <title>第1课(上) - 开始使用SDL &middot; 在Eclipse中使用SDL &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../../../index.html">简介</a></li> 
+       <li class=""><a href="../../../../contents.html">目录</a></li> 
+       <li class=""><a href="../../../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center">第1课(上) - 开始使用SDL &middot; 在Eclipse中使用SDL</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson01/windows/eclipse/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../../index.html">返回上层</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content"> 
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Setting up SDL in Eclipse</h1> 
+       <h6>Last Updated 11/02/09</h6> 
+      </div> 
+      <div class="tutText"> 
+       <a class="tutLink" name="1" href="#1">1)</a>First thing you need to do is download SDL headers and binaries. 
+       <br /> You will find them on the SDL website, specifically on 
+       <a class="tutLink" href="../../../../../www.libsdl.org/download-1.2.php">this page</a>. 
+       <br /> 
+       <br /> Scroll Down to the Development Libraries section and download the MinGW32 development library 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="download.jpg" /> 
+       </div> 
+       <br /> Open gz archive and there should be a *.tar archive inside. 
+       <br /> Open the *.tar and there should be a folder inside of that. 
+       <br /> Open the folder and it'll contain a bunch of subfolders. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="2" href="#2">2)</a>Copy the contents of the lib subfolder to the MinGW lib folder. 
+       <br /> The MinGW lib folder should be at C:\MinGW\lib. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="3" href="#3">3)</a>After that, open the include subfolder in the archive and extract the folder named &quot;SDL&quot; to the MinGW include folder, which should be at C:\MinGW\include. 
+       <br /> 
+       <br /> Note: Some versions of SDL won't have a folder named &quot;SDL&quot; in the archive's include subfolder, but just a bunch of header files. To get around this simply create a folder named &quot;SDL&quot; in your MinGW include folder and copy all the header files from the archive to that folder you made. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="4" href="#4">4)</a>Now take the SDL.dll from the archive (it should be inside the bin subfolder) and extract it. You're going to put this in the same directory as your exe when you compile it. 
+       <br /> 
+       <br /> Alternatively, you can copy SDL.dll to C:\WINDOWS\SYSTEM32 so your SDL app will find SDL.dll even if it's not in the same directory. If you're using a 64bit version of Windows, you'll want to put the dll in C:\Windows\SysWOW64. 
+       <br /> 
+       <br /> The problem with this method is if you have multiple SDL apps that use different versions of SDL, you'll have version conflicts. If you have SDL 1.2.8 in SYSTEM32 when the app uses 1.2.13 you're going to run into problems. Generally you want to have your SDL.dll in the same directory as your executable developing and you'll 
+       <b>always</b> want to have SDL.dll in the same directory as the exe when distributing your app. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="5" href="#5">5)</a>Now start up Eclipse and start a new project. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="new_project.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" name="6" href="#6">6)</a>Make it a managed make C++ project. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="managed.jpg" /> 
+       </div> Then hit next. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="7" href="#7">7)</a>Name your project. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="name.jpg" /> 
+       </div> Then hit next. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="8" href="#8">8)</a>Then hit finish. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="project_finish.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" name="9" href="#9">9)</a>Go to the project properties. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="project_properties.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" name="10" href="#10">10)</a>Go to the C/C++ Build menu, then the Libraries submenu. In the Libraries submenu click add. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="add.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" name="11" href="#11">11)</a>Then paste in: 
+       <h6>mingw32</h6> 
+       <div class="tutImg"> 
+        <img src="mingw32.jpg" /> 
+       </div> and click ok. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="12" href="#12">12)</a>Then do the same with: 
+       <h6>SDLmain</h6> and 
+       <h6>SDL</h6> 
+       <div class="tutImg"> 
+        <img src="link.jpg" /> 
+       </div> Do it in this exact order or it won't work. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="13" href="#13">13)</a>Add source new source file to the project, and paste the following code into the new source file: 
+      </div> 
+      <div class="tutCode">
+        #include &quot;SDL/SDL.h&quot; int main( int argc, char* args[] ) { //Start SDL SDL_Init( SDL_INIT_EVERYTHING ); //Quit SDL SDL_Quit(); return 0; } 
+      </div> 
+      <div class="tutText"> 
+       <a class="tutLink" name="14" href="#14">14)</a>Now save the source and compile. Make sure SDL.dll is in the same directory as the executable. If there are no errors, you're finished. Otherwise go back and make sure you didn't skip a step. 
+      </div> 
+      <div class="tutFooter">
+        Also, In the archive you just downloaded there's a subfolder called &quot;docs&quot;. It contains the SDL documentation. 
+       <br /> 
+       <br /> I highly recommend that you extract them somewhere and keep it for reference. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../../../index.php">Tutorial Index</a> 
+       <a class="rightNav" href="../../index2.php">Part 2: Getting an Image on the Screen</a> 
+       <br /> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../../../assets/js/jquery.js"></script> 
+  <script src="../../../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../../../assets/js/application.js"></script>  
+ </body>
+</html>

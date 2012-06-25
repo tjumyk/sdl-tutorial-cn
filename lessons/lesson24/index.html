@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第24课 - 保存游戏 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第24课 - 保存游戏</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson24/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson23/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson25/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Game Saves</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Ever wanted to know how to save data from your game? Whether saving settings or progress in a game you need to know file input/output. This program will save the background type and the dot's offsets. So when we start the program up again the dot and background will be the same as when we closed the program. 
+       <br /> 
+       <br /> Here's yet another incarnation of the motion tutorial to show you how to get input and output from a file to save/load game data. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
+#include &quot;SDL/SDL_image.h&quot;
+#include &lt;string&gt;
+#include &lt;fstream&gt;
+</pre> 
+      <div class="tutText">
+        You need to include the fstream header to read/write a file. It's a standard library and not part of SDL. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:5 lang-cpp">//The dot
+class Dot
+{
+    private:
+    //The X and Y offsets of the dot
+    int x, y;
+    
+    //The velocity of the dot
+    int xVel, yVel;
+    
+    public:
+    //Initializes the variables
+    Dot();
+    
+    //Takes key presses and adjusts the dot's velocity
+    void handle_input();
+    
+    //Moves the dot
+    void move();
+    
+    //Shows the dot on the screen
+    void show();
+    
+    //Set the dot's x/y offsets
+    void set_x( int X );
+    void set_y( int Y );
+    
+    //Get the dot's x/y offsets
+    int get_x();
+    int get_y();
+};
+</pre> 
+      <div class="tutText">
+        Here's the Dot class yet again. The only real change here is that we added functions to get/set the x and y offsets. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:36 lang-cpp">bool load_files( Dot &amp;thisDot, Uint32 &amp;bg )
+{    
+    //Load the dot image
+    dot = load_image( &quot;dot.png&quot; );
+    
+    //If there was a problem in loading the dot
+    if( dot == NULL )
+    {
+        return false;    
+    }
+    
+    //Open a file for reading
+    std::ifstream load( &quot;game_save&quot; );
+</pre> 
+      <div class="tutText">
+        In the load_files() function after we load our image we create an ifstream object. 
+       <br /> 
+       <br /> ifstream allows you to get 
+       <b>i</b>nput from a 
+       <b>f</b>ile stream. When you pass a file name to the constructor, it opens the file for reading. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:49 lang-cpp">    //If the file loaded
+    if( load != NULL )
+    {
+        //The offset
+        int offset;
+        
+        //The level name
+        std::string level;
+        
+        //Set the x offset
+        load &gt;&gt; offset;
+        thisDot.set_x( offset );
+        
+        //Set the y offset
+        load &gt;&gt; offset;
+        thisDot.set_y( offset );
+</pre> 
+      <div class="tutText">
+        When there's a problem in loading the file, the ifstream object will be NULL. 
+       <br /> 
+       <br /> Here we check if the file loaded fine. If it loaded fine, we declare &quot;offset&quot; to retrieve the offsets and &quot;level&quot; which we'll use to determine how to set the background. 
+       <br /> 
+       <br /> Then we get first integer from the file and set the x offset of the dot. Then we get another integer and use it to set the y offset. As you can see, we get integers with ifstreams the same way we would with cin. That's because they're both istreams (input streams). 
+       <br /> 
+       <br /> The contents of the &quot;game_save&quot; file will be something like this: 
+       <br /> 
+       <b>0 0<br /> White Level</b> 
+       <br /> 
+       <br /> Seeing as the file and what we enter in console apps are just characters it makes sense to treat them almost the same. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:65 lang-cpp">        //If the x offset is invalid
+        if( ( thisDot.get_x() &lt; 0 ) || ( thisDot.get_x() &gt; SCREEN_WIDTH - DOT_WIDTH ) )
+        {
+            return false;
+        }
+        
+        //If the y offset is invalid
+        if( ( thisDot.get_y() &lt; 0 ) || ( thisDot.get_y() &gt; SCREEN_HEIGHT - DOT_HEIGHT ) )
+        {
+            return false;
+        }
+</pre> 
+      <div class="tutText">
+        We also have to check if the offsets from the file are valid considering the user can easily alter the file. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:76 lang-cpp">        //Skip past the end of the line
+        load.ignore();
+        
+        //Get the next line
+        getline( load, level );
+        
+        //If an error occurred while trying to load data
+        if( load.fail() == true )
+        {
+            return false;    
+        }
+</pre> 
+      <div class="tutText">
+        Then we skip past the next character (which is a '\n') with the ignore() function. Then we get the next line and store it with the getline() function. getline() is a different from using &gt;&gt; in that it gets everything up until the end of the line. 
+       <br /> 
+       <br /> For you guys still using Visual C++ 6.0 you'll have to std::getline(). 
+       <br /> 
+       <br /> Then we check if there was a problem in reading from the file. The fail() function will return true when there's a problem. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:87 lang-cpp">        //If the level was white
+        if( level == &quot;White Level&quot; )
+        {
+            //Set the background color
+            bg = SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF );
+        }
+        //If the level was red
+        else if( level == &quot;Red Level&quot; )
+        {
+            //Set the background color
+            bg = SDL_MapRGB( screen-&gt;format, 0xFF, 0x00, 0x00 );
+        }
+        //If the level was green
+        else if( level == &quot;Green Level&quot; )
+        {
+            //Set the background color
+            bg = SDL_MapRGB( screen-&gt;format, 0x00, 0xFF, 0x00 );
+        }
+        //If the level was blue
+        else if( level == &quot;Blue Level&quot; )
+        {
+            //Set the background color
+            bg = SDL_MapRGB( screen-&gt;format, 0x00, 0x00, 0xFF );
+        }
+</pre> 
+      <div class="tutText">
+        Now that we have our level string, we set the background color accordingly. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:111 lang-cpp">        //Close the file
+        load.close();
+    }
+
+    //If everything loaded fine
+    return true;
+}
+</pre> 
+      <div class="tutText">
+        After we're done reading from the file we close it. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:118 lang-cpp">void clean_up( Dot &amp;thisDot, Uint32 &amp;bg )
+{
+    //Free the surface
+    SDL_FreeSurface( dot );
+    
+    //Open a file for writing
+    std::ofstream save( &quot;game_save&quot; );
+    
+    //Write offsets to the file
+    save &lt;&lt; thisDot.get_x();
+    save &lt;&lt; &quot; &quot;;
+    save &lt;&lt; thisDot.get_y();
+    save &lt;&lt; &quot;\n&quot;;
+</pre> 
+      <div class="tutText">
+        In the clean_up() function, we create a ofstream to write to a file. ofstream allows you to 
+       <b>o</b>utput to a 
+       <b>f</b>ile stream. 
+       <br /> 
+       <br /> Since ifstream was similar to cin, it makes sense that ofstream is similar to cout. 
+       <br /> 
+       <br /> In this piece of code we write the dot's offsets to a file. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:131 lang-cpp">    //The RGB values from the background
+    Uint8 r, g, b;
+    
+    //Get RGB values from the background color
+    SDL_GetRGB( bg, screen-&gt;format, &amp;r, &amp;g, &amp;b );
+</pre> 
+      <div class="tutText">
+        Then we get the individual R, G and B values from the background using SDL_GetRGB(). 
+      </div> 
+      <pre class="tutCode prettyprint linenums:136 lang-cpp">    //If the background was white
+    if( ( r == 0xFF ) &amp;&amp; ( g == 0xFF ) &amp;&amp; ( b == 0xFF ) )
+    {
+        //Write level type to the file
+        save &lt;&lt; &quot;White Level&quot;;
+    }
+    //If the background was red
+    else if( r == 0xFF )
+    {
+        //Write level type to the file
+        save &lt;&lt; &quot;Red Level&quot;;
+    }
+    //If the background was green
+    else if( g == 0xFF )
+    {
+        //Write level type to the file
+        save &lt;&lt; &quot;Green Level&quot;;
+    }
+    //If the background was blue
+    else if( b == 0xFF )
+    {
+        //Write level type to the file
+        save &lt;&lt; &quot;Blue Level&quot;;
+    }
+</pre> 
+      <div class="tutText">
+        After that, we write the level type. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:160 lang-cpp">    //Close the file
+    save.close();
+    
+    //Quit SDL
+    SDL_Quit();
+}
+</pre> 
+      <div class="tutText">
+        Lastly, we close the file. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:166 lang-cpp">    //Quit flag
+    bool quit = false;
+    
+    //Initialize
+    if( init() == false )
+    {
+        return 1;
+    }
+    
+    //The dot
+    Dot myDot;
+
+    //The background color
+    Uint32 background = SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF );
+        
+    //The frame rate regulator
+    Timer fps;
+    
+    //Load the files
+    if( load_files( myDot, background ) == false )
+    {
+        return 1;
+    }
+</pre> 
+      <div class="tutText">
+        Here you see how we use our load_files() function. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:189 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+        //Start the frame timer
+        fps.start();
+        
+        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //Handle events for the dot
+            myDot.handle_input();
+            
+            //If the user has pressed at key
+            if( event.type == SDL_KEYDOWN )
+            {
+                //Change background according to key press
+                switch( event.key.keysym.sym )
+                {
+                    case SDLK_1: background = SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ); break;
+                    case SDLK_2: background = SDL_MapRGB( screen-&gt;format, 0xFF, 0x00, 0x00 ); break;
+                    case SDLK_3: background = SDL_MapRGB( screen-&gt;format, 0x00, 0xFF, 0x00 ); break; 
+                    case SDLK_4: background = SDL_MapRGB( screen-&gt;format, 0x00, 0x00, 0xFF ); break;     
+                }
+            }
+            
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+        
+        //Move the dot
+        myDot.move();
+        
+        //Fill the background
+        SDL_FillRect( screen, ≻reen-&gt;clip_rect, background );
+        
+        //Show the dot on the screen
+        myDot.show();
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+        
+        //Cap the frame rate
+        if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
+        {
+            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Here's the main loop. To change the background, you press 1,2,3 or 4. When you start the program up again the dot and the background will be the same as you left it. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:243 lang-cpp">    //Clean up and save
+    clean_up( myDot, background );
+}
+</pre> 
+      <div class="tutText">
+        Lastly, we call our clean_up() function to clean and save the data. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson24">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson23/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson25/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

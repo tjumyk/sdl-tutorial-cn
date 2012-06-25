@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第5课 - 颜色键值 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第5课 - 颜色键值</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson05/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson04/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson06/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Color Keying</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 6/25/08</h6> Now you're going to learn how to color key. In English that means this lesson is going to teach you how to remove the background color when applying a surface. 
+       <br /> 
+       <br /> The SDL_Surface structure has an element called the color key. The color key is the color you don't want to show up when blitting the surface. It's what you use when you want to have transparent backgrounds. 
+      </div> 
+      <div class="tutText">
+        Say you wanted to apply this stick figure named &quot;Foo&quot;: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="foo.jpg" /> 
+       </div> 
+       <br /> To this background: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="background.jpg" /> 
+       </div> 
+       <br /> But you didn't want this blue background from the stick figure to pop up: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="nokey.jpg" /> 
+       </div> 
+       <br /> In order for the blue background not to show up you have to set the background's color (which in this case is Red 0, Green FF, Blue FF) to be the surface's color key. 
+       <br /> 
+       <br /> The color key is typically set when the image is loaded. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">SDL_Surface *load_image( std::string filename ) 
+{
+    //The image that's loaded
+    SDL_Surface* loadedImage = NULL;
+    
+    //The optimized image that will be used
+    SDL_Surface* optimizedImage = NULL;
+    
+    //Load the image
+    loadedImage = IMG_Load( filename.c_str() );
+    
+    //If the image loaded
+    if( loadedImage != NULL )
+    {
+        //Create an optimized image
+        optimizedImage = SDL_DisplayFormat( loadedImage );
+        
+        //Free the old image
+        SDL_FreeSurface( loadedImage );
+</pre> 
+      <div class="tutText">
+        So here's the image loading function we're going alter. 
+       <br /> 
+       <br /> First we load and optimize the image like before. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:20 lang-cpp">        //If the image was optimized just fine
+        if( optimizedImage != NULL )
+        {
+            //Map the color key
+            Uint32 colorkey = SDL_MapRGB( optimizedImage-&gt;format, 0, 0xFF, 0xFF );
+</pre> 
+      <div class="tutText">
+        Then we check if the image was optimized. 
+       <br /> 
+       <br /> If the image was optimized, we have to map the color we want to set as the color key. We call SDL_MapRGB() to take the red, green, and blue values and give us the pixel value back in the same format as the surface. You can learn more about pixels in 
+       <a class="tutLink" href="../../articles/article03/index.php">article 3</a>. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:25 lang-cpp">            //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
+            SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );
+        }
+</pre> 
+      <div class="tutText">
+        Now it's time to do the actual color keying. 
+       <br /> 
+       <br /> The first argument is the surface we want to set the color key to. 
+       <br /> 
+       <br /> The second argument holds the flags we want to place. The SDL_SRCCOLORKEY flag makes sure that we use the color key when blitting this surface onto another surface. 
+       <br /> 
+       <br /> The third argument is the color we want to set as the color key. As you see it's the color we mapped just a moment ago. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:28 lang-cpp">    //Return the optimized image
+    return optimizedImage;
+}
+</pre> 
+      <div class="tutText">
+        Then the surface loading function returns the optimized and color keyed surface. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:31 lang-cpp">    //Apply the surfaces to the screen
+    apply_surface( 0, 0, background, screen );
+    apply_surface( 240, 190, foo, screen );
+    
+    //Update the screen
+    if( SDL_Flip( screen ) == -1 )
+    {
+        return 1;    
+    }
+</pre> 
+      <div class="tutText">
+        Now the background is blitted, then the color keyed stick figure image is blitted. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="key.jpg" /> 
+       </div> Now there's no blue background around the stick figure. 
+       <br /> 
+       <br /> For those of you using transparent PNGs, IMG_Load() will automatically handle transparency. Trying to color key an image that already has a transparent background is going to cause funky results. You'll also lose the alpha transparency if you use SDL_DisplayFormat() instead of SDL_DisplayFormatAlpha(). To retain transparency on the PNG simply don't color key it. IMG_Load() will also handle alpha from TGA images. Look in the SDL documentation for more detailed information on color keying. 
+       <br /> 
+       <br /> 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson05">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson04/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson06/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第26课 - 可缩放窗口和窗口事件 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第26课 - 可缩放窗口和窗口事件</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson26/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson25/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson27/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Resizable Windows and Window Events</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Window events are things like resizing, maximizing, or minimizing the window. Up until now we couldn't do much with our window, mainly because it's more work to deal with it being resizable. This tutorial shows you how to make an adjustable window and handle the events from the window changes. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//Our window
+class Window
+{
+    private:
+    //Whether the window is windowed or not
+    bool windowed;
+    
+    //Whether the window is fine
+    bool windowOK;
+    
+    public:
+    //Constructor
+    Window();
+    
+    //Handle window events
+    void handle_events();
+    
+    //Turn fullscreen on/off
+    void toggle_fullscreen();
+    
+    //Check if anything's wrong with the window
+    bool error();
+};
+</pre> 
+      <div class="tutText">
+        Now we have a window class to manage all the things a resizable window can do. 
+       <br /> 
+       <br /> For variables we have two flags. The &quot;windowed&quot; flag keeps track of whether the screen is windowed or fullscreen. &quot;windowOK&quot; is whether the window is operational. 
+       <br /> 
+       <br /> Then we have a constructor, a function to handle events, a function to toggle windowed/fullscreen modes and an error checking function. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:24 lang-cpp">bool init()
+{
+    //Initialize all SDL subsystems
+    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+    {
+        return false;    
+    }
+
+    //If eveything loads fine
+    return true;    
+}
+</pre> 
+      <div class="tutText">
+        Here's our init() function. 
+       <br /> 
+       <br /> Because everything associated with the window is in a separate class, all we do is initialize SDL. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:35 lang-cpp">Window::Window()
+{
+    //Set up the screen
+    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE | SDL_RESIZABLE );
+    
+    //If there's an error
+    if( screen == NULL )
+    {
+        windowOK = false;
+        return;
+    }
+    else
+    {
+        windowOK = true;    
+    }
+    
+    //Set the window caption
+    SDL_WM_SetCaption( &quot;Window Event Test&quot;, NULL );
+    
+    //Set window flag
+    windowed = true;
+}
+</pre> 
+      <div class="tutText">
+        In the window class' constructor we create a window. Since we want it to be resizeable, we pass the SDL_RESIZABLE flag. 
+       <br /> 
+       <br /> Then we check if the screen is NULL. If it is we set &quot;windowOK&quot; to false so we can tell that there was a problem. 
+       <br /> 
+       <br /> If everything set up fine, we set &quot;windowOK&quot; to true, set the caption and since we're starting out windowed we set the &quot;windowed&quot; flag to true. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:57 lang-cpp">void Window::toggle_fullscreen()
+{
+    //If the screen is windowed
+    if( windowed == true )
+    {
+        //Set the screen to fullscreen
+        screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE | SDL_RESIZABLE | SDL_FULLSCREEN );
+                         
+        //If there's an error
+        if( screen == NULL )
+        {
+            windowOK = false;
+            return;
+        }
+        
+        //Set the window state flag
+        windowed = false;
+    }
+    //If the screen is fullscreen
+    else if( windowed == false )
+    {
+        //Window the screen
+        screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE | SDL_RESIZABLE );
+                     
+        //If there's an error
+        if( screen == NULL )
+        {
+            windowOK = false;
+            return;
+        }
+       
+        //Set the window state flag
+        windowed = true;
+    }
+}
+</pre> 
+      <div class="tutText">
+        In this program I added the ability to switch from windowed to fullscreen and back when you press enter, which you can only do with resizable window. Here's the function that toggles windowed/fullscreen modes. 
+       <br /> 
+       <br /> When enter is pressed we check the if the screen is windowed or not. If it's windowed, we call SDL_SetVideoMode() with the SDL_FULLSCREEN flag to switch to fullscreen and then change &quot;windowed&quot; to false. If we're already fullscreen we call SDL_SetVideoMode() normally to switch to windowed mode and then change the &quot;windowed&quot; flag to true. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:92 lang-cpp">void Window::handle_events()
+{
+    //If there's something wrong with the window
+    if( windowOK == false )
+    {
+        return;    
+    }
+    
+    //If the window resized
+    if( event.type == SDL_VIDEORESIZE )
+    {
+        //Resize the screen
+        screen = SDL_SetVideoMode( event.resize.w, event.resize.h, SCREEN_BPP, SDL_SWSURFACE | SDL_RESIZABLE );
+        
+        //If there's an error
+        if( screen == NULL )
+        {
+            windowOK = false;
+            return;
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Here we start our event handling and the first thing we do is check if the window is operational. Then we handle a video resize event. 
+       <br /> 
+       <br /> Whenever the window is resized you must set the video over again using SDL_SetVideoMode(). The dimensions of the new window is stored in our event structure in event.resize.w and event.resize.h so you can easily set the screen to the new size. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:113 lang-cpp">    //If enter was pressed
+    else if( ( event.type == SDL_KEYDOWN ) &amp;&amp; ( event.key.keysym.sym == SDLK_RETURN ) )
+    {
+        //Turn fullscreen on/off
+        toggle_fullscreen();
+    }
+</pre> 
+      <div class="tutText">
+        When enter is pressed we toggle window/fullscreen modes. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:119 lang-cpp">    //If the window focus changed
+    else if( event.type == SDL_ACTIVEEVENT )
+    {
+        //If the window was iconified or restored
+        if( event.active.state &amp; SDL_APPACTIVE )
+        {
+            //If the application is no longer active
+            if( event.active.gain == 0 )
+            {
+                SDL_WM_SetCaption( &quot;Window Event Test: Iconified&quot;, NULL );
+            }
+            else
+            {
+                SDL_WM_SetCaption( &quot;Window Event Test&quot;, NULL );
+            }
+        }
+</pre> 
+      <div class="tutText">
+        Another type of event is SDL_ACTIVEEVENT. A SDL_ACTIVEEVENT happens whenever the screen, keyboard, or mouse becomes active or inactive. 
+       <br /> 
+       <br /> Here we check if the screen became active or inactive by being iconified/minimized or restored. When the window is iconified/minimized, &quot;gain&quot; in our SDL_ActiveEvent structure is 0. When the window is restored, &quot;gain&quot; is 1. 
+       <br /> 
+       <br /> In this program we change the caption to notify the user of change. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:135 lang-cpp">        //If something happened to the keyboard focus
+        else if( event.active.state &amp; SDL_APPINPUTFOCUS )
+        {
+            //If the application lost keyboard focus
+            if( event.active.gain == 0 )
+            {
+                SDL_WM_SetCaption( &quot;Window Event Test: Keyboard focus lost&quot;, NULL );
+            }
+            else
+            {
+                SDL_WM_SetCaption( &quot;Window Event Test&quot;, NULL );
+            }
+        }
+        //If something happened to the mouse focus
+        else if( event.active.state &amp; SDL_APPMOUSEFOCUS )
+        {
+            //If the application lost mouse focus
+            if( event.active.gain == 0 )
+            {
+                SDL_WM_SetCaption( &quot;Window Event Test: Mouse Focus Lost&quot;, NULL );
+            }
+            else
+            {
+                SDL_WM_SetCaption( &quot;Window Event Test&quot;, NULL );
+            }
+        }
+    }
+</pre> 
+      <div class="tutText">
+        This is where keyboard and mouse focus is handled. 
+       <br /> 
+       <br /> SDL_APPINPUTFOCUS is change in keyboard focus. SDL_APPMOUSEFOCUS is change in mouse focus. As with SDL_APPACTIVE when focus is lost &quot;gain&quot; is 0, when focus is restored &quot;gain&quot; is 1. 
+       <br /> 
+       <br /> Remember to check for SDL_APPACTIVE first because bitwise AND comparisons with &quot;state&quot; will report other active events. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:162 lang-cpp">    //If the window's screen has been altered
+    else if( event.type == SDL_VIDEOEXPOSE )
+    {
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            //If there's an error
+            windowOK = false;
+            return;
+        }
+    }
+}
+</pre> 
+      <div class="tutText">
+        Lastly, we handle the SDL_VIDEOEXPOSE event. 
+       <br /> 
+       <br /> A SDL_VIDEOEXPOSE event happens whenever the screen is altered by something outside the program. We handle it by updating the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:174 lang-cpp">bool Window::error()
+{
+    return !windowOK;
+}
+</pre> 
+      <div class="tutText">
+        Here's the function we use to check if there's errors with our window. 
+       <br /> 
+       <br /> We negate &quot;windowOK&quot; because when the window is ok there are no errors and when the window is not ok there is an error. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:178 lang-cpp">    //Quit flag
+    bool quit = false;
+    
+    //Initialize
+    if( init() == false )
+    {
+        return 1;    
+    }
+    
+    //Create a window
+    Window myWindow;
+    
+    //If the window failed
+    if( myWindow.error() == true )
+    {
+        return 1;    
+    }
+    
+    //Load the files
+    if( load_files() == false )
+    {
+        return 1;    
+    }
+</pre> 
+      <div class="tutText">
+        At the top of our main function we create a Window object after we initialize. Then we check for errors in the window and continue normally. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:201 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //Handle window events
+            myWindow.handle_events();
+            
+            //If escape was pressed
+            if( ( event.type == SDL_KEYDOWN ) &amp;&amp; ( event.key.keysym.sym == SDLK_ESCAPE ) )
+            {
+                //Quit the program
+                quit = true;
+            }
+
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+        
+        //If the window failed
+        if( myWindow.error() == true )
+        {
+            return 1;    
+        }
+        
+        //Fill the screen white
+        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+    
+        //Show the image centered on the screen
+        apply_surface( ( screen-&gt;w - testing-&gt;w ) / 2, ( screen-&gt;h - testing-&gt;h ) / 2, testing, screen );
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Here's our main loop. Nothing much to point out other than we have to remember to check for errors in the window before we render. There's no point to render to a screen that's non-operational. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson26">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson25/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson27/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

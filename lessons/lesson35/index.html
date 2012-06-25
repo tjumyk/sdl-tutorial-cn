@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第35课 - 互斥和条件 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第35课 - 互斥和条件</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson35/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson34/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson36/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Mutexes and Conditions</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Here we're going to do some more advanced thread synchronization using mutexes and conditions. 
+      </div> 
+      <div class="tutText">
+        In case you missed the semaphores tutorial let me say this once again: 
+       <br /> In this tutorial we have video functions running in separate threads. You should never do this in a real application. It's just bad software design and in some cases can cause your OS to become unstable. The only reason we're doing it here is because it's a small program and nothing's going to go wrong. We're doing it here just as a simple demonstration of mutexes/conditions in action. Now on with the tutorial. 
+       <br /> 
+       <br /> In this tutorial we'll have a &quot;producer&quot; thread which will pick one of 5 surfaces and store it in a buffer, then show the &quot;generated&quot; surface on the left side of the screen. 
+       <br /> 
+       <br /> Then we'll have a &quot;consumer&quot; thread which shows the surface in the buffer on the right side of the screen then empties the buffer out. 
+       <br /> 
+       <br /> Here's the catch: unlike in the previous tutorial where there were 5 blits in order every 1/5 of a second, in this program we're going to have the producer produce 5 times at random and the consumer consume 5 times at random. 
+       <br /> 
+       <br /> In the last tutorial we used semaphores to prevent the two threads from trying to manipulate the screen at the same time. Here we're going to use a mutex. A mutex is just a binary semaphore or one that will only let one thread pass through it at a time. In fact the semaphores tutorial could be redone with mutexes instead. All you'd have to do is swap the semaphore with a mutex and swap the lock/unlock functions. 
+       <br /> 
+       <br /> Because the threads are doing things at random and they're dependent on each other, using just a mutex isn't enough. What if the consumer tries to consume and the buffer is empty? Or producer tries to produce but the buffer is full? This is where conditions come into play. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">SDL_Surface *images[ 5 ] = { NULL, NULL, NULL, NULL, NULL };
+SDL_Surface *buffer = NULL;
+</pre> 
+      <div class="tutText">
+        The buffer contains the surface &quot;produced&quot; by the producer. When the producer produces a surface, it just points to one of 5 surfaces which are loaded at the beginning of the program. 
+       <br /> 
+       <br /> I just want to prevent any confusion on what the buffer is and what it holds. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">//The threads that will be used
+SDL_Thread *producerThread = NULL;
+SDL_Thread *consumerThread = NULL;
+
+//The protective mutex
+SDL_mutex *bufferLock = NULL;
+
+//The conditions
+SDL_cond *canProduce = NULL;
+SDL_cond *canConsume = NULL;
+</pre> 
+      <div class="tutText">
+        Here we have our threads along with our mutex. The mutex will prevent the threads from manipulating the buffer and/or screen at the same time. 
+       <br /> 
+       <br /> Then we have the conditions which will tell when the producer can produce and the consumer can consume. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:13 lang-cpp">bool init()
+{
+    //Initialize all SDL subsystems
+    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+    {
+        return false;    
+    }
+    
+    //Set up the screen
+    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+    
+    //If there was an error in setting up the screen
+    if( screen == NULL )
+    {
+        return false;    
+    }
+    
+    //Create the mutex
+    bufferLock = SDL_CreateMutex();
+    
+    //Create Conditions
+    canProduce = SDL_CreateCond();
+    canConsume = SDL_CreateCond();
+    
+    //Set the window caption
+    SDL_WM_SetCaption( &quot;Producer / Consumer Test&quot;, NULL );
+    
+    //If everything initialized fine
+    return true;
+}
+</pre> 
+      <div class="tutText">
+        Before we can use a mutex or condition we have to create them. We do so by calling SDL_CreateMutex() and SDL_CreateCond() in our init() function. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:43 lang-cpp">int producer( void *data )
+{
+    //The offset of the blit.
+    int y = 10;
+    
+    //Seed random
+    srand( SDL_GetTicks() );
+    
+    //Produce
+    for( int p = 0; p &lt; 5; p++ )
+    {
+        //Wait
+        SDL_Delay( rand() % 1000 );
+        
+        //Produce
+        produce( 10, y );
+        
+        //Move down
+        y += 90;
+    }
+    
+    return 0;
+}
+
+int consumer( void *data )
+{
+    //The offset of the blit.
+    int y = 10;
+    
+    for( int p = 0; p &lt; 5; p++ )
+    {
+        //Wait
+        SDL_Delay( rand() % 1000 );
+        
+        //Consume
+        consume( 330, y );
+        
+        //Move down
+        y += 90;
+    }
+    
+    return 0;
+}
+</pre> 
+      <div class="tutText">
+        Here we have our producer/consumer thread functions. They produce/consume 5 times at random time intervals. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:86 lang-cpp">void produce( int x, int y )
+{
+    //Lock
+    SDL_mutexP( bufferLock );
+    
+    //If the buffer is full
+    if( buffer != NULL )
+    {
+        //Wait for buffer to be cleared
+        SDL_CondWait( canProduce, bufferLock );
+    }
+    
+    //Fill and show buffer
+    buffer = images[ rand() % 5 ];
+    apply_surface( x, y, buffer, screen );
+    
+    //Update the screen
+    SDL_Flip( screen );
+    
+    //Unlock
+    SDL_mutexV( bufferLock );
+    
+    //Signal consumer
+    SDL_CondSignal( canConsume );
+}
+
+void consume( int x, int y )
+{
+    //Lock
+    SDL_mutexP( bufferLock );
+    
+    //If the buffer is empty
+    if( buffer == NULL )
+    {
+        //Wait for buffer to be filled
+        SDL_CondWait( canConsume, bufferLock );
+    }
+    
+    //Show and empty buffer
+    apply_surface( x, y, buffer, screen );
+    buffer = NULL;
+    
+    //Update the screen
+    SDL_Flip( screen );
+    
+    //Unlock
+    SDL_mutexV( bufferLock );
+    
+    //Signal producer
+    SDL_CondSignal( canProduce );
+}
+</pre> 
+      <div class="tutText">
+        Here are our producer/consumer functions which are each called 5 times at random. How do they work? Well let's take this example situation: 
+       <br /> 
+       <br /> Let's say the consumer function is called first. It goes in and calls SDL_mutexP() to lock the mutex: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="lock.png" /> 
+       </div> 
+       <br /> Then the producer tries to go in but can't because the mutex is locked. The mutex makes sure that the buffer and/or screen aren't manipulated by two threads at once. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="wait.png" /> 
+       </div> 
+       <br /> But let's say the buffer is empty. Now the consumer calls SDL_CondWait() which makes the thread wait on the &quot;canConsume&quot; condition. It also unlocks the mutex. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="condwait.png" /> 
+       </div> 
+       <br /> Now the producer can go through and produce. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="produce.png" /> 
+       </div> 
+       <br /> When the producer is done it calls SDL_mutexV() to unlock the mutex. But the consumer thread is still sleeping. 
+       <div class="tutImg"> 
+        <img src="produced.png" /> 
+       </div> 
+       <br /> That's why we call SDL_CondSignal() to signal the consumer waiting on the &quot;canConsume&quot; condition. 
+       <div class="tutImg"> 
+        <img src="signal.png" /> 
+       </div> 
+       <br /> Now that SDL_CondWait() has been signaled, the consumer wakes up, the mutex is relocked and now the consumer does its thing. 
+       <div class="tutImg"> 
+        <img src="consume.png" /> 
+       </div> 
+       <br /> The threads not only stay out of each other's way, they also wait on and signal on each other thanks to mutexes/conditions. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:137 lang-cpp">void clean_up()
+{
+    //Destroy mutex
+    SDL_DestroyMutex( bufferLock );
+    
+    //Destroy condition
+    SDL_DestroyCond( canProduce );
+    SDL_DestroyCond( canConsume );
+    
+    //Free the surfaces
+    for( int i = 0; i &lt; 5; i++ )
+    {
+        SDL_FreeSurface( images[ i ] );
+    }
+    
+    //Quit SDL
+    SDL_Quit();
+}
+</pre> 
+      <div class="tutText">
+        As always, don't forget to free anything dynamically allocated. Here we free our mutex and conditions using SDL_DestroyMutex() and SDL_DestroyCond(). 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson35">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson34/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson36/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

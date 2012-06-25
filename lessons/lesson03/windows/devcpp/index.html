@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8" /> 
+  <title>第3课 - 使用SDL扩展库加载更多格式的图片 &middot; 在Dev C++中使用SDL扩展库 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../../../index.html">简介</a></li> 
+       <li class=""><a href="../../../../contents.html">目录</a></li> 
+       <li class=""><a href="../../../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center">第3课 - 使用SDL扩展库加载更多格式的图片 &middot; 在Dev C++中使用SDL扩展库</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson03/windows/devcpp/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../../index.html">返回上层</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content"> 
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Setting up SDL Extension Libraries in Dev C++</h1> 
+       <h6>Last Updated 11/02/09</h6> In this tutorial you're going to learn to set up SDL_image. If you know how to set up this extension, you can set any of them up. 
+       <br /> 
+       <br /> SDL_image is located on 
+       <a class="tutLink" href="../../../../../www.libsdl.org/projects/SDL_image/default.htm">this page</a>. 
+       <br /> 
+       <br /> Also, always make sure that when you get an SDL extension (SDL_image, SDL_ttf, SDL_mixer, etc) that you also get the newest version of SDL. New versions of the SDL extensions don't like old versions of SDL. If you don't, Dev C++ will compile the program but the program will complain at run time (it's typically something about an entry point). 
+      </div> 
+      <div class="tutText"> 
+       <a class="tutLink" name="1" href="#1">1)</a>Scroll down to the Binary section and download the Windows development library 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="download.jpg" /> 
+       </div> 
+       <br /> Every extension libary has 3 essential parts: 
+       <br /> 
+       <ol> 
+        <li>The header file.</li> 
+        <li>The lib file.</li> 
+        <li>The *.dll file(s)</li> 
+       </ol> They're all set up pretty much the same way no matter which extension you're setting up. 
+       <br /> 
+       <br /> Open up the zip archive and there should be a folder inside. 
+       <br /> Open the folder and it'll contain 2 subfolders. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="2" href="#2">2)</a>First, open the include subfolder in the archive and you should see a header file. Put that header file in the directory with all the other header files in the SDL folder you extracted in lesson 1. 
+       <br /> 
+       <br /> For example, I extracted the SDL version 1.2.12 folder to &quot;C:\&quot;, so I put the SDL_image.h (or SDL_ttf.h or SDL_mixer.h) header in C:\SDL-1.2.12\include\SDL\. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="3" href="#3">3)</a>Next extract the lib file that's inside of lib subfolder of the archive to your SDL lib folder. In my case it was at C:\SDL-1.2.12\lib\. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="4" href="#4">4)</a>Now extract all of the *.dll file(s) from the archive and put them in the same directory as your exe. 
+       <br /> 
+       <br /> Like before, you can copy them to C:\WINDOWS\SYSTEM32 (or C:\Windows\SysWOW64 on 64bit Windows) so your SDL app will find the *.dll(s) even if they're not in the same directory. The problem with this method is if you have multiple SDL apps that use different versions of SDL, you'll have version conflicts. If you have an old version in SYSTEM32 when the app uses the new version you're going to run into problems. Generally you want to have your the *.dll(s) in the same directory as your executable developing and you'll 
+       <b>always</b> want to have *.dll(s) in the same directory as the exe when distributing your app. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="5" href="#5">5)</a>Now open up your SDL project and go to the project options. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="project_options.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" name="6" href="#6">6)</a>Under the Parameters tab, paste: 
+       <h6>-lSDL_image</h6> in the linker after &quot;-lmingw32 -lSDLmain -lSDL&quot;. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="linker.jpg" /> 
+       </div> 
+       <br /> If you were linking SDL_ttf you'd put 
+       <h6>-lSDL_ttf</h6>if you were linking SDL_mixer you'd put 
+       <h6>-lSDL_mixer</h6> etc, etc. 
+       <br /> 
+       <br /> 
+       <a class="tutLink" name="7" href="#7">7)</a>To use SDL_image make sure to include the header file. 
+      </div> 
+      <div class="tutCode">
+        #include &quot;SDL/SDL_image.h&quot; 
+      </div> 
+      <div class="tutText">
+        If you were setting up SDL_ttf you'd put 
+       <h6>#include &quot;SDL/SDL_ttf.h&quot;</h6> If you were setting up SDL_mixer you'd put 
+       <h6>#include &quot;SDL/SDL_mixer.h&quot;</h6> etc, etc. 
+       <br /> 
+       <br /> Now the extension library is all set up. 
+      </div> 
+      <div class="tutText">
+        Now you can use SDL_image functions. 
+       <br /> 
+       <br /> The main one you want to know about is IMG_Load(). 
+       <br /> 
+      </div> 
+      <div class="tutCode">
+        SDL_Surface *load_image( std::string filename ) { //The image that's loaded SDL_Surface* loadedImage = NULL; //The optimized image that will be used SDL_Surface* optimizedImage = NULL; //Load the image using SDL_image loadedImage = IMG_Load( filename.c_str() ); //If the image loaded if( loadedImage != NULL ) { //Create an optimized image optimizedImage = SDL_DisplayFormat( loadedImage ); //Free the old image SDL_FreeSurface( loadedImage ); } //Return the optimized image return optimizedImage; } 
+      </div> 
+      <div class="tutText">
+        Here is a revised version of the image loading function from the previous tutorial. As you can see IMG_Load() functions exactly the same as SDL_LoadBMP(), but there's one big exception: IMG_Load() can load BMP, PNM, XPM, LBM, PCX, GIF, JPEG, TGA and PNG files. 
+       <br /> 
+       <br /> From this tutorial on, PNG image files will be the primary image format used. PNGs have excellent lossless compression. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a href="../../../../downloads/index.php@file=SDLTut_lesson03" class="tutLink">here</a>. 
+       <br /> 
+       <br /> I highly recommend that you download the documentation for SDL_image and keep it handy. 
+       <br /> 
+       <br /> It can be found 
+       <a class="tutLink" href="../../../../../jcatki.no-ip.org_3A8080/SDL_image/SDL_image_html.tar.gz">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../../../lesson02/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../../../lesson04/index.php">Next Tutorial</a> 
+       <br /> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../../../assets/js/jquery.js"></script> 
+  <script src="../../../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../../../assets/js/application.js"></script>  
+ </body>
+</html>

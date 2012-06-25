@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第33课 - 多线程 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第33课 - 多线程</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson33/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson32/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson34/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Multithreading</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Up until now you've been making programs that only do one process at a time. With multithreading, you can make programs that can do multiple processes at once. This tutorial will introduce you to SDL's cross platform multithreading capabilities. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
+#include &quot;SDL/SDL_image.h&quot;
+#include &quot;SDL/SDL_thread.h&quot;
+#include &lt;string&gt;
+</pre> 
+      <div class="tutText">
+        First off we have to remember to include the header for SDL threads. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:5 lang-cpp">//The thread that will be used
+SDL_Thread *thread = NULL;
+
+//Quit flag
+bool quit = false;
+</pre> 
+      <div class="tutText">
+        Here are two important global variables. 
+       <br /> 
+       <br /> First we have the SDL_Thread which is going to be the thread we are going to run. Then we have our &quot;quit&quot; variable, which we usually have as a local variable in main() but this time we need it to be global. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:10 lang-cpp">int my_thread( void *data )
+{
+    //While the program is not over
+    while( quit == false )
+    {
+        //Do the caption animation
+        SDL_WM_SetCaption( &quot;Thread is running&quot;, NULL );
+        SDL_Delay( 250 );
+        
+        SDL_WM_SetCaption( &quot;Thread is running.&quot;, NULL );
+        SDL_Delay( 250 );
+        
+        SDL_WM_SetCaption( &quot;Thread is running..&quot;, NULL );
+        SDL_Delay( 250 );
+        
+        SDL_WM_SetCaption( &quot;Thread is running...&quot;, NULL );
+        SDL_Delay( 250 );
+    }
+    
+    return 0;    
+}
+</pre> 
+      <div class="tutText">
+        Here's the function that's going to be our thread. All it does is put a different caption every quarter of a second while the user has not quit. Now you see why the &quot;quit&quot; variable needed to be global. 
+       <br /> 
+       <br /> In order for a function to be used as a thread in SDL it has to meet 2 requirements. First off it must return an int. Secondly it must have the argument that is a pointer to a data type of void. If the function does not meet both of these requirements it cannot be used as a thread. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:31 lang-cpp">    //Create and run the thread
+    thread = SDL_CreateThread( my_thread, NULL );
+</pre> 
+      <div class="tutText">
+        In the main function after everything is initialized and loaded, we call SDL_CreateThread(). 
+       <br /> 
+       <br /> SDL_CreateThread() takes in the function in the first argument, turns it into a thread and then runs the newly made thread. It returns a pointer to the thread so we can keep track of it. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:33 lang-cpp">    //Apply the image to the screen
+    apply_surface( 0, 0, image, screen );
+    
+    //Update the screen
+    if( SDL_Flip( screen ) == -1 )
+    {
+        return 1;    
+    }
+    
+    //While the user hasn't quit
+    while( quit == false )
+    {
+        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }    
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Then we show the image on the screen, then wait for the user to quit. 
+       <br /> 
+       <br /> While this is going on, the caption is changing in our thread that is currently running parallel to what we're doing. Thanks to SDL's multithreading capabilities, you're able to do these two things simultaneously. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:56 lang-cpp">void clean_up()
+{
+    //Stop the thread
+    SDL_KillThread( thread );
+    
+    //Free the surface
+    SDL_FreeSurface( image );
+    
+    //Quit SDL
+    SDL_Quit();    
+}
+</pre> 
+      <div class="tutText">
+        Here's our clean up function. 
+       <br /> 
+       <br /> First we call SDL_KillThread() which instantly stops the thread. Typically you should wait for the thread to finish, but in this case it won't do any harm to just stop it. Then we free the surface, and quit SDL. 
+      </div> 
+      <div class="tutText">
+        When it comes to using multithreading in games, the general rule is &quot;Don't&quot;. There's so much more you have to deal with than in single threaded programs. With the rise of multicore CPUs, it's tempting to jump right in. 
+       <br /> 
+       <br /> However there are cases where multithreading can be useful in game. If you're new to game programming, don't use it until you're more experienced. Multithreading can be more of a headache than it's worth. You have to know thread synchronization (which the next two tutorials teach), and how to deal with concurrency. Only when you have a good handle on software architecture should you use this powerful tool. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson33">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson32/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson34/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

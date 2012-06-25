@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第4课 - 事件驱动编程 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第4课 - 事件驱动编程</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson04/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson03/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson05/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Event Driven Programming</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Up until this point you're probably used to command driven programs using cin and cout. This tutorial will teach you how to check for events and handle events. 
+       <br /> 
+       <br /> An event is simply something that happens. It could be a key press, movement of the mouse, resizing the window or in this case when the user wants to X out the window. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The headers
+#include &quot;SDL/SDL.h&quot;
+#include &quot;SDL/SDL_image.h&quot;
+#include &lt;string&gt;
+
+//Screen attributes
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
+const int SCREEN_BPP = 32;
+
+//The surfaces
+SDL_Surface *image = NULL;
+SDL_Surface *screen = NULL;
+</pre> 
+      <div class="tutText">
+        Here we have the same story as before, we have our headers, constants and surfaces. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:14 lang-cpp">//The event structure that will be used
+SDL_Event event;
+</pre> 
+      <div class="tutText">
+        Now this is new. A SDL_Event structure stores event data for us to handle. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:16 lang-cpp">SDL_Surface *load_image( std::string filename ) 
+{
+    //The image that's loaded
+    SDL_Surface* loadedImage = NULL;
+    
+    //The optimized image that will be used
+    SDL_Surface* optimizedImage = NULL;
+    
+    //Load the image
+    loadedImage = IMG_Load( filename.c_str() );
+    
+    //If the image loaded
+    if( loadedImage != NULL )
+    {
+        //Create an optimized image
+        optimizedImage = SDL_DisplayFormat( loadedImage );
+        
+        //Free the old image
+        SDL_FreeSurface( loadedImage );
+    }
+    
+    //Return the optimized image
+    return optimizedImage;
+}
+
+void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination )
+{
+    //Temporary rectangle to hold the offsets
+    SDL_Rect offset;
+    
+    //Get the offsets
+    offset.x = x;
+    offset.y = y;
+    
+    //Blit the surface
+    SDL_BlitSurface( source, NULL, destination, &amp;offset );
+}
+</pre> 
+      <div class="tutText">
+        Here we have our surface loading and blitting functions. Nothing has changed from the previous tutorial. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:53 lang-cpp">bool init()
+{
+    //Initialize all SDL subsystems
+    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+    {
+        return false;    
+    }
+    
+    //Set up the screen
+    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+    
+    //If there was an error in setting up the screen
+    if( screen == NULL )
+    {
+        return false;    
+    }
+    
+    //Set the window caption
+    SDL_WM_SetCaption( &quot;Event test&quot;, NULL );
+    
+    //If everything initialized fine
+    return true;
+}
+</pre> 
+      <div class="tutText">
+        Here is the initialization function. This function starts up SDL, sets up the window, sets the caption and returns false if there are any errors. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:76 lang-cpp">bool load_files()
+{
+    //Load the image
+    image = load_image( &quot;x.png&quot; );
+    
+    //If there was an error in loading the image
+    if( image == NULL )
+    {
+        return false;    
+    }
+    
+    //If everything loaded fine
+    return true;    
+}
+</pre> 
+      <div class="tutText">
+        Here is the file loading function. It loads the images, and returns false if there were any problems. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:90 lang-cpp">void clean_up()
+{
+    //Free the image
+    SDL_FreeSurface( image );
+    
+    //Quit SDL
+    SDL_Quit();    
+}
+</pre> 
+      <div class="tutText">
+        Here we have the end of the program clean up function. It frees up the surface and quits SDL. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:98 lang-cpp">int main( int argc, char* args[] )
+{
+    //Make sure the program waits for a quit
+    bool quit = false;
+</pre> 
+      <div class="tutText">
+        Now we enter the main function. 
+       <br /> 
+       <br /> Here we have the quit variable which keeps track of whether the user wants to quit. Since the program just started we set it to false or the program will end immediately. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:102 lang-cpp">    //Initialize
+    if( init() == false )
+    {
+        return 1;    
+    }
+    
+    //Load the files
+    if( load_files() == false )
+    {
+        return 1;    
+    }
+</pre> 
+      <div class="tutText">
+        Now we call the initialization and file loading functions we made earlier. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:113 lang-cpp">    //Apply the surface to the screen
+    apply_surface( 0, 0, image, screen );
+    
+    //Update the screen
+    if( SDL_Flip( screen ) == -1 )
+    {
+        return 1;    
+    }
+</pre> 
+      <div class="tutText">
+        Then we show the image on the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:121 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+</pre> 
+      <div class="tutText">
+        Now we start the main loop. This loop will keep going until the user sets quit to true. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:124 lang-cpp">        //While there's an event to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+</pre> 
+      <div class="tutText">
+        In SDL whenever an event happens, it is put on the event queue. The event queue holds the event data for every event that happens. 
+       <br /> 
+       <br /> So if you were to press a mouse button, move the mouse around, then press a keyboard key, the event queue would look something like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="queue.jpg" /> 
+       </div> 
+       <br /> What SDL_PollEvent() does is take an event from the queue and sticks its data in our event structure: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="poll.jpg" /> 
+       </div> 
+       <br /> What this code does is keep getting event data while there's events on the queue. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:127 lang-cpp">            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }    
+        }
+    }
+</pre> 
+      <div class="tutText">
+        When the user Xs out the window, the event type will be SDL_QUIT. 
+       <br /> 
+       <br /> But when the user does that it does not end the program, all it does inform us the user wants to exit the program. 
+       <br /> 
+       <br /> Since we want the program to end when the user Xs the window, we set quit to true and it will break the loop we are in. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:135 lang-cpp">    //Free the surface and quit SDL
+    clean_up();
+        
+    return 0;    
+}
+</pre> 
+      <div class="tutText">
+        Finally, we do the end of the program clean up. 
+       <br /> 
+       <br /> There are other ways to handle events like SDL_WaitEvent() and SDL_PeepEvents(). You can find out more about them in the SDL documentation. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson04">here</a>. 
+       <br /> 
+       <br /> On a side note, now would also be a good time to learn to use the SDL error functions. I don't have a tutorial on them, but I touch on them in 
+       <a class="tutLink" href="../../articles/article05/index.php">article 5</a>. The SDL documentation should explain SDL_GetError(), and the SDL_image documentation should explain IMG_GetError(). SDL_ttf and SDL_mixer also have their error functions so remember to look those up in their documentations. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson03/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson05/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第14课 - 调节帧率 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第14课 - 调节帧率</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson14/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson13/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson15/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Regulating Frame Rate</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 11/15/07</h6> What may run on your computer at 60 FPS, may run on someone else's at 200 FPS. Since speed varies from computer to computer, you're going to have to regulate frame rate to keep the game from running too fast. If a game runs too fast it becomes unplayable. To prevent that you must cap the frame rate. 
+       <br /> 
+       <br /> This tutorial teaches you just that. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The frames per second
+const int FRAMES_PER_SECOND = 20;
+</pre> 
+      <div class="tutText">
+        We define our frames per second as a global constant. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">    //Keep track of the current frame
+    int frame = 0;
+    
+    //Whether or not to cap the frame rate
+    bool cap = true;
+
+    //The frame rate regulator
+    Timer fps;
+</pre> 
+      <div class="tutText">
+        Here are some variables declared in the main() function. The &quot;frame&quot; variable keeps track of how many frames have been animated, which is important for knowing where to blit the message surface in this demo program. There's also the &quot;cap&quot; variable which keeps track of whether the user wants to cap the frame rate. 
+       <br /> 
+       <br /> Then we declare a timer object which we use to cap the frame rate. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:11 lang-cpp">    //Generate the message surfaces
+    message = TTF_RenderText_Solid( font, &quot;Testing Frame Rate&quot;, textColor );
+</pre> 
+      <div class="tutText">
+        Now we render the message surface that will move across the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:13 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+        //Start the frame timer
+        fps.start();
+</pre> 
+      <div class="tutText">
+        Now we enter our main loop. At the beginning of every frame, we have to start our frame timer. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:18 lang-cpp">        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //If a key was pressed
+            if( event.type == SDL_KEYDOWN )
+            {
+                //If enter was pressed
+                if( event.key.keysym.sym == SDLK_RETURN )
+                {
+                    //Switch cap
+                    cap = ( !cap );
+                }
+            }
+            
+            //If the user has Xed out the window
+            else if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+</pre> 
+      <div class="tutText">
+        Here we do our event handling. Basically this turns the FPS cap on/off when the user presses enter, and quits the program when the user wants to X out. 
+       <br /> 
+       <br /> You typically don't need a variable to turn the frame regulation on/off when you're capping the frame rate in an actual game, but it's here in this program so you can see the difference between regulated and unregulated frame rate. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:39 lang-cpp">        //Apply the background
+        apply_surface( 0, 0, background, screen );
+        
+        //Apply the message
+        apply_surface( ( SCREEN_WIDTH - message-&gt;w ) / 2, ( ( SCREEN_HEIGHT + message-&gt;h * 2 ) / FRAMES_PER_SECOND ) * ( frame % FRAMES_PER_SECOND ) - message-&gt;h, message, screen );
+</pre> 
+      <div class="tutText">
+        Then we apply the background and message surface. 
+       <br /> 
+       <br /> Don't worry about all that coding that went into blitting the message surface. It was basically a shorter way of doing: 
+       <br /> 
+       <br /> if( frame % FRAMES_PER_SECOND == 0 ) 
+       <br /> { 
+       <br /> //blit here 
+       <br /> } 
+       <br /> if( frame % FRAMES_PER_SECOND == 1 ) 
+       <br /> { 
+       <br /> //blit there 
+       <br /> } 
+       <br /> 
+       <br /> etc, etc. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:44 lang-cpp">        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+        
+        //Increment the frame counter
+        frame++;
+</pre> 
+      <div class="tutText">
+        Then we update the screen and increment the frame counter. 
+       <br /> Now we've finished everything we needed to do for this frame. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:52 lang-cpp">        //If we want to cap the frame rate
+        if( ( cap == true ) &amp;&amp; ( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND ) )
+        {
+            //Sleep the remaining frame time
+            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+        }
+</pre> 
+      <div class="tutText">
+        This is where we do the actual frame rate capping. 
+       <br /> 
+       <br /> When we started the frame, we started a timer to keep track of how much time it took to output this frame. In order for this program not to run too fast, each frame must take a certain amount of time. Since 20 frames are being shown per second, each frame must take no less than 1/20th of a second. If the frame rate is at 60 FPS, each frame must take no less than 1/60th of a second. Since this demo is running at 20 FPS, that means we should spend 50 milliseconds (1000 milliseconds / 20 frames) per frame. 
+       <br /> 
+       <br /> To regulate the frame rate, first we check if the frame timer is less than the time allowed per frame. If it's more, it means we're either on time or behind schedule so we don't have time to wait. If it is less, then we use SDL_Delay() to sleep the rest of the frame time. 
+       <br /> 
+       <br /> So if the frame timer in this program is at 20 milliseconds we sleep for 30 milliseconds. If the frame timer is at 40 milliseconds, we sleep for 10 milliseconds, etc, etc. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson14">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson13/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson15/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

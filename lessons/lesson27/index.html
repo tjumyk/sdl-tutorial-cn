@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第27课 - Alpha混合 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第27课 - Alpha混合</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson27/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson26/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson28/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Alpha Blending</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/28/09</h6> Alpha blending allows you to have have surfaces with different levels of transparency. In this tutorial we blit two surfaces with the front one being able to fade in/out by changing its alpha value. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The frame rate
+const int FRAMES_PER_SECOND = 20;
+</pre> 
+      <div class="tutText">
+        SDL's alpha transparency is notoriously slow. That's because it's not hardware accelerated. Stick whatever graphics card in your system it won't make much of a difference. 
+       <br /> 
+       <br /> I just wanted to point out that if you notice SDL being really slow in this demo, it may be because the frame rate is capped at 20 fps. 
+       <br /> 
+       <br /> If you want hardware accelerated graphics, consider moving on to OpenGL. It works very well with SDL. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">    //Quit flag
+    bool quit = false;
+    
+    //The front surface alpha value
+    int alpha = SDL_ALPHA_OPAQUE;
+    
+    //The frame rate regulator
+    Timer fps;
+    
+    //Initialize
+    if( init() == false )
+    {
+        return 1;
+    }
+    
+    //Load the files
+    if( load_files() == false )
+    {
+        return 1;    
+    }
+</pre> 
+      <div class="tutText">
+        Near the top of our main function we declare &quot;alpha&quot; to hold the alpha value of our front surface. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:23 lang-cpp">        //Get the keystates
+        Uint8 *keystates = SDL_GetKeyState( NULL );
+    
+        //If up is pressed
+        if( keystates[ SDLK_UP ] )
+        {
+            //If alpha is not at maximum
+            if( alpha &lt; SDL_ALPHA_OPAQUE )
+            {
+                //Increase alpha
+                alpha += 5;
+            }
+        }
+    
+        //If down is pressed
+        if( keystates[ SDLK_DOWN ] )
+        {
+            //If alpha is not at minimum
+            if( alpha &gt; SDL_ALPHA_TRANSPARENT )
+            {
+                //Decrease alpha
+                alpha -= 5;
+            }
+        }
+</pre> 
+      <div class="tutText">
+        Here's where we play with our alpha value. 
+       <br /> 
+       <br /> Alpha goes from 0 to 255 like Red, Green, or Blue. Alpha at 0 is completely transparent and equal to SDL_ALPHA_TRANSPARENT. Alpha at 255 is completely opaque and equal to SDL_ALPHA_OPAQUE. 
+       <br /> 
+       <br /> In this piece of code we get the key states, then increase alpha when up is pressed and decrease alpha when down is pressed. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:47 lang-cpp">        //Set surface alpha
+        SDL_SetAlpha( front, SDL_SRCALPHA, alpha );
+        
+        //Apply the back
+        apply_surface( 0, 0, back, screen );
+        
+        //Apply the front
+        apply_surface( 0, 0, front, screen );
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+</pre> 
+      <div class="tutText">
+        Here we apply the alpha value to the front surface using SDL_SetAlpha(). Now when the front surface us blitted, it will have the transparency we set. 
+       <br /> 
+       <br /> Then we blit back surface, then the front surface with the alpha value we gave it and finally we update the screen. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson27">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson26/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson28/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

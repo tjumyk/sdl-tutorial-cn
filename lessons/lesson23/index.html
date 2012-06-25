@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第23课 - 获得字符串输入 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第23课 - 获得字符串输入</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson23/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson22/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson24/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Getting String Input</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Here we need to get the player's name after they got a high score. Back in your early days, you used cin to get string input. Since SDL has no built in ways of getting the user's name, we'll make our own function to handle keypresses to get string input. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The key press interpreter
+class StringInput
+{
+    private:
+    //The storage string
+    std::string str;
+    
+    //The text surface
+    SDL_Surface *text;
+    
+    public:
+    //Initializes variables
+    StringInput();
+    
+    //Does clean up
+    ~StringInput();
+    
+    //Handles input
+    void handle_input();
+    
+    //Shows the message on screen
+    void show_centered();    
+};
+</pre> 
+      <div class="tutText">
+        Here's is our class used to manage string input. 
+       <br /> 
+       <br /> In terms of variables we have a string for the actual string data and a surface to render the text to. 
+       <br /> 
+       <br /> Then we have our constructors and destructors, the function handle_input() to deal with user input, and show_centered() to make the string appear on the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:24 lang-cpp">StringInput::StringInput()
+{
+    //Initialize the string
+    str = &quot;&quot;;
+    
+    //Initialize the surface
+    text = NULL;
+    
+    //Enable Unicode
+    SDL_EnableUNICODE( SDL_ENABLE );    
+}
+
+StringInput::~StringInput()
+{
+    //Free text surface
+    SDL_FreeSurface( text );
+    
+    //Disable Unicode
+    SDL_EnableUNICODE( SDL_DISABLE );  
+}
+</pre> 
+      <div class="tutText">
+        In the constructor along with a variable initialization, we enable unicode with SDL_EnableUNICODE(). This will make getting string input much easier as you'll see later. 
+       <br /> 
+       <br /> In the destructor we free our text surface and disable unicode. While enabling unicode makes string input easier, it does add a bit of overhead. It should be turned off when you're not using it. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:44 lang-cpp">void StringInput::handle_input()
+{
+    //If a key was pressed
+    if( event.type == SDL_KEYDOWN )
+    {
+        //Keep a copy of the current version of the string
+        std::string temp = str;
+        
+        //If the string less than maximum size
+        if( str.length() &lt;= 16 )
+        {
+</pre> 
+      <div class="tutText">
+        Now it's time to handle the user's input. 
+       <br /> 
+       <br /> When the user presses a key, we first store a copy of the current string. I'll tell you why later. 
+       <br /> 
+       <br /> Then we check that the string isn't at maximum length. Here I set it as 16, but you can set it to be whatever you want. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">            //If the key is a space
+            if( event.key.keysym.unicode == (Uint16)' ' )
+            {
+                //Append the character
+                str += (char)event.key.keysym.unicode;    
+            }
+</pre> 
+      <div class="tutText">
+        The basic concept of string input is when the user presses 'A' add on a 'A', when the user presses 'B' add on a 'B', etc, etc. 
+       <br /> 
+       <br /> Because the SDLKey definitions don't match up with their ASCII/Unicode values, we enable unicode so the &quot;unicode&quot; member of the Keysym structure matches the unicode value of character pressed. Enabling unicode also automatically handles shift and caps lock when you want capital letters and symbols. 
+       <br /> 
+       <br /> If you don't know what unicode is, it's just an extension of ASCII. Instead of being 8bit, it's 16bit so it can hold all the international characters. 
+       <br /> 
+       <br /> Here if the key pressed has the unicode value of the space character, we append it the string. Since a standard string only uses 8bit ASCII characters, we have to convert it to a char when appending it. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:61 lang-cpp">            //If the key is a number
+            else if( ( event.key.keysym.unicode &gt;= (Uint16)'0' ) &amp;&amp; ( event.key.keysym.unicode &lt;= (Uint16)'9' ) )
+            {
+                //Append the character
+                str += (char)event.key.keysym.unicode;
+            }
+            //If the key is a uppercase letter
+            else if( ( event.key.keysym.unicode &gt;= (Uint16)'A' ) &amp;&amp; ( event.key.keysym.unicode &lt;= (Uint16)'Z' ) )
+            {
+                //Append the character
+                str += (char)event.key.keysym.unicode;
+            }
+            //If the key is a lowercase letter
+            else if( ( event.key.keysym.unicode &gt;= (Uint16)'a' ) &amp;&amp; ( event.key.keysym.unicode &lt;= (Uint16)'z' ) )
+            {
+                //Append the character
+                str += (char)event.key.keysym.unicode;
+            }
+        }
+</pre> 
+      <div class="tutText">
+        In this program we only want spaces (ASCII/Unicode 32), numbers (48-57), uppercase (65-90), and lowercase (97-122) letters to appear. So here we limit the numbers allowed to be appended to the string. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">        //If backspace was pressed and the string isn't blank
+        if( ( event.key.keysym.sym == SDLK_BACKSPACE ) &amp;&amp; ( str.length() != 0 ) )
+        {
+            //Remove a character from the end
+            str.erase( str.length() - 1 );
+        }
+</pre> 
+      <div class="tutText">
+        Here we deal with when the user presses backspace. 
+       <br /> 
+       <br /> We simply check if the string is empty, and if it's not we lop off the last character of the string. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:86 lang-cpp">        //If the string was changed
+        if( str != temp )
+        {
+            //Free the old surface
+            SDL_FreeSurface( text );
+        
+            //Render a new text surface
+            text = TTF_RenderText_Solid( font, str.c_str(), textColor );
+        }
+    }
+}
+</pre> 
+      <div class="tutText">
+        Lastly, we check if string was altered by comparing it to the copy we made earlier. 
+       <br /> 
+       <br /> If the string has changed, we free the old text surface, and render a new one. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:97 lang-cpp">void StringInput::show_centered()  
+{
+    //If the surface isn't blank
+    if( text != NULL )
+    {
+        //Show the name
+        apply_surface( ( SCREEN_WIDTH - text-&gt;w ) / 2, ( SCREEN_HEIGHT - text-&gt;h ) / 2, text, screen );
+    }
+}
+</pre> 
+      <div class="tutText">
+        In our show_centered() function we apply the text surface centered on the screen. 
+       <br /> 
+       <br /> In this program we check if the name surface is NULL because when you try to render a surface from a blank string ( that-&gt; &quot;&quot; ), SDL_ttf returns NULL. Which makes sense because it was given nothing to render. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:106 lang-cpp">int main( int argc, char* args[] )
+{
+    //Quit flag
+    bool quit = false;
+    
+    //Keep track if whether or not the user has entered their name
+    bool nameEntered = false;
+    
+    //Initialize
+    if( init() == false )
+    {
+        return 1;
+    }
+    
+    //The gets the user's name
+    StringInput name;
+    
+    //Load the files
+    if( load_files() == false )
+    {
+        return 1;
+    }
+    
+    //Set the message
+    message = TTF_RenderText_Solid( font, &quot;New High Score! Enter Name:&quot;, textColor );
+</pre> 
+      <div class="tutText">
+        At the top of our main() function we have two new variables. &quot;nameEntered&quot; is a flag that tells whether or not the user has entered their name which we obviously initialize to false. &quot;name&quot; is, of course, an object of the class we made used to get the user's name. 
+       <br /> 
+       <br /> We have our typical initialization and loading but we also render the message surface before we go into the main loop. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:131 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //If the user hasn't entered their name yet
+            if( nameEntered == false )
+            {
+                //Get user input
+                name.handle_input();
+                
+                //If the enter key was pressed
+                if( ( event.type == SDL_KEYDOWN ) &amp;&amp; ( event.key.keysym.sym == SDLK_RETURN ) )
+                {
+                    //Change the flag
+                    nameEntered = true;
+                        
+                    //Free the old message surface
+                    SDL_FreeSurface( message );
+                        
+                    //Change the message
+                    message = TTF_RenderText_Solid( font, &quot;Rank: 1st&quot;, textColor );
+                }
+            }
+            
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+</pre> 
+      <div class="tutText">
+        Here's the event handling part of our main loop. 
+       <br /> 
+       <br /> First we check if the user is still entering their name. If they are we call handle_input() on our StringInput object and let it do its thing. 
+       <br /> 
+       <br /> When the user presses enter, it means the user has finished so we set the &quot;nameEntered&quot; flag to true. Then we free the old message surface and render a new one. 
+       <br /> 
+       <br /> and of course we also check if the user wants to X out. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:164 lang-cpp">        //Apply the background
+        apply_surface( 0, 0, background, screen );
+
+        //Show the message
+        apply_surface( ( SCREEN_WIDTH - message-&gt;w ) / 2, ( ( SCREEN_HEIGHT / 2 ) - message-&gt;h ) / 2, message, screen );
+        
+        //Show the name on the screen
+        name.show_centered();
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Now here's the rendering part of our main loop. 
+       <br /> 
+       <br /> Nothing really new here, we just apply the background, then message surface and show our text input. 
+       <br /> 
+       <br /> In this tutorial we only handled string input, but getting integers isn't much harder. The 
+       <a class="tutLink" href="../../../www.cppreference.com/stdstring/index.html">string header</a> has the function atoi() that gets an integer from a string. There's other functions that'll do floating point numbers. Look 'em up. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson23">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson22/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson24/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

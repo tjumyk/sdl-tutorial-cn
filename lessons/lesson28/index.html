@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第28课 - 粒子引擎 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第28课 - 粒子引擎</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson28/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson27/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson29/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Particle Engines</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Particle engines are ways to create effects like fire, smoke, or in this case a trail of sparks. Here we're going to make a very simple particle engine to surround the dot in sparks. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">class Particle
+{
+    private:
+    //Offsets
+    int x, y;
+    
+    //Current frame of animation
+    int frame;
+    
+    //Type of particle
+    SDL_Surface *type;
+    
+    public:
+    //Constructor
+    Particle( int X, int Y );
+    
+    //Shows the particle
+    void show();
+
+    //Checks if particle is dead
+    bool is_dead();
+};
+</pre> 
+      <div class="tutText">
+        Particles are just little animations. We want to surround the dot with a bunch of little flashing sparks that look like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="red.gif" /> 
+        <img src="green.gif" /> 
+        <img src="blue.gif" /> 
+       </div> 
+       <div class="tutImg"> 
+        <img src="green.gif" /> 
+        <img src="blue.gif" /> 
+        <img src="red.gif" /> 
+       </div> 
+       <div class="tutImg"> 
+        <img src="blue.gif" /> 
+        <img src="red.gif" /> 
+        <img src="green.gif" /> 
+       </div> So we'll create a particle class and give the dot a bunch of particles. 
+       <br /> 
+       <br /> These spark particles are real simple. They have offsets, a frame of animation and a surface. 
+       <br /> 
+       <br /> In terms of functions they have a constructor, a function to show the spark and a function to check if the spark is still active. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:23 lang-cpp">//The dot
+class Dot
+{
+    private:
+    //The offsets
+    int x, y;
+    
+    //The velocity of the dot
+    int xVel, yVel;
+    
+    //The particles
+    Particle *particles[ TOTAL_PARTICLES ];
+    
+    public:
+    //Initializes
+    Dot();
+    
+    //Cleans up particles
+    ~Dot();
+    
+    //Handles keypresses
+    void handle_input();
+    
+    //Moves the dot
+    void move();
+    
+    //Shows the particles
+    void show_particles();
+    
+    //Shows the dot
+    void show();
+};
+</pre> 
+      <div class="tutText">
+        Here we have our good friend the dot class revised to include the particles. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">bool init()
+{
+    //Initialize all SDL subsystems
+    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+    {
+        return false;    
+    }
+    
+    //Set up the screen
+    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+    
+    //If there was an error in setting up the screen
+    if( screen == NULL )
+    {
+        return false;    
+    }
+    
+    //Set the window caption
+    SDL_WM_SetCaption( &quot;Particle Test&quot;, NULL );
+    
+    //Seed random
+    srand( SDL_GetTicks() );
+    
+    //If everything initialized fine
+    return true;
+}
+</pre> 
+      <div class="tutText">
+        Because we're going to need random numbers for our particle engine, we seed random with the current time (which is a common way to do it) in our initialization function. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:81 lang-cpp">Particle::Particle( int X, int Y )
+{
+    //Set offsets
+    x = X - 5 + ( rand() % 25 );
+    y = Y - 5 + ( rand() % 25 );
+    
+    //Initialize animation
+    frame = rand() % 5;
+    
+    //Set type
+    switch( rand() % 3 )
+    {
+        case 0: type = red; break;
+        case 1: type = green; break;
+        case 2: type = blue; break;
+    }
+}
+</pre> 
+      <div class="tutText">
+        Here's the constructor for our particle class. 
+       <br /> 
+       <br /> The &quot;X&quot; and &quot;Y&quot; arguments are going to be the offsets of the dot. We take the arguments and put the particle in a random place around the dot. 
+       <br /> 
+       <br /> Then we initialize the animation a random number from 0 to 4. This is because we want the particles to animate asynchronously. 
+       <br /> 
+       <br /> Then we set the surface type to be the red, green, or blue particle surface. This is also done at random. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:98 lang-cpp">void Particle::show()
+{
+    //Show image
+    apply_surface( x, y, type, screen );
+    
+    //Show shimmer
+    if( frame % 2 == 0 )
+    {
+        apply_surface( x, y, shimmer, screen );    
+    }
+    
+    //Animate
+    frame++;
+}
+</pre> 
+      <div class="tutText">
+        Here is the show() function for our sparks. 
+       <br /> 
+       <br /> All we do is show our surface then if the frame is divisible by 2 we show the shimmer surface on top of red, green or blue surface. The shimmer surface is just semitransparent white surface. The result will have the particles doing a flashing animation. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:112 lang-cpp">bool Particle::is_dead()
+{
+    if( frame &gt; 10 )
+    {
+        return true;    
+    }
+    
+    return false;
+}
+</pre> 
+      <div class="tutText">
+        Here we have a function to check if a particle is dead or not. 
+       <br /> 
+       <br /> A particle is considered dead after it animates for 10 frames. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:121 lang-cpp">Dot::Dot()
+{
+    //Initialize the offsets
+    x = 0;
+    y = 0;
+    
+    //Initialize the velocity
+    xVel = 0;
+    yVel = 0;
+    
+    //Initialize particles
+    for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
+    {
+        particles[ p ] = new Particle( x, y );
+    }
+}
+
+Dot::~Dot()
+{
+    //Delete particles
+    for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
+    {
+        delete particles[ p ];
+    }
+}
+</pre> 
+      <div class="tutText">
+        Here are the dot's constructor and destructor. The only changes to the dot class made here is that we generate particles in the constructor and get rid of them in the destructor. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:146 lang-cpp">void Dot::show()
+{
+    //Show the dot
+    apply_surface( x, y, dot, screen );
+    
+    //Show the particles
+    show_particles();
+}
+</pre> 
+      <div class="tutText">
+        Here you can see we altered the dot's show() function to show the particles. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:154 lang-cpp">void Dot::show_particles()
+{
+    //Go through particles
+    for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
+    {
+        //Delete and replace dead particles
+        if( particles[ p ]-&gt;is_dead() == true )
+        {
+            delete particles[ p ];
+            
+            particles[ p ] = new Particle( x, y );
+        }
+    }
+    
+    //Show particles
+    for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
+    {
+        particles[ p ]-&gt;show();
+    }
+}
+</pre> 
+      <div class="tutText">
+        When we show the particles we first go through them and remove and replace any dead particles. 
+       <br /> 
+       <br /> After any dead particles are replaced we show the particles on top of the dot. 
+      </div> 
+      <div class="tutText">
+        This is a pretty minimalistic example of a particle engine but the basics are there. You can make more advanced and better looking particles by making more detailed animations, adding properties like velocity, acceleration, and rotation, or even have the particles interact with each other. 
+       <br /> 
+       <br /> Experiment and see what effects you can create. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson28">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson27/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson29/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第9课 - 鼠标事件 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第9课 - 鼠标事件</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson09/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson08/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson10/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Mouse Events</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/31/10</h6> Time to learn to handle events from the mouse. This is a simple tutorial that will teach you to handle various mouse events to make a simple button. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The button
+class Button
+{
+    private:
+    //The attributes of the button
+    SDL_Rect box;
+    
+    //The part of the button sprite sheet that will be shown
+    SDL_Rect* clip;
+    
+    public:
+    //Initialize the variables
+    Button( int x, int y, int w, int h );
+    
+    //Handles events and set the button's sprite region
+    void handle_events();
+    
+    //Shows the button on the screen
+    void show();
+};
+</pre> 
+      <div class="tutText">
+        Here's the Button class which we're going to interact with. 
+       <br /> 
+       <br /> We have a rectangle to define the position and dimensions of the Button. We also have a pointer to the sprite from the sprite sheet being used by the Button. 
+       <br /> 
+       <br /> Then we have the constructor that sets the Button according to the attributes given in the arguments. Then we have our handle_events() function which handles mouse motion and mouse button events. 
+       <br /> 
+       <br /> Then there's show() function which shows the button on the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:21 lang-cpp">void set_clips()
+{
+    //Clip the sprite sheet
+    clips[ CLIP_MOUSEOVER ].x = 0;
+    clips[ CLIP_MOUSEOVER ].y = 0;
+    clips[ CLIP_MOUSEOVER ].w = 320;
+    clips[ CLIP_MOUSEOVER ].h = 240;
+
+    clips[ CLIP_MOUSEOUT ].x = 320;
+    clips[ CLIP_MOUSEOUT ].y = 0;
+    clips[ CLIP_MOUSEOUT ].w = 320;
+    clips[ CLIP_MOUSEOUT ].h = 240;
+
+    clips[ CLIP_MOUSEDOWN ].x = 0;
+    clips[ CLIP_MOUSEDOWN ].y = 240;
+    clips[ CLIP_MOUSEDOWN ].w = 320;
+    clips[ CLIP_MOUSEDOWN ].h = 240;
+    
+    clips[ CLIP_MOUSEUP ].x = 320;
+    clips[ CLIP_MOUSEUP ].y = 240;
+    clips[ CLIP_MOUSEUP ].w = 320;
+    clips[ CLIP_MOUSEUP ].h = 240;    
+}
+</pre> 
+      <div class="tutText">
+        Here's our function that clips the images from our sprite sheet: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="button.png" /> 
+       </div> As you can see we have a sprite for the various mouse events. So we have an array of four SDL_Rects that clip each button sprite. Each button sprite has a constant associated with it. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:44 lang-cpp">Button::Button( int x, int y, int w, int h )
+{
+    //Set the button's attributes
+    box.x = x;
+    box.y = y;
+    box.w = w;
+    box.h = h;
+    
+    //Set the default sprite
+    clip = &amp;clips[ CLIP_MOUSEOUT ];
+}
+</pre> 
+      <div class="tutText">
+        The constructor for the Button class is pretty straight forward. It sets the x and y offsets of the button along with its width and height. 
+       <br /> 
+       <br /> It also sets the default sprite from the sprite sheet. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">void Button::handle_events()
+{
+    //The mouse offsets
+    int x = 0, y = 0;
+    
+    //If the mouse moved
+    if( event.type == SDL_MOUSEMOTION )
+    {
+        //Get the mouse offsets
+        x = event.motion.x;
+        y = event.motion.y;
+        
+        //If the mouse is over the button
+        if( ( x &gt; box.x ) &amp;&amp; ( x &lt; box.x + box.w ) &amp;&amp; ( y &gt; box.y ) &amp;&amp; ( y &lt; box.y + box.h ) )
+        {
+            //Set the button sprite
+            clip = &amp;clips[ CLIP_MOUSEOVER ];    
+        }
+        //If not
+        else
+        {
+            //Set the button sprite
+            clip = &amp;clips[ CLIP_MOUSEOUT ];
+        }    
+    }
+</pre> 
+      <div class="tutText">
+        In the event handler, the first thing we check is if the mouse moved. When the mouse moves, a SDL_MOUSEMOTION event occurs. 
+       <br /> 
+       <br /> If the mouse was moved, we get the mouse offsets from the event structure, then check if the mouse is over the Button. If the mouse is over the Button, we set the Button's sprite to be the mouse over sprite, otherwise it is set to the mouse out sprite. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">    //If a mouse button was pressed
+    if( event.type == SDL_MOUSEBUTTONDOWN )
+    {
+        //If the left mouse button was pressed
+        if( event.button.button == SDL_BUTTON_LEFT )
+        {
+            //Get the mouse offsets
+            x = event.button.x;
+            y = event.button.y;
+        
+            //If the mouse is over the button
+            if( ( x &gt; box.x ) &amp;&amp; ( x &lt; box.x + box.w ) &amp;&amp; ( y &gt; box.y ) &amp;&amp; ( y &lt; box.y + box.h ) )
+            {
+                //Set the button sprite
+                clip = &amp;clips[ CLIP_MOUSEDOWN ];
+            }
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Then we check if a mouse button was pressed. When a mouse button is pressed, a SDL_MOUSEBUTTONDOWN event occurs. 
+       <br /> 
+       <br /> We only want the button to react to the left mouse button, so we check if the left mouse button was pressed. 
+       <br /> 
+       <br /> Then we check if the mouse button was pressed over the Button. If it was we set the Button's sprite to be the mouse down sprite. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:98 lang-cpp">    //If a mouse button was released
+    if( event.type == SDL_MOUSEBUTTONUP )
+    {
+        //If the left mouse button was released
+        if( event.button.button == SDL_BUTTON_LEFT )
+        { 
+            //Get the mouse offsets
+            x = event.button.x;
+            y = event.button.y;
+        
+            //If the mouse is over the button
+            if( ( x &gt; box.x ) &amp;&amp; ( x &lt; box.x + box.w ) &amp;&amp; ( y &gt; box.y ) &amp;&amp; ( y &lt; box.y + box.h ) )
+            {
+                //Set the button sprite
+                clip = &amp;clips[ CLIP_MOUSEUP ];
+            }
+        }
+    }
+}
+</pre> 
+      <div class="tutText">
+        Then we check if the mouse button was released over the button with a SDL_MOUSEBUTTONUP event. 
+       <br /> 
+       <br /> In this program we got the mouse offsets by getting them from the event structure. It would have been more efficient to get the mouse offsets via SDL_GetMouseState(), but.... eh I'm too lazy to go back and change the code. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:117 lang-cpp">void Button::show()
+{
+    //Show the button
+    apply_surface( box.x, box.y, buttonSheet, screen, clip );
+}
+</pre> 
+      <div class="tutText">
+        Then in the show function we show the button's sprite on the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:122 lang-cpp">    //Clip the sprite sheet
+    set_clips();
+    
+    //Make the button
+    Button myButton( 170, 120, 320, 240 );
+    
+</pre> 
+      <div class="tutText">
+        At the top of the main() function after we've initialized and loaded everything, we set clip the sprite sheet and set our button. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:128 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+        //If there's events to handle
+        if( SDL_PollEvent( &amp;event ) )
+        {
+            //Handle button events
+            myButton.handle_events();
+            
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }    
+        }
+
+        //Fill the screen white
+        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+        
+        //Show the button
+        myButton.show();
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Here's the button class in action inside our main loop. 
+       <br /> 
+       <br /> First we handle events. As you can see we use Button's event handler and we also check for a user quit. 
+       <br /> 
+       <br /> Typically a while loop is used to handle events but in this tutorial (and the previous one) we used &quot;if&quot;. This is so one event is handled per frame and it's easier to see the individual events. In most real applications you use &quot;while&quot; because you want to handle all events on queue every frame. 
+       <br /> 
+       <br /> After the event is handled, we clear the screen by filling it white. Then we show the button on the screen and update the screen. 
+       <br /> 
+       <br /> Then the main loop continues so we can render another frame until the user quits. 
+      </div> 
+      <div class="tutText">
+        For those of you on faster computers you may not see the CLIP_MOUSEUP sprite. This is because the program runs so fast it only shows up for a split second. Fortunately there's a set of tutorials dealing with timing and regulating frame rate coming up. If you slow the program down to 20 frames per second you should at least be able to notice it. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson09">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson08/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson10/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

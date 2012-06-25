@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第3课 - 使用SDL扩展库加载更多格式的图片 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第3课 - 使用SDL扩展库加载更多格式的图片</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson03/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson02/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson04/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+  <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content translated"> 
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Setting up SDL Extension Libraries</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 8/26/10</h6> SDL only supports .bmp files natively, but using the SDL_image extension library, you'll be able to load BMP, PNM, XPM, LBM, PCX, GIF, JPEG, TGA and PNG files. 
+       <br /> 
+       <br /> Extension libraries allow you to use features that basic SDL doesn't support natively. Setting up an SDL extension library isn't hard at all, I'd even say it's easier to set up than basic SDL. This tutorial will teach you how to use the SDL_image extension library. 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="row"> 
+    <div class="span10 offset1 well"> 
+     <h2 align="center">请选择您的操作系统及编程环境：</h2> 
+     <div class="alert alert-info"> 
+      <strong>译者注：</strong>针对国内实际情况，仅翻译了常用编程环境的配置教程，如需查看更多环境的配置方法，请查看 
+      <a target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson01/index.php"><strong>英文原文</strong></a>！ 
+     </div> 
+     <table class="tutToC table table-bordered"> 
+      <colgroup> 
+       <col width="20%" /> 
+      </colgroup> 
+      <tbody> 
+       <tr> 
+        <td class="tutLink"><img src="windows/logo.jpg" /> <p align="center"> <br />Windows </p></td> 
+        <td class="tutLink"><a href="windows/devcpp/index.html" class="tutLink btn btn-large">Dev C++ 4.9.9.2</a> <a href="windows/codeblocks/index.html" class="tutLink btn btn-large">Code::Blocks 8.02</a> <a href="windows/msvsnet2010e/index.html" class="tutLink btn btn-large">Visual Studio.NET 2010 Express</a> <a href="windows/eclipse/index.html" class="tutLink btn btn-large">Eclipse 3.1</a></td> 
+       </tr> 
+       <tr> 
+        <td class="tutLink"><img src="linux/logo.jpg" /> <p align="center"> <br />Linux </p></td> 
+        <td class="tutLink"><a href="linux/eclipse/index.html" class="tutLink btn btn-large">Eclipse 3.0</a></td> 
+       </tr> 
+       <tr> 
+        <td class="tutLink"><img src="mac/logo.jpg" /> <p align="center"> <br />Max OS X </p></td> 
+        <td class="tutLink"><a href="mac/xcode/index.html" class="tutLink btn btn-large">XCode 3.2</a></td> 
+       </tr> 
+      </tbody> 
+     </table> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第1课(下) - 在屏幕上显示一张图片 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第1课(下) - 在屏幕上显示一张图片</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson01/index2.php">原文链接</a></li> 
+      <li><a class="btn" href="./index.html">上一部分</a></li> 
+      <li><a class="btn" href="../lesson02/index.html">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Getting an Image on the Screen</h1> 
+       <div class="tutImg"> 
+        <img src="preview2.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> This tutorial covers how to do Hello World SDL style. 
+       <br /> 
+       <br /> Now that you have SDL set up, it's time to make a bare bones graphics application that loads and displays an image on the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//Include SDL functions and datatypes
+#include &quot;SDL/SDL.h&quot;
+</pre> 
+      <div class="tutText">
+        At the top of the source file we include the SDL header file so we can use the SDL functions and data types. 
+       <br /> 
+       <br /> Remember that some of you (like Visual Studio users) are going to include SDL like this: 
+       <h6>#include &quot;SDL.h&quot;</h6> So if the compiler is complaining that it can't find &quot;SDL/SDL.h&quot;, then it's either because you're including the wrong path or you forgot to put SDL.h in the right place. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">int main( int argc, char* args[] )
+{
+    //The images
+    SDL_Surface* hello = NULL;
+    SDL_Surface* screen = NULL;
+</pre> 
+      <div class="tutText">
+        At the top of the main() function, two SDL_Surface pointers are declared. An SDL_Surface is an image, and in this application we're going to be dealing with two images. The surface &quot;hello&quot; is the image we're going to be loading and showing. The &quot;screen&quot; is what is visible on the screen. 
+       <br /> 
+       <br /> Whenever you're dealing with pointers, you should always remember to initialize them. 
+       <br /> 
+       <br /> Also, when using SDL, you must have your main() function declared like it is above. You can't use void main() or anything like that. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:8 lang-cpp">    //Start SDL
+    SDL_Init( SDL_INIT_EVERYTHING );
+
+    //Set up screen
+    screen = SDL_SetVideoMode( 640, 480, 32, SDL_SWSURFACE );
+
+    //Load image
+    hello = SDL_LoadBMP( &quot;hello.bmp&quot; );
+</pre> 
+      <div class="tutText">
+        The first function we call in the main() function is SDL_Init(). This call of SDL_Init() initializes all the SDL subsystems so we can start using SDL's graphics functions. 
+       <br /> 
+       <br /> Next SDL_SetVideoMode() is called to set up a 640 pixel wide, 480 pixel high window that has 32 bits per pixel. The last argument (SDL_SWSURFACE) sets up the surface in software memory. After SDL_SetVideoMode() executes, it returns a pointer to the window surface so we can use it. 
+       <br /> 
+       <br /> After the window is set up, we load our image using SDL_LoadBMP(). SDL_LoadBMP() takes in a path to a bitmap file as an argument and returns a pointer to the loaded SDL_Surface. This function returns NULL if there was an error in loading the image. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:16 lang-cpp">    //Apply image to screen
+    SDL_BlitSurface( hello, NULL, screen, NULL );
+
+    //Update Screen
+    SDL_Flip( screen );
+
+    //Pause
+    SDL_Delay( 2000 );
+</pre> 
+      <div class="tutText">
+        Now that we have our window set up and our image loaded, we want to apply the loaded image onto the screen. We do this using SDL_BlitSurface(). The first of SDL_BlitSurface() argument is the source surface. The third argument is the destination surface. SDL_BlitSurface() sticks the source surface onto the destination surface. In this case, it's going to apply our loaded image onto the screen. You'll find out what the other arguments do in later tutorials. 
+       <br /> 
+       <br /> Now that our image is applied to screen, we need to update the screen so we can see it. We do this using SDL_Flip(). If you don't call SDL_Flip(), you'll only see an unupdated blank screen. 
+       <br /> 
+       <br /> Now that the image is applied to the screen and it's made visible, we have to make the window stay visible so it doesn't just flash for a split second and disappear. We'll make the window stay by calling SDL_Delay(). Here we delay the window for 2000 milliseconds (2 seconds). You'll learn a better way to make the window stay in place in 
+       <a class="tutLink" href="../lesson04/index.php">tutorial 4</a>. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:24 lang-cpp">    //Free the loaded image
+    SDL_FreeSurface( hello );
+
+    //Quit SDL
+    SDL_Quit();
+
+    return 0;
+}
+</pre> 
+      <div class="tutText">
+        Now that we're not going to use the loaded image anymore in our program, we need to remove it from memory. You can't just use delete, you have to use SDL_FreeSurface() to remove the image from memory. At the end of our program, we call SDL_Quit() to shut down SDL. 
+       <br /> 
+       <br /> You may be wondering why we never deleted the screen surface. Don't worry, SDL_Quit() cleans it up for you. 
+       <br /> 
+       <br /> Congratulations, you've just made your first graphics application. 
+      </div> 
+      <div class="tutText"> 
+       <h1 class="tutHead">Troubleshooting your SDL application</h1> If the compiler complains that it can't find 
+       <b>'SDL/SDL.h'</b>, it means you forgot to set up your header files. Your compiler/IDE should be looking for the SDL header files, so make sure that it's configured to look in the SDL include folder. 
+       <br /> 
+       <br /> If you're using Visual Studio and the compiler complains 
+       <b>'SDL/SDL.h': No such file or directory</b>, go to the top of the source code and make sure it says 
+       <b>#include &quot;SDL.h&quot;</b>. 
+       <br /> 
+       <br /> If your program compiles, but linker complains it can't find some lib files, make sure your compiler/IDE is looking in the SDL lib folder. If your linker complains about an undefined references to a bunch of SDL functions, make sure you linked against SDL in the linker. 
+       <br /> 
+       <br /> If your linker complains about entry points, make sure that you have the main function declared the right way and that you only have one main function combined in your source code. 
+       <br /> 
+       <br /> If the program compiles, links, and builds, but when you try to run it it complains that it can't find SDL.dll, make sure you put SDL.dll in the same directory as the compiled executable. Visual Studio users will need to put the dll file in the same directory as your vcproj file. Windows users can also put the dll inside of the system32 directory. 
+       <br /> 
+       <br /> If you run the program and the images don't show up or the window flashes for a second and you find in stderr.txt: 
+       <br /> 
+       <b>Fatal signal: Segmentation Fault (SDL Parachute Deployed)</b> 
+       <br /> It's because the program tried to access memory it wasn't supposed to. Odds are its because it tried to access NULL when SDL_BlitSurface() was called. This means you need to make sure the bitmap files are in the same directory as the program. Visual Studio users will need to put the bitmap file in the same directory as your vcproj file. 
+       <br /> 
+       <br /> Also if you're using Visual Studio and you get the error 
+       <b>&quot;The application failed to start because the application configuration is incorrect. Reinstalling the application may fix this problem.&quot;</b>, it's because you don't have the service pack update installed. 
+       <a class="tutLink" href="windows/vcsetup/index.php">Do not forget to have the latest version of your compiler/IDE with the service pack update for your compiler/IDE or SDL will not work with Visual Studio</a>. 
+       <br /> 
+       <br /> Some Linux users will run and get a blank screen. Try running the program from the command line. 
+       <br /> 
+       <br /> If you had to create a project to compile an SDL program, remember that you will need to create a project for every SDL program you create. Or, better yet, you can reuse the SDL project you made the first time. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson01">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="index.php">Tutorial Index</a> 
+       <a class="rightNav" href="../lesson02/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

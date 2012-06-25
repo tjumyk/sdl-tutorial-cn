@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8" /> 
+  <title>SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="assets/css/docs.css" rel="stylesheet" /> 
+  <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="./index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class="active"><a href="./index.html">简介</a></li> 
+       <li class=""><a href="./contents.html">目录</a></li> 
+       <li class=""><a href="./about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <!-- Masthead
+================================================== --> 
+   <header class="jumbotron masthead"> 
+    <div class="inner"> 
+     <h1>SDL中文教程 - 游戏编程入门</h1> 
+     <p>翻译自Lazy Foo的英文教程 &middot; 面向SDL 1.2</p> 
+     <p class="download-info"> 
+	   <a  data-toggle="modal" href="#downloadModal" id="btn1" class="btn btn-primary btn-large hidden-phone">
+	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_351_book_open-white.png" />
+		 下载适用于电脑和手机的电子书
+	   </a> 
+	   <a target="_blank" href="http://github.com/download.zip" id="btn2" class="btn btn-primary btn-large visible-phone">
+	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_351_book_open-white.png" />
+		 下载适用于电脑和手机的电子书
+	   </a>
+	   <!-- 
+	   <a target="_blank" href="http://github.com/index.html" id="btn3" class="btn btn-primary btn-large ">
+	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_020_home-white.png" />
+		   查看最新在线版本
+	   </a>
+	    -->
+	   <a target="_blank" href="https://github.com/twitter/bootstrap/" class="btn btn-large">
+	     <img class="bs-icon" src="assets/img/github.png" /> 
+		 在GitHub上浏览此项目
+	   </a> 
+	   <a href="http://www.lazyfoo.net/SDL_tutorials/" target="_blank" class="btn btn-large">
+	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_340_globe.png" /> 
+	     Original English Version 
+	   </a> 
+	</p> 
+    </div>
+    <div class="modal hide fade" id="downloadModal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>下载适用于电脑和手机的电子书</h3>
+      </div>
+      <div class="modal-body">
+        <h3>方式一：</h3><h4>本教程所有内容已打包为一个独立的<span class="label label-info">CHM</span>格式的电子书，支持在Windows系统和智能手机上离线阅读。</h4>
+		<br />
+		<div align="center" id="qrcode"></div>
+		<p align="center"><span class="label label-info">这是神奇的二维码，你懂的...</span></p>
+		<hr class="">
+		<h3>方式二：</h3><h4>如果您正在使用Chrome浏览器，建议安装特别制作的<span class="label label-info">Chrome插件</span>，其中不仅包含了可离线阅读的完整教程，还支持HTML5和CSS3的渲染，您可以获得更完美的阅读体验。</h4>
+		<p align="center"><a target="_blank" href="http://chrome.google.com" rel="tooltip"  class="tooltip-test" data-original-title="点此安装最新Chrome浏览器"><img class="bs-icon" src="assets/img/chrome_logo.gif" /></a></p>
+      </div>
+	  
+      <div class="modal-footer">
+        <a target="_blank" id="downloadLink" href="http://github.com/download.zip" class="btn btn-primary">直接下载CHM到本机</a>
+        <a target="_blank" href="http://github.com/download.zip" class="btn btn-primary">安装Chrome插件</a>
+		<a href="#" class="btn" data-dismiss="modal">关闭窗口</a>
+      </div>
+    </div>	
+    <ul class="quick-links"> 
+     <li><a target="_blank" href="https://github.com/twitter/bootstrap/zipball/master">下载整个站点</a></li> 
+     <li><a target="_blank" href="https://github.com/twitter/bootstrap/issues?state=open">提交问题</a></li> 
+     <li><a target="_blank" href="https://github.com/twitter/bootstrap/wiki">路线图及更新日志</a></li> 
+    </ul> 
+    <p> <span class="label label-info">当前进度：6%， 更新时间：2012年6月21日</span> </p> 
+    <div class="row"> 
+     <div class="span10 offset1 progress progress-striped
+     active"> 
+      <div class="bar" style="width: 6%;"></div> 
+     </div> 
+    </div> 
+   </header> 
+   <hr style="" /> 
+   <div class="marketing"> 
+    <h1>什么是SDL？</h1> 
+    <p class="marketing-byline">SDL是 “Simple DirectMedia Layer”的缩写，它是一个开源的项目。</p> 
+    <div class="row"> 
+     <div class="span4"> 
+      <img class="bs-icon" src="assets/img/SDL_logo.png" /> 
+     </div> 
+     <div class="span8"> 
+      <div class="row"> 
+       <div class="span4"> 
+        <img class="bs-icon" src="assets/img/glyphicons/glyphicons_008_film.png" /> 
+        <h2>为多媒体编程而设计</h2> 
+        <p>SDL是一个跨平台的多媒体库，它通过OpenGL和2D视频帧缓冲，提供了针对音频、视频、键盘、鼠标、控制杆及3D硬件的低级别的访问接口。它在MPEG播放软件、模拟器以及许多游戏中得到广泛的应用，其中包含了获得大奖的“文明：权力的呼唤”的Linux版本。</p> 
+       </div> 
+       <div class="span4"> 
+        <img class="bs-icon" src="assets/img/glyphicons/glyphicons_083_random.png" /> 
+        <h2>优越的跨平台特性</h2> 
+        <p>SDL支持以下操作系统：Linux, Windows, Windows CE, BeOS, MacOS, Mac OS X, FreeBSD, NetBSD, OpenBSD, BSD/OS, Solaris, IRIX,以及 QNX。同时代码中包含了针对AmigaOS, Dreamcast, Atari, AIX, OSF/Tru64, RISC OS, SymbianOS, 和OS/2的支持，但这些并不是正式的支持。</p> 
+       </div> 
+      </div> 
+      <div class="row"> 
+       <div class="span4"> 
+        <img class="bs-icon" src="assets/img/glyphicons/glyphicons_030_pencil.png" /> 
+        <h2>支持多种程序语言</h2> 
+        <p>SDL是用C编写的，但可以原生地配合C++使用，并且它拥有一些其他程序语言的绑定，这包括：Ada, C#, D, Eiffel, Erlang, Euphoria, Go, Guile, Haskell, Java, Lisp, Lua, ML, Objective C, Pascal, Perl, PHP, Pike, Pliant, Python, Ruby, Smalltalk, 以及 Tcl。</p> 
+       </div> 
+       <div class="span4"> 
+        <img class="bs-icon" src="assets/img/glyphicons/glyphicons_274_beer.png" /> 
+        <h2>因为开源，所以自由</h2> 
+        <p>SDL采用GNU的LGPL第二版许可发行。该许可允许你自由地链接其动态链接库，甚至可以在商业软件中自由地使用。</p> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer">
+   <div id="installChrome" class="row hidden-phone">
+        <p class="alert alert-info" align="center">页面显示混乱或不完整？可能是您的浏览器已经out了，推荐使用 <a target="_blank" href="http://chrome.google.com" rel="tooltip"  class="tooltip-test" data-original-title="点此安装最新Chrome浏览器"><img class="bs-icon" src="assets/img/chrome.png" /> Chrome</a>！这不是广告...</p>
+    </div>
+    <br />
+    <br /> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="./about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p>
+    <p class="pull-right"> 
+      <a target="_blank" href="http://www.w3.org/html/logo/">
+        <img src="assets/img/html5.png"></img><img src="assets/img/css3.png"></img>
+      </a>
+      <a target="_blank" href="http://lesscss.org">
+        <img src="assets/img/less-small.png"></img>
+      </a> 
+    </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="assets/js/jquery.js"></script> 
+  <script src="assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="assets/js/bootstrap-transition.js"></script> 
+  <script src="assets/js/bootstrap-alert.js"></script> 
+  <script src="assets/js/bootstrap-modal.js"></script> 
+  <script src="assets/js/bootstrap-dropdown.js"></script> 
+  <script src="assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="assets/js/bootstrap-tab.js"></script> 
+  <script src="assets/js/bootstrap-tooltip.js"></script> 
+  <script src="assets/js/bootstrap-popover.js"></script> 
+  <script src="assets/js/bootstrap-button.js"></script> 
+  <script src="assets/js/bootstrap-collapse.js"></script> 
+  <script src="assets/js/bootstrap-carousel.js"></script> 
+  <script src="assets/js/bootstrap-typeahead.js"></script> 
+  <script src="assets/js/application.js"></script>  
+  <script type="text/javascript" src="assets/js/jquery.qrcode.min.js"></script>
+  <!-- 
+  <script type="text/javascript">
+    var link = window.location.href.toLowerCase();
+    var host = window.location.hostname.toLowerCase(); 
+    var head = link.split(":", 1)[0];
+    if(head == "file" || head == "mk" || head == "chrome-extension" || host == "127.0.0.1"){
+    	$('#btn3').toggleClass("hidden");
+    	$('#btn1').remove();
+    	$('#btn2').remove();
+    	if(head == "chrome-extension"){
+    		$('#installChrome').remove();
+    	}
+    }else{//Online
+    	$('#btn1').toggleClass("hidden");
+    	$('#btn2').toggleClass("hidden");
+    	$('#btn3').remove();
+    } 
+  </script>
+  -->
+  <script type="text/javascript">
+    $('#qrcode').qrcode({width:128,height:128,text:$('#downloadLink').attr('href')});
+  </script>
+ </body>
+</html>

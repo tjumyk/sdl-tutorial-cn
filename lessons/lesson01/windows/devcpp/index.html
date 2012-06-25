@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8" /> 
+  <title>第1课(上) - 开始使用SDL &middot; 在Dev C++中使用SDL &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../../../index.html">简介</a></li> 
+       <li class=""><a href="../../../../contents.html">目录</a></li> 
+       <li class=""><a href="../../../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center">第1课(上) - 开始使用SDL &middot; 在Dev C++中使用SDL</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson01/windows/devcpp/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../../index.html">返回上层</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1">
+      <div class="content translated">
+      <div class="tutText"> 
+       <a class="tutLink" id="1" href="#1">1)</a>首先你需要下载SDL头文件和二进制文件。 
+       <br /> 你可以在SDL的官方网站上找到它们，
+       <a class="tutLink" target="_blank" href="http://www.libsdl.org/download-1.2.php">点此进入下载页</a>。 
+       <br /> 
+       <br /> 向下滚动到Development Libraries部分，下载Mingw32开发包。 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="download.jpg" /> 
+       </div> 
+       <br /> 打开gz压缩包，里面应该有个tar压缩包。 
+       <br /> 打开tar压缩包 ，里面应该有一个文件夹。
+       <br /> 将这个文件夹拷贝到你喜欢的任意地方。在本教程中，我把它放在C:\根目录 
+       <br /> 
+       <br /> 
+       <a class="tutLink" id="2" href="#2">2)</a>启动Dev C++，打开<span class="label">工具</span>菜单下的<span class="label">编译选项</span>。 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="compiler_options.png" /> 
+       </div> 
+       <div class="alert alert-info"> 
+        <strong>译者注：</strong>本教程中所有插图均采用原版插图，其中可能包含了英文内容，但由于制图过程较繁琐，均不作翻译处理。 
+       </div>
+       <br /> 
+       <a class="tutLink" id="3" href="#3">3)</a>单击<span class="label">目录</span>选项卡，然后再单击<span class="label">C++包含文件</span>。单击文件夹图标： 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="directories.png" /> 
+        <br /> 然后将你解压出来的SDL目录中的“include”文件夹加入列表中 
+        <br /> 
+        <img src="include.png" /> 
+        <br /> 
+        <img src="add.png" /> 
+        <br /> 
+        <img src="added.png" /> 
+        <br /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" id="4" href="#4">4)</a>然后在<span class="label">库</span>选项卡中添加SDL目录中的“lib”文件夹： 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="lib.png" /> 
+        <br /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" id="5" href="#5">5)</a>现在你需要将SDL目录中“bin”文件夹下的SDL.dll拷贝到你将要建立工程的地方。在编译程序时，你需要将SDL.dll和编译生成的exe放在同一个目录中。 
+       <br /> 
+       <br /> 另外，你也可以将SDL.dll拷贝到 “C:\WINDOWS\SYSTEM32”目录下，这样虽然SDL.dll与你的SDL程序不在同一个目录下，但程序仍能找到它。当然，如果你在使用64位的Windows系统，你就得把dll放于“C:\Windows\SysWOW64”目录中。
+       <br /> 
+       <br /> 可是，这样处理存在一个问题：如果你有多个使用不同版本SDL库的应用程序，这会导致版本冲突。 如果你将SDL 1.2.8放于System32中，而应用程序使用的是1.2.13，这必然会导致问题。通常情况下，你需要把SDL.dll和你开发的可执行程序放在同一个目录下，并且当你发布你的应用程序时，你<span class="label label-info">总是</span>需要将SDL.dll与exe放在同一个目录下。
+       <br /> 
+       <br /> 
+       <a class="tutLink" id="6" href="#6">6)</a>现在启动Dev C++并新建一个空工程。  
+       <br /> 
+       <div class="tutImg"> 
+        <img src="new_project.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" id="7" href="#7">7)</a>进入<span class="label">工程属性</span>
+       <br /> 
+       <div class="tutImg"> 
+        <img src="project_options.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" id="8" href="#8">8)</a>在<span class="label">普通</span>选项卡下，设置<span class="label">类型</span>为"Win32图形界面程序".
+       <br /> 这是为了让程序启动时不弹出控制台窗口。
+       <br /> 
+       <div class="tutImg"> 
+        <img src="gui.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" id="9" href="#9">9)</a>在<span class="label">参数</span>选项卡下，粘贴如下命令到<span class="label">连接器</span>方框中：
+       <br />
+       <br />
+       <p align="center">
+       <code>-lmingw32 -lSDLmain -lSDL</code>
+       </p>
+       <br /> 
+       <div class="tutImg"> 
+        <img src="linker.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" id="10" href="#10">10)</a>在工程中新建源代码文件。 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="new_file.jpg" /> 
+       </div> 
+       <br /> 
+       <a class="tutLink" id="11" href="#11">11)</a>将下面的代码粘贴到新建的源文件中： 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
+int main( int argc, char* args[] ) 
+{ 
+    //Start SDL
+    SDL_Init( SDL_INIT_EVERYTHING );
+    
+    //Quit SDL 
+    SDL_Quit();
+    
+    return 0;
+} 
+</pre>
+      <div class="tutText"> 
+       <a class="tutLink" id="12" href="#12">12)</a>现在开始编译。当然，如果还未保存源码，需先保存一下，然后要确保SDL.dll与即将编译出来的exe放于同一个目录中（或者置于“C:\WINDOWS\SYSTEM32”中）。如果编译没有出错，你就成功了。否则，请查看前面的步骤，确保没有跳过任何一步。
+      </div> 
+      <div class="tutFooter">
+                      另外补充一句，在你刚刚下载的压缩包中，有一个“doc”子文件夹，其中包含了SDL的文档。 
+       <br /> 
+       <br /> 我非常推荐您将文档解压到某一个地方，以便查阅。 
+       <br /> 
+       <br />   
+       <br /> 
+      </div> 
+     </div> 
+    </div> 
+    <p align="center">
+     <a class="btn btn-primary" href="../../index2.html">下一部分： 在屏幕上显示一张图片</a>
+    </p>
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../../../assets/js/jquery.js"></script> 
+  <script src="../../../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../../../assets/js/application.js"></script>  
+ </body>
+</html>

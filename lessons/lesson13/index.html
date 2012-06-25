@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第13课 - 高级计时 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第13课 - 高级计时</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson13/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson12/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson14/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Advanced Timers</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/28/09</h6> You've already learned to make a very basic timer. Here you're going to learn to make a timer class with start, stop, and pause functions that you would need when programming a game. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The timer
+class Timer
+{
+    private:
+    //The clock time when the timer started
+    int startTicks;
+    
+    //The ticks stored when the timer was paused
+    int pausedTicks;
+    
+    //The timer status
+    bool paused;
+    bool started;
+    
+    public:
+    //Initializes variables
+    Timer();
+    
+    //The various clock actions
+    void start();
+    void stop();
+    void pause();
+    void unpause();
+    
+    //Gets the timer's time
+    int get_ticks();
+    
+    //Checks the status of the timer
+    bool is_started();
+    bool is_paused();    
+};
+</pre> 
+      <div class="tutText">
+        Here we have the rundown of the timer class. 
+       <br /> 
+       <br /> &quot;startTicks&quot; is the starting point of the timer, and &quot;pausedTicks&quot; is the time the timer had when it was paused. 
+       <br /> 
+       <br /> The constructor initializes the variables, and I'm pretty sure you can figure out what start(), stop(), pause(), and unpause() do. 
+       <br /> 
+       <br /> The function get_ticks() gets the timer's time in milliseconds. is_started() checks if the timer has started, and is_paused() checks if the timer is paused. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:32 lang-cpp">Timer::Timer()
+{
+    //Initialize the variables
+    startTicks = 0;
+    pausedTicks = 0;
+    paused = false;
+    started = false;    
+}
+</pre> 
+      <div class="tutText">
+        Here we have the constructor initializing the variables. Nothing much to explain here. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:40 lang-cpp">void Timer::start()
+{
+    //Start the timer
+    started = true;
+    
+    //Unpause the timer
+    paused = false;
+    
+    //Get the current clock time
+    startTicks = SDL_GetTicks();    
+}
+</pre> 
+      <div class="tutText">
+        Now when we start the timer, we set the started status to true, we unpause the timer, and we set our starting time to the current time using SDL_GetTicks(). 
+      </div> 
+      <pre class="tutCode prettyprint linenums:51 lang-cpp">void Timer::stop()
+{
+    //Stop the timer
+    started = false;
+    
+    //Unpause the timer
+    paused = false;    
+}
+</pre> 
+      <div class="tutText">
+        When we stop it, we set the started status to false and we unpause the timer. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:59 lang-cpp">int Timer::get_ticks()
+{
+    //If the timer is running
+    if( started == true )
+    {
+        //If the timer is paused
+        if( paused == true )
+        {
+            //Return the number of ticks when the timer was paused
+            return pausedTicks;
+        }
+        else
+        {
+            //Return the current time minus the start time
+            return SDL_GetTicks() - startTicks;
+        }    
+    }
+    
+    //If the timer isn't running
+    return 0;    
+}
+</pre> 
+      <div class="tutText">
+        Here we have the function that gets the timer's time. 
+       <br /> 
+       <br /> First we check if the timer is running. If it is, we then check if the timer is paused. 
+       <br /> 
+       <br /> If the timer is paused, we return the time the timer had when it was paused. We'll talk about pausing/unpausing later. 
+       <br /> 
+       <br /> If the timer isn't paused, we return the difference in the time from when the timer started and the current time. As you can see it's the exact same formula from the last tutorial. 
+       <br /> 
+       <br /> If the timer was never running in the first place, the function returns 0. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">void Timer::pause()
+{
+    //If the timer is running and isn't already paused
+    if( ( started == true ) &amp;&amp; ( paused == false ) )
+    {
+        //Pause the timer
+        paused = true;
+    
+        //Calculate the paused ticks
+        pausedTicks = SDL_GetTicks() - startTicks;
+    }
+}
+</pre> 
+      <div class="tutText">
+        Now when we want to pause the timer, first we check if the timer is running and if it's not already paused. If we can pause the timer, we set the paused status to true, and store the timer's time in &quot;pausedTicks&quot;. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:92 lang-cpp">void Timer::unpause()
+{
+    //If the timer is paused
+    if( paused == true )
+    {
+        //Unpause the timer
+        paused = false;
+    
+        //Reset the starting ticks
+        startTicks = SDL_GetTicks() - pausedTicks;
+        
+        //Reset the paused ticks
+        pausedTicks = 0;
+    }
+}
+</pre> 
+      <div class="tutText">
+        When we want to unpause the timer, we check if the timer is paused first. 
+       <br /> 
+       <br /> If it is, we set the paused status to false, then set the start time to the current clock time minus the time the timer had when it was paused. 
+       <br /> 
+       <br /> Finally, we set &quot;pausedTicks&quot; to 0 for no real reason other than I don't like stray variables. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:107 lang-cpp">bool Timer::is_started()
+{
+    return started;    
+}
+
+bool Timer::is_paused()
+{
+    return paused;    
+}
+</pre> 
+      <div class="tutText">
+        Here are the functions that check the timer's status. I'm pretty sure you can figure out what they do. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:116 lang-cpp">    //Make the timer
+    Timer myTimer;
+    
+    //Generate the message surfaces
+    startStop = TTF_RenderText_Solid( font, &quot;Press S to start or stop the timer&quot;, textColor );
+    pauseMessage = TTF_RenderText_Solid( font, &quot;Press P to pause or unpause the timer&quot;, textColor );
+</pre> 
+      <div class="tutText">
+        Now in our main function after we do our initialization and file loading, we declare a timer object and render our message surfaces. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:122 lang-cpp">    //Start the timer
+    myTimer.start();
+    
+    //While the user hasn't quit
+    while( quit == false )
+    {
+</pre> 
+      <div class="tutText">
+        Before we enter our main loop we start the timer. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:128 lang-cpp">        //While there's an event to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //If a key was pressed
+            if( event.type == SDL_KEYDOWN )
+            {
+                //If s was pressed
+                if( event.key.keysym.sym == SDLK_s )
+                {
+                    //If the timer is running
+                    if( myTimer.is_started() == true )
+                    {
+                        //Stop the timer
+                        myTimer.stop();    
+                    }
+                    else
+                    {
+                        //Start the timer
+                        myTimer.start();    
+                    }
+                }
+</pre> 
+      <div class="tutText">
+        This is where we handle our key presses. When &quot;s&quot; is pressed, if the timer is running it is stopped, otherwise the timer is started. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:149 lang-cpp">                //If p was pressed
+                if( event.key.keysym.sym == SDLK_p )
+                {
+                    //If the timer is paused
+                    if( myTimer.is_paused() == true )
+                    {
+                        //Unpause the timer
+                        myTimer.unpause();
+                    }
+                    else
+                    {
+                        //Pause the timer
+                        myTimer.pause();
+                    }
+                }
+            }
+</pre> 
+      <div class="tutText">
+        Now when &quot;p&quot; is pressed, if the timer is paused we unpause it, otherwise we pause it. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:165 lang-cpp">        //The timer's time as a string
+        std::stringstream time;
+            
+        //Convert the timer's time to a string
+        time &lt;&lt; &quot;Timer: &quot; &lt;&lt; myTimer.get_ticks() / 1000.f;
+        
+        //Render the time surface
+        seconds = TTF_RenderText_Solid( font, time.str().c_str(), textColor );
+        
+        //Apply the time surface
+        apply_surface( ( SCREEN_WIDTH - seconds-&gt;w ) / 2, 0, seconds, screen );
+ 
+        //Free the time surface
+        SDL_FreeSurface( seconds );
+               
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+    }
+</pre> 
+      <div class="tutText">
+        After the events are handled and the background and message surfaces are blitted we show the timer's time on the screen. 
+       <br /> 
+       <br /> First we create a string stream object, and then we put the timer's time in the string stream. Since we want the timer's time in seconds, we divide it by 1000 since there's 1000 milliseconds per second. 
+       <br /> 
+       <br /> Next, we create a surface from the string holding the timer's time. Then the new surface showing the timer's time is blitted to the screen, then free since we're done with it. After that the screen is updated and we continue the main loop. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson13">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson12/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson14/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

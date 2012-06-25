@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第19课 - 圆形碰撞检测 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第19课 - 圆形碰撞检测</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson19/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson18/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson20/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Circular Collision Detection</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/28/09</h6> Besides rectangles, the most common shape you'll have to deal with is a circle. In the last tutorial we had to use 11 collision boxes for a circle. This tutorial will teach you a more efficient way to handle circles and collision detection. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
+#include &quot;SDL/SDL_image.h&quot;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;cmath&gt;
+</pre> 
+      <div class="tutText">
+        This tutorial is going to require the distance formula so we include a header for math. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:6 lang-cpp">//A circle stucture
+struct Circle
+{
+    int x, y;
+    int r;    
+};
+</pre> 
+      <div class="tutText">
+        We have to create our own circle structure for this program. &quot;x&quot; and &quot;y&quot; are the offsets of the center of the circle. &quot;r&quot; is the radius. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:12 lang-cpp">//The dot
+class Dot
+{
+    private:
+    //The area of the dot
+    Circle c;
+    
+    //The velocity of the dot
+    int xVel, yVel;
+    
+    public:
+    //Initializes the variables
+    Dot();
+    
+    //Takes key presses and adjusts the dot's velocity
+    void handle_input();
+    
+    //Moves the dot
+    void move( std::vector&lt;SDL_Rect&gt; ▭s, Circle ˆle );
+    
+    //Shows the dot on the screen
+    void show();
+};
+</pre> 
+      <div class="tutText">
+        Here's yet another revision of the Dot class. 
+       <br /> 
+       <br /> Everything is pretty much the same except for two differences. This time we have a Circle structure instead of a vector of SDL_Rects. Also, in the move() function we check collision with a vector of SDL_Rects and a Circle. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:35 lang-cpp">double distance( int x1, int y1, int x2, int y2 )
+{
+    //Return the distance between the two points
+    return sqrt( pow( x2 - x1, 2 ) + pow( y2 - y1, 2 ) );
+}
+</pre> 
+      <div class="tutText">
+        This function we made gives us the distance between given 2 points. This is pretty much the only real math used in this program. 
+       <br /> 
+       <br /> For those of you using visual studio you may need to type cast those integers to doubles. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:40 lang-cpp">bool check_collision( Circle &amp;A, Circle &amp;B )
+{
+    //If the distance between the centers of the circles is less than the sum of their radii
+    if( distance( A.x, A.y, B.x, B.y ) &lt; ( A.r + B.r ) )
+    {
+        //The circles have collided
+        return true;
+    }
+    
+    //If not
+    return false;    
+}
+</pre> 
+      <div class="tutText">
+        Checking collision between two circles is pretty easy. All you have to do is check whether or not the distance between the centers of the circles is less than the sum of their radii. 
+       <br /> 
+       <br /> If it is less, a collision has happened, otherwise there's no collision. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:52 lang-cpp">bool check_collision( Circle &amp;A, std::vector&lt;SDL_Rect&gt; &amp;B )
+{
+    //Closest point on collision box
+    int cX, cY;
+
+    //Go through the B boxes
+    for( int Bbox = 0; Bbox &lt; B.size(); Bbox++ )
+    {
+</pre> 
+      <div class="tutText">
+        This function checks collision between a circle and a vector of rectangles. Checking for collision between a circle and a rectangle gets a bit tricky. To check if there's a collision between a circle and a collision box, you must find the point on the collision box closest to the center of the circle. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:60 lang-cpp">        //Find closest x offset
+        if( A.x &lt; B[ Bbox ].x )
+        {
+            cX = B[ Bbox ].x;
+        }
+</pre> 
+      <div class="tutText">
+        If the center of the circle is to the left of the box, then the x offset of the closest point is equal to the x offset of the collision box. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="less.jpg" /> 
+       </div> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:65 lang-cpp">        else if( A.x &gt; B[ Bbox ].x + B[ Bbox ].w )
+        {
+            cX = B[ Bbox ].x + B[ Bbox ].w;
+        }
+</pre> 
+      <div class="tutText">
+        If the center of the circle is to the right of the box, then the x offset of the closest point is equal to the x offset of the right side of the collision box. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="greater.jpg" /> 
+       </div> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:69 lang-cpp">        else
+        {
+            cX = A.x;
+        }
+</pre> 
+      <div class="tutText">
+        If the x offset of the center of the circle is not to the left or the right of the collision box, then the x offset is inside the collision box. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="equal.jpg" /> 
+       </div> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:73 lang-cpp">        //Find closest y offset
+        if( A.y &lt; B[ Bbox ].y )
+        {
+            cY = B[ Bbox ].y;
+        }
+        else if( A.y &gt; B[ Bbox ].y + B[ Bbox ].h )
+        {
+            cY = B[ Bbox ].y + B[ Bbox ].h;
+        }
+        else
+        {
+            cY = A.y;
+        }
+</pre> 
+      <div class="tutText">
+        Then we do the same as above to find the closest y offset. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:86 lang-cpp">        //If the closest point is inside the circle
+        if( distance( A.x, A.y, cX, cY ) &lt; A.r )
+        {
+            //This box and the circle have collided
+            return true;
+        }
+    }
+
+    //If the shapes have not collided
+    return false;
+}
+</pre> 
+      <div class="tutText">
+        If the point on the collision box closest to the circle is inside the circle, then the circle and the collision box are overlapped. Here we keep going through all the collision boxes until we find a collision or all of the boxes have been checked and there is no collision. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:97 lang-cpp">    //Make the shapes
+    std::vector&lt;SDL_Rect&gt; box( 1 );
+    Circle otherDot;
+    
+    //Set the shapes' attributes
+    box[ 0 ].x = 60;
+    box[ 0 ].y = 60;
+    box[ 0 ].w = 40;
+    box[ 0 ].h = 40;
+    
+    otherDot.x = 30;
+    otherDot.y = 30;
+    otherDot.r = DOT_WIDTH / 2;
+</pre> 
+      <div class="tutText">
+        In the main() function we create the 2 shapes the Dot is going to interact with. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:110 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+        //Start the frame timer
+        fps.start();
+        
+        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //Handle events for the dot
+            myDot.handle_input();
+            
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+        
+        //Move the dot
+        myDot.move( box, otherDot );
+		
+        //Fill the screen white
+        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+        
+        //Show the box
+        SDL_FillRect( screen, &amp;box[ 0 ], SDL_MapRGB( screen-&gt;format, 0x00, 0x00, 0x00 ) );
+        
+        //Show the other dot
+        apply_surface( otherDot.x - otherDot.r, otherDot.y - otherDot.r, dot, screen );
+        
+        //Show our dot
+        myDot.show();
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+        
+        //Cap the frame rate
+        if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
+        {
+            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Here's the main loop, pretty much everything is the same story as before. I would like to point one thing out. 
+       <br /> 
+       <br /> When we show the other dot, we don't blit the image at its offset. The offset is the center of the circle, so we have to blit the dot image at the upper-left corner. We do this by subtracting the radius from the offset. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson19">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson18/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson20/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

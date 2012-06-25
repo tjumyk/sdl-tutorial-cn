@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第36课 - 在SDL中使用OpenGL &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第36课 - 在SDL中使用OpenGL</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson36/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson35/index.html" id="prev_link">上一课</a></li> 
+      <li></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Using SDL with OpenGL 2.1</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/31/10</h6> There's a point where SDL's rendering just isn't enough. When you need more power, speed, and flexibility, it's time to move onto OpenGL. This lesson will get you started with some OpenGL/SDL basics. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
+#include &quot;SDL/SDL_opengl.h&quot;
+</pre> 
+      <div class="tutText">
+        First we need to remember to include the SDL OpenGL header so we can use OpenGL's rendering. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">//The square
+class Square
+{
+    private:
+    //The offsets
+    int x, y;
+    
+    //The velocity of the square
+    int xVel, yVel;
+    
+    public:
+    //Initializes
+    Square();
+    
+    //Handles key presses
+    void handle_input();
+    
+    //Moves the square
+    void move();
+    
+    //Shows the square on the screen
+    void show();
+};
+</pre> 
+      <div class="tutText">
+        Here's the square we're going to move around on the screen. Nothing has changed from the overall structure of the class. 
+       <br /> 
+       <br /> When using SDL with OpenGL the event handling, audio, time, and threading all stay the same. Only the rendering changes. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:26 lang-cpp">bool init()
+{
+    //Initialize SDL
+    if( SDL_Init( SDL_INIT_EVERYTHING ) &lt; 0 )
+    {
+        return false;    
+    }
+    
+    //Create Window
+    if( SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_OPENGL ) == NULL )
+    {
+        return false;
+    }
+    
+    //Initialize OpenGL
+    if( init_GL() == false )
+    {
+        return false;    
+    }
+    
+    //Set caption
+    SDL_WM_SetCaption( &quot;OpenGL Test&quot;, NULL );
+    
+    return true;    
+}
+</pre> 
+      <div class="tutText">
+        Here is our init() function. 
+       <br /> 
+       <br /> First we initialize SDL as we always do. Then we create our OpenGL window. When we want to use OpenGL we pass the SDL_OPENGL flag to SDL_SetVideoMode() instead of SDL_SWSURFACE. Now the window will use OpenGL's hardware accelerated rendering instead of SDL's software rendering. This also means we can't use SDL to blit to the screen. 
+       <br /> 
+       <br /> Then we call our init_GL() function (which I will show you in a second) to initialize OpenGL and lastly we set the window caption. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:51 lang-cpp">bool init_GL()
+{
+    //Set clear color
+    glClearColor( 0, 0, 0, 0 );
+</pre> 
+      <div class="tutText">
+        Here is the top of our OpenGL initialiation function. The first thing we do is set the clear color. 
+       <br /> 
+       <br /> When we clear the screen, we want it to be black. So we set the clear color to be black (R0, G0, B0, A0) with glClearColor(). 
+      </div> 
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">    //Set projection
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    glOrtho( 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1, 1 );
+</pre> 
+      <div class="tutText">
+        Next we have to set the projection matrix. The projection matrix controls how everything will be shown on the screen. 
+       <br /> 
+       <br /> First we set the matrix mode to projection using glMatrixMode(). Then we initialize the projection matrix by calling glLoadIdentity(). glLoadIdentity() essentially resets the matrix by setting it to be the identity matrix. 
+       <br /> 
+       <br /> Didn't get a word I just said? Don't worry, I'll explain what a matrix is later. 
+       <br /> 
+       <br /> Now that the projection matrix is initialized it's time to set our projection. We do this by calling glOrtho() which will give us an orthographic (meaning 2 dimensional) projection. For those of you wanting to do 3D, look up gluPerspective(). 
+       <br /> 
+       <br /> We want it to be 2D and to have the same coordinate system as SDL's rendering. So we set the coordinate system like this: 
+       <br /> 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="coord.jpg" /> 
+       </div> So we set the left, right, bottom, and top arguments like so. For those of you wanting to have the origin like the cartesian coordinate system, just swap the top and bottom arguments. 
+       <br /> 
+       <br /> The 5th and 6th argument deal with the z axis. What is the z axis? Well the x axis goes left and right, the y axis goes up and down and the z axis goes forward and back. The 5th argument is near which is set to z = -1. The 6th argument is far which is set to z = 1. 
+       <br /> 
+       <br /> We're not really going to bother with the z axis in this tutorial. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:59 lang-cpp">    //Initialize modelview matrix
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+</pre> 
+      <div class="tutText">
+        Next we initialize the modelview matrix much like we did the projection matrix. 
+       <br /> 
+       <br /> The modelview matrix controls the objects that are drawn on the screen. We'll see an example of this in the square's show() function. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:62 lang-cpp">    //If there was any errors
+    if( glGetError() != GL_NO_ERROR )
+    {
+        return false;    
+    }
+    
+    //If everything initialized
+    return true;
+}
+</pre> 
+      <div class="tutText">
+        At the end of our init_GL() function we check if there were any errors using glGetError(). If there were no errors we return true. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:71 lang-cpp">void Square::show()
+{    
+    //Move to offset
+    glTranslatef( x, y, 0 );
+</pre> 
+      <div class="tutText">
+        Here's our show() function from the Square class. Now it's time to do some OpenGL rendering. 
+       <br /> 
+       <br /> First thing we do is translate (meaning we move to) the offset of the square using glTranslate(). The first two arguments are the x and y offsets and the last one is the z. We don't bother with z axis so it's set to 0. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:75 lang-cpp">    //Start quad
+    glBegin( GL_QUADS );
+    
+        //Set color to white
+        glColor4f( 1.0, 1.0, 1.0, 1.0 );
+</pre> 
+      <div class="tutText">
+        Now it's time to draw our square. 
+       <br /> 
+       <br /> To start drawing our square we call glBegin() with the GL_QUADS argument. We want to draw a white square so we set the color with glColor(). 
+       <br /> 
+       <br /> You may be wondering why the color is 1, 1, 1, 1. Shouldn't it be R255, G255, B255, A255? The thing is glColor4f() uses floating point colors. It actually means R100%, G100%, B100%, A100% which is white. Note that glClearColor() in the init_GL() function also used floating point colors. 
+       <br /> 
+       <br /> Another thing I want to point out is that the &quot;4f&quot; in glColor4f() stands for 4 floating point numbers. Many OpenGL functions have different versions with different names based on the arguments the function takes. 
+       <br /> 
+       <br /> For example, in the previous piece of code we used glTranslatef() which took in floats. We could have also used glTranslated() which takes in doubles. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">        //Draw square
+        glVertex3f( 0,            0,             0 );
+        glVertex3f( SQUARE_WIDTH, 0,             0 );
+        glVertex3f( SQUARE_WIDTH, SQUARE_HEIGHT, 0 );
+        glVertex3f( 0,            SQUARE_HEIGHT, 0 );
+	    
+    //End quad   
+    glEnd();
+</pre> 
+      <div class="tutText">
+        Now it's time to draw the vertices (meaning the corners) of the square. 
+       <br /> 
+       <br /> Each vertex is drawn by calling glVertex3f(). We draw them from the translation point in this order: top left, top right, bottom right, bottom left. 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="quad.jpg" /> 
+       </div> After we've finished drawing the vertices we call glEnd() so OpenGL can form our square from the vertices. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:88 lang-cpp">    //Reset
+    glLoadIdentity();
+}
+</pre> 
+      <div class="tutText">
+        At the end of the show() function we call glLoadIdentity() to reset the modelview matrix. 
+       <br /> 
+       <br /> What is the matrix? this: 
+       <br /> [ 1, 0, 0, 0 ] 
+       <br /> [ 0, 1, 0, 0 ] 
+       <br /> [ 0, 0, 1, 0 ] 
+       <br /> [ 0, 0, 0, 1 ] 
+       <br /> 
+       <br /> It's just a 4 x 4 set of numbers, but it's very important. It controls how much the vertices are translated, rotated, and scaled. 
+       <br /> 
+       <br /> Whenever we call glTranslate() we alter the matrix. If we don't reset the matrix by calling glLoadIdentity() after translating, when we call glTranslate() the next time we'll be moving from the last point of translation instead of the origin. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:91 lang-cpp">        //While there are events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //Handle key presses
+            square.handle_input();
+            
+            //Handle user quit
+            if( event.type == SDL_QUIT )
+            {
+                quit = true;
+            }
+        }
+	    
+        //Move the square
+        square.move();
+	    
+        //Clear the screen
+        glClear( GL_COLOR_BUFFER_BIT );
+	    
+        //Show the square
+        square.show();
+	    
+        //Update screen
+        SDL_GL_SwapBuffers();
+	    
+        //Cap the frame rate
+        if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
+        {
+            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Here's our main loop. 
+       <br /> 
+       <br /> First we handle events and move the square like we usually do. Then we clear the screen by calling glClear(). After that show the square on the screen. To update the screen we call SDL_GL_SwapBuffers() instead of SDL_Flip() since we're using OpenGL's rendering. Lastly we regulate our frame rate and continue on with the main loop. 
+      </div> 
+      <div class="tutText">
+        Yeah that was a lot of work just to make a square show on the screen. Now you see why these beginners tutorials used SDL's rendering. OpenGL is much more powerful than SDL's rendering, but as you saw it's also harder to use. 
+       <br /> 
+       <br /> For now, the tutorials stop here. I am still learning OpenGL and once I'm ready there will be a batch of OpenGL tutorials. When will they be out? Not for a good while. I'll announce it on the news page. So don't stuff my mailbox. =) 
+       <br /> 
+       <br /> Until then you can check out 
+       <a class="tutLink" href="../../../nehe.gamedev.net/default.htm">NeHe</a>. The tutorial text uses Win32 API but the actual OpenGL code is mostly the same. There's also SDL ports of the code at the bottom of most of the pages. They're called &quot;Linux/SDL&quot; ports, but since SDL is cross platform the code should work on Windows and OS X. The SDL ports haven't been updated in a small while and may not compile as is. 
+       <br /> 
+       <br /> For now I've created a 
+       <a class="tutLink" href="../../articles/article10/index.php">study guide</a> you can check out. It's not as in depth as my tutorials, but hopefully it's enough to get you off the ground. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson36">here</a>. 
+       <br /> 
+       <br /> Make sure to read readme.txt to see what you need to link against. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson35/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../index.php">Tutorial Index</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第8课 - 按键操作 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第8课 - 按键操作</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson08/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson07/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson09/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Key Presses</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/28/09</h6> This lesson covers how to detect key presses. It's a simple program that shows which arrow key was pressed. You've already done some simple event handling with SDL_QUIT, now this tutorial will teach you to detect when a key is pressed, and how to check which key it was. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">    //Generate the message surfaces
+    upMessage = TTF_RenderText_Solid( font, &quot;Up was pressed.&quot;, textColor );
+    downMessage = TTF_RenderText_Solid( font, &quot;Down was pressed.&quot;, textColor );
+    leftMessage = TTF_RenderText_Solid( font, &quot;Left was pressed&quot;, textColor );
+    rightMessage = TTF_RenderText_Solid( font, &quot;Right was pressed&quot;, textColor );
+</pre> 
+      <div class="tutText">
+        After everything is initialized and loaded, we generate all 4 message surfaces. 
+       <br /> 
+       <br /> I probably should have checked for errors when rendering the text but ....eh, less typing for me. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:6 lang-cpp">        //If there's an event to handle
+        if( SDL_PollEvent( &amp;event ) )
+        {
+            //If a key was pressed
+            if( event.type == SDL_KEYDOWN )
+            {
+</pre> 
+      <div class="tutText">
+        Now when we want to check when a key is pressed, we check for event type SDL_KEYDOWN. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:12 lang-cpp">                //Set the proper message surface
+                switch( event.key.keysym.sym )
+                {
+                    case SDLK_UP: message = upMessage; break;
+                    case SDLK_DOWN: message = downMessage; break;
+                    case SDLK_LEFT: message = leftMessage; break;
+                    case SDLK_RIGHT: message = rightMessage; break;
+                }
+            }
+            
+            //If the user has Xed out the window
+            else if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+</pre> 
+      <div class="tutText">
+        Now if a key was pressed, we need to check which key it was. 
+       <br /> 
+       <br /> SDL_PollEvent() puts the SDL_KEYDOWN data in the event structure as a SDL_KeyboardEvent named &quot;key&quot;: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="keydown.jpg" /> 
+       </div> and inside of &quot;key&quot; is a keysym structure: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="keysym.jpg" /> 
+       </div> and inside of the keysym is the SDL_Key named &quot;sym&quot;, which is which key was pressed. 
+       <br /> 
+       <br /> If the up arrow was pressed, the sym will be SDLK_UP and we'll set the message to be up, if the down arrow was pressed, the sym will be SDLK_DOWN and we'll set the message to be down, etc, etc. 
+       <br /> 
+       <br /> To see what all the SDL_Key definitions are, you can look it up in the SDL documentation. 
+       <br /> 
+       <br /> We also check if the user wants to X out the window, and handle it accordingly. 
+       <br /> 
+       <br /> Note: Some IDEs like Code::Blocks have the -Wall flag on by default. This will cause the compiler to complain if you don't have a case statement for all the key values. You can get the compiler to stop complaining by adding: 
+       <h6>default : ;</h6> to your switch block. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:29 lang-cpp">        //If a message needs to be displayed
+        if( message != NULL )
+        {
+            //Apply the images to the screen
+            apply_surface( 0, 0, background, screen );
+            apply_surface( ( SCREEN_WIDTH - message-&gt;w ) / 2, ( SCREEN_HEIGHT - message-&gt;h ) / 2, message, screen );
+            
+            //Null the surface pointer
+            message = NULL;
+        }
+    
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+</pre> 
+      <div class="tutText">
+        When the message surface isn't pointing to anything it'll be NULL and nothing will be blitted. When the message surface is pointing to something we'll apply the background, then apply the message surface centered on the screen. 
+       <br /> 
+       <br /> The way you center a surface is to first subtract the width/height from the width/height of the surface you're blitting to. Since when surface is centered the padding on both sides is equal, you divide the remaining distance into two equal halves. 
+       <br /> 
+       <br /> After that we reset the message to NULL, then we update the screen. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson08">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson07/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson09/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

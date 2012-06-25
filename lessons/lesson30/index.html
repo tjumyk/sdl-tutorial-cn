@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第30课 - Bitmap字体 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第30课 - Bitmap字体</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson30/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson29/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson31/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Bitmap Fonts</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 3/28/10</h6> Good fonting programs can be expensive, and sometimes font APIs (like SDL_ttf) are simply not flexible enough. While time consuming, making your own bitmap font engine can be useful. This tutorial will teach you to make a common style bitmap font. 
+      </div> 
+      <div class="tutText">
+        A bitmap font is simply a sprite sheet. 
+       <br /> 
+       <br /> If we wanted to make &quot;HELLO&quot; show on the screen we would do this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="sprites.jpg" /> 
+       </div> We would take the &quot;H&quot; sprite, the &quot;E&quot; sprite, two of the &quot;L&quot; sprite, and finally the &quot;O&quot; sprite and then show them on the screen one after the other. 
+       <br /> 
+       <br /> Now that you know the basic concept, it's time to make a bitmap fonting engine. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//Our bitmap font
+class BitmapFont
+{
+    private:
+    //The font surface
+    SDL_Surface *bitmap;
+
+    //The individual characters in the surface
+    SDL_Rect chars[ 256 ];
+
+    //Spacing Variables
+    int newLine, space;
+
+    public:
+    //The default constructor
+    BitmapFont();
+
+    //Generates the font when the object is made
+    BitmapFont( SDL_Surface *surface );
+
+    //Generates the font
+    void build_font( SDL_Surface *surface );
+
+    //Shows the text
+    void show_text( int x, int y, std::string text, SDL_Surface *surface );
+};
+</pre> 
+      <div class="tutText">
+        Here is our bitmap font class. 
+       <br /> 
+       <br /> First thing we have is the surface of the bitmap font. Then we have to have an array of rectangles to clip the letters from the bitmap font. We have 256 of them, one for each of the extended ASCII characters. We have two integers, &quot;newLine&quot; and &quot;space&quot; that determine the distance between lines of text and the distance between two words. 
+       <br /> 
+       <br /> Then we have our constructors. We also have a build_font() to initialize the font. Finally, we have show_text() to show text on the screen. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:27 lang-cpp">Uint32 get_pixel32( int x, int y, SDL_Surface *surface )
+{
+    //Convert the pixels to 32 bit
+    Uint32 *pixels = (Uint32 *)surface-&gt;pixels;
+    
+    //Get the pixel requested
+    return pixels[ ( y * surface-&gt;w ) + x ];
+}
+</pre> 
+      <div class="tutText">
+        First off we need to make a function that gets an individual pixel from a surface. Why the SDL API doesn't have one built in I'll never know. 
+       <br /> 
+       <br /> First thing we do is convert the pixel pointer from type void to 32bit integer so we can properly access them. After all, a surface's pixels are nothing more than an array of 32bit integers. Then we get or set the requested pixel. 
+       <br /> 
+       <br /> You maybe be wondering why I don't just go &quot;return pixels[ x ][ y ]&quot;. 
+       <br /> 
+       <br /> The thing is the pixels aren't stored like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="2d.jpg" /> 
+       </div> 
+       <br /> They're stored like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="1d.jpg" /> 
+       </div> in a single dimensional array. Its because different operating systems store 2D arrays differently (At least I think that's why). 
+       <br /> 
+       <br /> So to retrieve the red pixel from the array we multiply the y offset by the width and add the x offset. 
+       <br /> 
+       <br /> These functions only work for 32-bit surfaces. You'll have to make one of your own if you're using a different format. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:35 lang-cpp">BitmapFont::BitmapFont()
+{
+    //Initialize variables
+    bitmap = NULL;
+    newLine = 0;
+    space = 0;
+}
+
+BitmapFont::BitmapFont( SDL_Surface *surface )
+{
+    //Build the font
+    build_font( surface );
+}
+</pre> 
+      <div class="tutText">
+        Here are our constructors. 
+       <br /> 
+       <br /> The first one simply initializes our variables to 0. The second one creates the object and builds the font with the given variables. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:48 lang-cpp">void BitmapFont::build_font( SDL_Surface *surface )
+{
+    //If surface is NULL
+    if( surface == NULL )
+    {
+        return;
+    }
+    
+    //Get the bitmap
+    bitmap = surface;
+    
+    //Set the background color
+    Uint32 bgColor = SDL_MapRGB( bitmap-&gt;format, 0, 0xFF, 0xFF );
+</pre> 
+      <div class="tutText">
+        Now it's time to build our font. We have to first check that a valid surface was given to us. 
+       <br /> 
+       <br /> Then we get the actual bitmap font surface from the given argument. Then we set the background color. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:61 lang-cpp">    //Set the cell dimensions
+    int cellW = bitmap-&gt;w / 16;
+    int cellH = bitmap-&gt;h / 16;
+
+    //New line variables
+    int top = cellH;
+    int baseA = cellH;
+</pre> 
+      <div class="tutText">
+        Here we calculate the cell width and height. What are cells? Cells are used to arrange the letters on our bitmap to make it easy to get the individual characters. 
+       <br /> 
+       <br /> A typical bitmap font has the 256 characters in ASCII order. Each of the letters are in a uniformly sized cell and are laid out in 16 columns and 16 rows. It looks like this: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="cells.jpg" /> 
+       </div> The lines lining the cell don't have to be there, they're just there to show how the cells look. To calculate cell width, divide the image width by 16 since there are 16 equal columns. The same thing is done with the height. 
+       <br /> 
+       <br /> The variables &quot;top&quot; and &quot;baseA&quot; are going to be used to calculate how much space we need between lines. You'll see how we use them later. 
+       <br /> 
+       <br /> Now that we've got our bitmap and set the cells, it's time to clip the individual letters. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:68 lang-cpp">    //The current character we're setting
+    int currentChar = 0;
+    
+    //Go through the cell rows
+    for( int rows = 0; rows &lt; 16; rows++ )
+    {
+        //Go through the cell columns
+        for( int cols = 0; cols &lt; 16; cols++ )
+        {
+</pre> 
+      <div class="tutText">
+        First off, we make an integer to keep track of which character we're setting. Then we go through the rows of the cells, then through each individual column. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:77 lang-cpp">            //Set the character offset
+            chars[ currentChar ].x = cellW * cols;
+            chars[ currentChar ].y = cellH * rows;
+            
+            //Set the dimensions of the character
+            chars[ currentChar ].w = cellW;
+            chars[ currentChar ].h = cellH;
+</pre> 
+      <div class="tutText">
+        Then we set the default offsets and dimensions of the current character which are the offsets and dimensions of the cell. Certain ASCII values have no character assigned to them so the default values will never change. 
+       <br /> 
+       <br /> However, most characters will not all have the same x offsets or widths. So we go through the each of the cells to set the unique clip rectangles of each character. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:84 lang-cpp">            //Find Left Side
+            //Go through pixel columns
+            for( int pCol = 0; pCol &lt; cellW; pCol++ )
+            {
+                //Go through pixel rows
+                for( int pRow = 0; pRow &lt; cellH; pRow++ )
+                {
+                    //Get the pixel offsets
+                    int pX = ( cellW * cols ) + pCol;
+                    int pY = ( cellH * rows ) + pRow;
+</pre> 
+      <div class="tutText">
+        Now we go through the pixels in the cell. Notice how our nested for loops are structured. We go through each column, then we go through the column top to bottom. 
+       <br /> 
+       <br /> We calculate the offset by adding the relative pixel offset to the cell's offset. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:94 lang-cpp">                    //If a non colorkey pixel is found
+                    if( get_pixel32( pX, pY, bitmap ) != bgColor )
+                    {
+                        //Set the x offset
+                        chars[ currentChar ].x = pX;
+                        
+                        //Break the loops
+                        pCol = cellW;
+                        pRow = cellH;
+                    }
+                }
+            }
+</pre> 
+      <div class="tutText">
+        As we're going through the pixels in the cell, we scan for a pixel that is not of the background color like so: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="fishing.gif" /> 
+       </div> When a non background pixel is found that means we found the x offset of the character. We set the x offset of the sprite then crudely break the loop. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:106 lang-cpp">            //Find Right Side
+            //Go through pixel columns
+            for( int pCol_w = cellW - 1; pCol_w &gt;= 0; pCol_w-- )
+                //Go through pixel rows
+            {
+                for( int pRow_w = 0; pRow_w &lt; cellH; pRow_w++ )
+                {
+                    //Get the pixel offsets
+                    int pX = ( cellW * cols ) + pCol_w;
+                    int pY = ( cellH * rows ) + pRow_w;
+
+                    //If a non colorkey pixel is found
+                    if( get_pixel32( pX, pY, bitmap ) != bgColor )
+                    {
+                        //Set the width
+                        chars[ currentChar ].w = ( pX - chars[ currentChar ].x ) + 1;
+
+                        //Break the loops
+                        pCol_w = -1;
+                        pRow_w = cellH;
+                    }
+                }
+            }
+</pre> 
+      <div class="tutText">
+        Then we do pretty much the same thing for the width. However, this time we start from the right and move left. When we find a pixel of the character, the width is calculated by subtracting the x offset from the offset of the pixel we found and adding one. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:129 lang-cpp">            //Find Top
+            //Go through pixel rows
+            for( int pRow = 0; pRow &lt; cellH; pRow++ )
+            {
+                //Go through pixel columns
+                for( int pCol = 0; pCol &lt; cellW; pCol++ )
+                {
+                    //Get the pixel offsets
+                    int pX = ( cellW * cols ) + pCol;
+                    int pY = ( cellH * rows ) + pRow;
+
+                    //If a non colorkey pixel is found
+                    if( get_pixel32( pX, pY, bitmap ) != bgColor )
+                    {
+                        //If new top is found
+                        if( pRow &lt; top )
+                        {
+                            top = pRow;
+                        }
+
+                        //Break the loops
+                        pCol = cellW;
+                        pRow = cellH;
+                    }
+                }
+            }
+</pre> 
+      <div class="tutText">
+        Here we scan the cell pixels from top to bottom instead of side to side like before. What we're trying to find is what's the tallest character in our bitmap font. 
+       <br /> 
+       <br /> We use the &quot;pRow&quot; variable because we want the offset relative to the cell. &quot;pY&quot; is the offset relative to the bitmap surface. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:155 lang-cpp">            //Find Bottom of A
+            if( currentChar == 'A' )
+            {
+                //Go through pixel rows
+                for( int pRow = cellH - 1; pRow &gt;= 0; pRow-- )
+                {
+                    //Go through pixel columns
+                    for( int pCol = 0; pCol &lt; cellW; pCol++ )
+                    {
+                        //Get the pixel offsets
+                        int pX = ( cellW * cols ) + pCol;
+                        int pY = ( cellH * rows ) + pRow;
+
+                        //If a non colorkey pixel is found
+                        if( get_pixel32( pX, pY, bitmap ) != bgColor )
+                        {
+                            //Bottom of a is found
+                            baseA = pRow;
+
+                            //Break the loops
+                            pCol = cellW;
+                            pRow = -1;
+                        }
+                    }
+                }
+            }
+
+            //Go to the next character
+            currentChar++;
+        }
+    }
+</pre> 
+      <div class="tutText">
+        If the current cell we're scanning belongs to capitial A, we're going to find the bottom of A relative to cell. We're going to use this as our baseline. Certain characters like g, j, and y have their character image go below the baseline. You'll see how we use the baseline later. 
+       <br /> 
+       <br /> Once we're done setting the current character, we increment the counter to move onto the next character. 
+       <br /> 
+       <br /> Remember, in order for this function to work properly the bitmap font has to have the 256 characters in ASCII order and laid out in 16 columns and 16 rows. Any other way would require you to create your own building function. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:186 lang-cpp">    //Calculate space
+    space = cellW / 2;
+
+    //Calculate new line
+    newLine = baseA - top;
+
+    //Lop off excess top pixels
+    for( int t = 0; t &lt; 256; t++ )
+    {
+        chars[ t ].y += top;
+        chars[ t ].h -= top;
+    }
+}
+</pre> 
+      <div class="tutText">
+        After we're done going through all the cells, we do some extra things to properly space the text. 
+       <br /> 
+       <br /> We set the space to be half the cell width. &quot;newLine&quot; which is how much space is between lines of text. It's set to be the baseline minus highest known character height. 
+       <br /> 
+       <br /> At the end of font loading function, we go through the character clip rectangles and cut off the extra pixels on top. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:199 lang-cpp">void BitmapFont::show_text( int x, int y, std::string text, SDL_Surface *surface )
+{
+    //Temp offsets
+    int X = x, Y = y;
+</pre> 
+      <div class="tutText">
+        Now here's the function that actually shows the text. 
+       <br /> 
+       <br /> First thing we do is get the given offsets and store them in the temp offsets. The offsets given in the arguments serve as base offsets, the temp offsets are where the next sprite will be blitted. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:203 lang-cpp">    //If the font has been built
+    if( bitmap != NULL )
+    {
+        //Go through the text
+        for( int show = 0; text[ show ] != '\0'; show++ )
+        {
+</pre> 
+      <div class="tutText">
+        Then we check if a bitmap was given for us to use. If there is one, we go through the characters in the string. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:209 lang-cpp">            //If the current character is a space
+            if( text[ show ] == ' ' )
+            {
+                //Move over
+                X += space;
+            }
+            //If the current character is a newline
+            else if( text[ show ] == '\n' )
+            {
+                //Move down
+                Y += newLine;
+
+                //Move back
+                X = x;
+            }
+</pre> 
+      <div class="tutText">
+        First thing we do here is check if the current character is a space or a newline. 
+       <br /> 
+       <br /> If the character is a space, we move over the space assigned in the build_font() function. If the character is a newline the temp offset goes down the cell height, and then moves back to the base x offset. 
+       <br /> 
+      </div> 
+      <pre class="tutCode prettyprint linenums:224 lang-cpp">            else
+            {
+                //Get the ASCII value of the character
+                int ascii = (unsigned char)text[ show ];
+                
+                //Show the character
+                apply_surface( X, Y, bitmap, surface, &amp;chars[ ascii ] );
+                
+                //Move over the width of the character with one pixel of padding
+                X += chars[ ascii ].w + 1;
+            }
+        }
+    }
+}
+</pre> 
+      <div class="tutText">
+        If the current character is not one of our special characters we apply the character's sprite on the screen. 
+       <br /> 
+       <br /> To show the character first we have to get the ASCII value by type casting the character to an integer. Then we apply the sprite onto the screen. This is easily done since the sprites are in ASCII order. 
+       <br /> 
+       <br /> Then the temp offset is moved over the width of the sprite plus one. That way the next sprite will be applied next to the previous sprite with one pixel of padding. 
+       <br /> 
+       <br /> We keep looping through this until all the characters are shown. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:238 lang-cpp">    //Create our font
+    BitmapFont font( bitmapFont );
+    
+    //Fill the screen white
+    SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+    
+    //Show the text
+    font.show_text( 100, 100, &quot;Bitmap Font:\nABDCEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789&quot;, screen );
+    
+    //Update the screen
+    if( SDL_Flip( screen ) == -1 )
+    {
+        return 1;    
+    }
+</pre> 
+      <div class="tutText">
+        Here's a basic demonstration of our bitmap class that we do in the main() function. 
+       <br /> 
+       <br /> All we do is create a font object, fill screen white, apply some text, and update the screen. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson30">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson29/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson31/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

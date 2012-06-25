@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第32课 - 帧的独立运动 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第32课 - 帧的独立运动</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson32/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson31/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson33/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Frame Independent Movement</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 12/28/09</h6> Before we had to cap the frame rate to keep the dot from moving too fast. Here we're going to make the dot move based on time instead of frame rate so it moves the same no matter what the frame rate is. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The attributes of the dot
+const int DOT_WIDTH = 20;
+const int DOT_HEIGHT = 20;
+const int DOT_VEL = 200;
+</pre> 
+      <div class="tutText">
+        Here we define the dot related constants of width, height, and velocity. 
+       <br /> 
+       <br /> Now that we're moving in relation to time instead of frame rate we have to change how we handle velocity. Instead of basing velocity per frame we're going to base it per second. In the original motion tutorial we had the dot travel 10 pixels every frame. Since the program ran at 20 frames per second that meant the dot moved at a rate of 200 pixels per second. 
+       <br /> 
+       <br /> So now the dot's velocity is 200 pixels per second. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:5 lang-cpp">//The dot
+class Dot
+{
+    private:
+    //The X and Y offsets of the dot
+    float x, y;
+    
+    //The velocity of the dot
+    float xVel, yVel;
+    
+    public:
+    //Initializes the variables
+    Dot();
+    
+    //Takes key presses and adjusts the dot's velocity
+    void handle_input();
+    
+    //Moves the dot
+    void move( Uint32 deltaTicks );
+    
+    //Shows the dot on the screen
+    void show();
+};
+</pre> 
+      <div class="tutText">
+        Here we have yet another revision of our friend the dot class. 
+       <br /> 
+       <br /> Now the offsets and velocity are floating point numbers. This is because there will be cases where the dot will move less than a pixel per frame. 
+       <br /> 
+       <br /> Say this program runs at 300 fps on a computer. To move at 200 pps the dot would have to move at 2/3 of a pixel per frame. 
+       <br /> 
+       <br /> We also have a move() function that takes in a delta time. For those of you who haven't taken physics, a delta time is a change in time. We need the change in time since the last frame to determine how much the dot needs to move. 
+       <br /> 
+       <br /> And of course we have our video and input functions. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:28 lang-cpp">void Dot::handle_input()
+{
+    //If a key was pressed
+    if( event.type == SDL_KEYDOWN )
+    {
+        //Adjust the velocity
+        switch( event.key.keysym.sym )
+        {
+            case SDLK_UP: yVel -= DOT_VEL; break;
+            case SDLK_DOWN: yVel += DOT_VEL; break;
+            case SDLK_LEFT: xVel -= DOT_VEL; break;
+            case SDLK_RIGHT: xVel += DOT_VEL; break;    
+        }
+    }
+    //If a key was released
+    else if( event.type == SDL_KEYUP )
+    {
+        //Adjust the velocity
+        switch( event.key.keysym.sym )
+        {
+            case SDLK_UP: yVel += DOT_VEL; break;
+            case SDLK_DOWN: yVel -= DOT_VEL; break;
+            case SDLK_LEFT: xVel += DOT_VEL; break;
+            case SDLK_RIGHT: xVel -= DOT_VEL; break;    
+        }        
+    }
+}
+</pre> 
+      <div class="tutText">
+        As you can see the input handling is pretty much the same from last time. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">void Dot::move( Uint32 deltaTicks )
+{
+    //Move the dot left or right
+    x += xVel * ( deltaTicks / 1000.f );
+    
+    //If the dot went too far to the left
+    if( x &lt; 0 )
+    {
+        //Move back
+        x = 0;    
+    }
+    //or the right
+    else if( x + DOT_WIDTH &gt; SCREEN_WIDTH )
+    {
+        //Move back
+        x = SCREEN_WIDTH - DOT_WIDTH;    
+    }
+    
+    //Move the dot up or down
+    y += yVel * ( deltaTicks / 1000.f );
+    
+    //If the dot went too far up
+    if( y &lt; 0 )
+    {
+        //Move back
+        y = 0;    
+    }
+    //or down
+    else if( y + DOT_HEIGHT &gt; SCREEN_HEIGHT )
+    {
+        //Move back
+        y = SCREEN_HEIGHT - DOT_HEIGHT;    
+    }
+}
+</pre> 
+      <div class="tutText">
+        Here is where we do our movement. 
+       <br /> 
+       <br /> We take in the delta time which is going to tell us the change in time since the dot last moved. If the program is running at 100 fps, the delta time will be 1/100 of a second. If the program is running at 200 fps, the delta time will be 1/200 of a second. If the program is running at 150 fps, the delta time will be 1/150 of a second, so on and so on. 
+       <br /> 
+       <br /> The formula to figure out how much we need to move is: 
+       <h5>velocity in pixels per second * time since last frame in seconds.</h5> So if the program runs at 200 frames per second: 
+       <h5>200 pps * 1/200 seconds = 1 pixel </h5> If the program runs at 100 frames per second: 
+       <h5>200 pps * 1/100 seconds = 2 pixels</h5> and so on and so on. 
+       <br /> 
+       <br /> Using the time based movement makes sure that the dot always moves at 200 pps. 
+       <br /> 
+       <br /> Also notice we changed our method to keep the dot in bounds. Instead of using the undo motion method like before, here whenever the dot goes off the screen we pull it back in. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:89 lang-cpp">void Dot::show()
+{    
+    //Show the dot
+    apply_surface( (int)x, (int)y, dot, screen );
+}
+</pre> 
+      <div class="tutText">
+        Here you see the show() function is pretty much unchanged except for the fact that we do have to type cast the float offsets to integers for blitting. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:94 lang-cpp">    //Quit flag
+    bool quit = false;
+    
+    //The dot that will be used
+    Dot myDot;
+
+    //Keeps track of time since last rendering
+    Timer delta;
+    
+    //Initialize
+    if( init() == false )
+    {
+        return 1;
+    }
+    
+    //Load the files
+    if( load_files() == false )
+    {
+        return 1;
+    }
+    
+    //Start delta timer
+    delta.start();
+</pre> 
+      <div class="tutText">
+        Here's the top of our main() function. 
+       <br /> 
+       <br /> Along with our dot we make a timer object to measure the delta time between frames. We start the timer before we enter our main loop. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:117 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {   
+        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //Handle events for the dot
+            myDot.handle_input();
+            
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+        
+        //Move the dot
+        myDot.move( delta.get_ticks() );
+        
+        //Restart delta timer
+        delta.start();
+</pre> 
+      <div class="tutText">
+        At the top of our main loop we handle events and move the dot. 
+       <br /> 
+       <br /> After the dot is moved we restart the delta timer so we can keep track of how long it's been since we last moved. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:139 lang-cpp">        //Fill the screen white
+        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+        
+        //Show the dot on the screen
+        myDot.show();
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Then we do our graphics as we do normally. 
+       <br /> 
+       <br /> As you can see we don't cap the frame rate, but since our movement is based on time it doesn't matter what the frame rate is. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson32">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson31/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson33/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>

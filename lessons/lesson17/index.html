@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <title>第17课 - 碰撞检测 &middot; SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <!-- Le styles --> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
+  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--> 
+  <!-- Le fav and touch icons --> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+ </head> 
+ <body data-spy="scroll" data-target=".subnav" data-offset="50">
+   ﻿ 
+  <!-- Navbar
+    ================================================== --> 
+  <div class="navbar navbar-fixed-top"> 
+   <div class="navbar-inner"> 
+    <div class="container"> 
+     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
+     <a class="brand" href="../../index.html">SDL中文教程</a> 
+     <div class="nav-collapse collapse"> 
+      <ul class="nav"> 
+       <li class=""><a href="../../index.html">简介</a></li> 
+       <li class=""><a href="../../contents.html">目录</a></li> 
+       <li class=""><a href="../../about.html">关于</a></li> 
+      </ul> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="container"> 
+   <div class="row"> 
+    <div class="span10 offset1"> 
+     <h1 align="center" id="content_title">第17课 - 碰撞检测</h1> 
+     <br /> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <ul class="quick-links"> 
+      <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson17/index.php">原文链接</a></li> 
+      <li><a class="btn" href="../lesson16/index.html" id="prev_link">上一课</a></li> 
+      <li><a class="btn" href="../lesson18/index.html" id="next_link">下一课</a></li> 
+     </ul> 
+     <hr /> 
+    </div> 
+   </div> 
+   <!-- Main contents start from here --> 
+   <div class="row"> 
+    <div class="well span10 offset1"> 
+     <div class="alert alert-warning"> 
+      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong><a href="../../about.html">联系我</a></strong>！ 
+     </div> 
+     <div class="content">
+      <div class="tutPreface"> 
+       <h1 class="tutHead">Collision Detection</h1> 
+       <div class="tutImg"> 
+        <img src="preview.jpg" /> 
+       </div> 
+       <h6>Last Updated 6/21/11</h6> Here's one of the most important concepts of gaming. 
+       <br /> 
+       <br /> We have a square and wall. We want to make sure that the square doesn't go through the wall. In order for that to happen we have to check if the square and wall have collided. 
+       <br /> 
+       <br /> This tutorial covers a basic way to check collision between two objects. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The wall
+SDL_Rect wall;
+</pre> 
+      <div class="tutText">
+        Here we have the wall that the square is going to interact with. Nothing much to explain here. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">//The square
+class Square
+{
+    private:
+    //The collision box of the square
+    SDL_Rect box;
+    
+    //The velocity of the square
+    int xVel, yVel;
+    
+    public:
+    //Initializes the variables
+    Square();
+    
+    //Takes key presses and adjusts the square's velocity
+    void handle_input();
+    
+    //Moves the square
+    void move();
+    
+    //Shows the square on the screen
+    void show();
+};
+</pre> 
+      <div class="tutText">
+        Now here's the square class we're going to use. As you'll probably notice it's almost identical to the Dot class from the motion tutorial. 
+       <br /> 
+       <br /> The only real difference in the variables is the fact that the square's X and Y coordinates are held inside of a SDL_Rect which also happens to hold the dimensions of the square. Otherwise it's pretty much the same. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:26 lang-cpp">bool check_collision( SDL_Rect A, SDL_Rect B )
+{
+    //The sides of the rectangles
+    int leftA, leftB;
+    int rightA, rightB;
+    int topA, topB;
+    int bottomA, bottomB;
+
+    //Calculate the sides of rect A
+    leftA = A.x;
+    rightA = A.x + A.w;
+    topA = A.y;
+    bottomA = A.y + A.h;
+        
+    //Calculate the sides of rect B
+    leftB = B.x;
+    rightB = B.x + B.w;
+    topB = B.y;
+    bottomB = B.y + B.h;
+</pre> 
+      <div class="tutText">
+        Here we have the actual function that checks for a collision. 
+       <br /> 
+       <br /> First thing the function does is take in the SDL_Rects and calculate their sides. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:45 lang-cpp">    //If any of the sides from A are outside of B
+    if( bottomA &lt;= topB )
+    {
+        return false;
+    }
+    
+    if( topA &gt;= bottomB )
+    {
+        return false;
+    }
+    
+    if( rightA &lt;= leftB )
+    {
+        return false;
+    }
+    
+    if( leftA &gt;= rightB )
+    {
+        return false;
+    }
+    
+    //If none of the sides from A are outside B
+    return true;
+}
+</pre> 
+      <div class="tutText">
+        Now it's time for collision. 
+       <br /> 
+       <br /> The basic principle of rectangular collision is that we check whether the sides from one rectangle are outside the sides of the other rectangle. 
+       <br /> 
+       <br /> Think about it, it's impossible for two rectangles to collide if their sides have to be outside each other, just look: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="nocollision.jpg" /> 
+       </div> Every single time all the sides from B are outside of A. 
+       <br /> 
+       <br /> Now notice when there is a collision: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="collision.jpg" /> 
+       </div> At least one side from B is inside A. 
+       <br /> 
+       <br /> So we go through and make sure none of the sides from B are inside A. If there's no collision we return false, if there is we return true. 
+       <br /> 
+       <br /> Notice that I use greater than or equal to and less than or equal to. This means in order for a collision to happen the rectangles have to overlap. If you use greater than and less than, the rectangles in this picture: 
+       <br /> 
+       <div class="tutImg"> 
+        <img src="nocollision.jpg" /> 
+       </div> would count as collisions because they're next to each other. 
+       <br /> 
+       <br /> Use which ever method best suits your needs. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:69 lang-cpp">Square::Square()
+{
+    //Initialize the offsets
+    box.x = 0;
+    box.y = 0;
+    
+    //Set the square's dimensions
+    box.w = SQUARE_WIDTH;
+    box.h = SQUARE_HEIGHT;
+    
+    //Initialize the velocity
+    xVel = 0;
+    yVel = 0;
+}
+</pre> 
+      <div class="tutText">
+        In the square's constructor we initialize the square's offsets, dimensions, and velocity like before. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:83 lang-cpp">void Square::move()
+{
+    //Move the square left or right
+    box.x += xVel;
+       
+    //If the square went too far to the left or right or has collided with the wall
+    if( ( box.x &lt; 0 ) || ( box.x + SQUARE_WIDTH &gt; SCREEN_WIDTH ) || ( check_collision( box, wall ) ) )
+    {
+        //Move back
+        box.x -= xVel;
+    }
+    
+    //Move the square up or down
+    box.y += yVel;
+    
+    //If the square went too far up or down or has collided with the wall
+    if( ( box.y &lt; 0 ) || ( box.y + SQUARE_HEIGHT &gt; SCREEN_HEIGHT ) || ( check_collision( box, wall ) ) )
+    {
+        //Move back
+        box.y -= yVel;
+    }   
+}
+</pre> 
+      <div class="tutText">
+        Now in the move() function we move the square, then check whether the square went outside the screen and whether the square overlaps the wall. If the square does go out of bounds we move it back. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:105 lang-cpp">    //Set the wall
+    wall.x = 300;
+    wall.y = 40;
+    wall.w = 40;
+    wall.h = 400;
+</pre> 
+      <div class="tutText">
+        In our main function after we initialize and load everything, we set the attributes of the wall. 
+      </div> 
+      <pre class="tutCode prettyprint linenums:110 lang-cpp">    //While the user hasn't quit
+    while( quit == false )
+    {
+        //Start the frame timer
+        fps.start();
+        
+        //While there's events to handle
+        while( SDL_PollEvent( &amp;event ) )
+        {
+            //Handle events for the square
+            mySquare.handle_input();
+            
+            //If the user has Xed out the window
+            if( event.type == SDL_QUIT )
+            {
+                //Quit the program
+                quit = true;
+            }
+        }
+        
+        //Move the square
+        mySquare.move();
+        
+        //Fill the screen white
+        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+        
+        //Show the wall
+        SDL_FillRect( screen, &amp;wall, SDL_MapRGB( screen-&gt;format, 0x77, 0x77, 0x77 ) );
+            
+        //Show the square on the screen
+        mySquare.show();
+        
+        //Update the screen
+        if( SDL_Flip( screen ) == -1 )
+        {
+            return 1;    
+        }
+        
+        //Cap the frame rate
+        if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
+        {
+            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+        }
+    }
+</pre> 
+      <div class="tutText">
+        Then we have our main loop. We simply handle events, move the square, fill the background, fill the region of the wall, and show the square, then update the screen and cap the frame rate. 
+      </div> 
+      <div class="tutFooter">
+        Download the media and source code for this tutorial 
+       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson17">here</a>. 
+       <br /> 
+       <br /> 
+       <a class="leftNav" href="../lesson16/index.php">Previous Tutorial</a> 
+       <a class="rightNav" href="../lesson18/index.php">Next Tutorial</a> 
+       <br /> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+   <!-- End of main contents--> 
+   <!-- Footer
+      ================================================== --> 
+   <footer class="footer"> 
+    <p class="pull-right"> <a href="#">返回页首</a> </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
+   </footer> 
+  </div> 
+  <!-- /container --> 
+  <!-- Le javascript
+    ================================================== --> 
+  <!-- Placed at the end of the document so the pages load faster --> 
+  <script src="../../assets/js/jquery.js"></script> 
+  <script src="../../assets/js/google-code-prettify/prettify.js"></script> 
+  <script src="../../assets/js/bootstrap-transition.js"></script> 
+  <script src="../../assets/js/bootstrap-alert.js"></script> 
+  <script src="../../assets/js/bootstrap-modal.js"></script> 
+  <script src="../../assets/js/bootstrap-dropdown.js"></script> 
+  <script src="../../assets/js/bootstrap-scrollspy.js"></script> 
+  <script src="../../assets/js/bootstrap-tab.js"></script> 
+  <script src="../../assets/js/bootstrap-tooltip.js"></script> 
+  <script src="../../assets/js/bootstrap-popover.js"></script> 
+  <script src="../../assets/js/bootstrap-button.js"></script> 
+  <script src="../../assets/js/bootstrap-collapse.js"></script> 
+  <script src="../../assets/js/bootstrap-carousel.js"></script> 
+  <script src="../../assets/js/bootstrap-typeahead.js"></script> 
+  <script src="../../assets/js/application.js"></script>  
+ </body>
+</html>
