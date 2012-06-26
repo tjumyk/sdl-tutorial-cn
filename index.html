@@ -4,8 +4,10 @@
  <meta charset="utf-8" /> 
   <title>SDL中文教程</title> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+  <meta name ="keywords" content="SDL,中文,教程,翻译,Lazy Foo">
+  <meta name="description" content="SDL中文教程，翻译自Lazy Foo的英文教程, 面向SDL 1.2" /> 
+  <meta name="author" content="tjumyk" /> 
+  
   <!-- Le styles --> 
   <link href="assets/css/bootstrap.css" rel="stylesheet" /> 
   <link href="assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
@@ -21,6 +23,17 @@
   <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png" /> 
   <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png" /> 
   <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32915160-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
   </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
   <!-- Navbar
@@ -52,19 +65,19 @@
 	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_351_book_open-white.png" />
 		 下载适用于电脑和手机的电子书
 	   </a> 
-	   <a target="_blank" href="http://github.com/download.zip" id="btn2" class="btn btn-primary btn-large visible-phone">
+	   <a target="_blank" href="https://github.com/downloads/tjumyk/sdl-tutorial-cn/sdl_tutorial_cn.chm" id="btn2" class="btn btn-primary btn-large visible-phone">
 	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_351_book_open-white.png" />
 		 下载适用于电脑和手机的电子书
 	   </a>
 	   <!-- 
-	   <a target="_blank" href="http://github.com/index.html" id="btn3" class="btn btn-primary btn-large ">
+	   <a target="_blank" href="http://tjumyk.github.com/sdl-tutorial-cn/" id="btn3" class="btn btn-primary btn-large ">
 	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_020_home-white.png" />
 		   查看最新在线版本
 	   </a>
 	    -->
-	   <a target="_blank" href="https://github.com/twitter/bootstrap/" class="btn btn-large">
-	     <img class="bs-icon" src="assets/img/github.png" /> 
-		 在GitHub上浏览此项目
+	   <a href="./contents.html" class="btn btn-large">
+	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_090_table.png" /> 
+		 进入教程主目录
 	   </a> 
 	   <a href="http://www.lazyfoo.net/SDL_tutorials/" target="_blank" class="btn btn-large">
 	     <img class="bs-icon" src="assets/img/glyphicons/glyphicons_340_globe.png" /> 
@@ -81,22 +94,21 @@
         <h3>方式一：</h3><h4>本教程所有内容已打包为一个独立的<span class="label label-info">CHM</span>格式的电子书，支持在Windows系统和智能手机上离线阅读。</h4>
 		<br />
 		<div align="center" id="qrcode"></div>
-		<p align="center"><span class="label label-info">这是神奇的二维码，你懂的...</span></p>
 		<hr class="">
 		<h3>方式二：</h3><h4>如果您正在使用Chrome浏览器，建议安装特别制作的<span class="label label-info">Chrome插件</span>，其中不仅包含了可离线阅读的完整教程，还支持HTML5和CSS3的渲染，您可以获得更完美的阅读体验。</h4>
 		<p align="center"><a target="_blank" href="http://chrome.google.com" rel="tooltip"  class="tooltip-test" data-original-title="点此安装最新Chrome浏览器"><img class="bs-icon" src="assets/img/chrome_logo.gif" /></a></p>
       </div>
 	  
       <div class="modal-footer">
-        <a target="_blank" id="downloadLink" href="http://github.com/download.zip" class="btn btn-primary">直接下载CHM到本机</a>
-        <a target="_blank" href="http://github.com/download.zip" class="btn btn-primary">安装Chrome插件</a>
+        <a target="_blank" id="downloadLink" href="https://github.com/downloads/tjumyk/sdl-tutorial-cn/sdl_tutorial_cn.chm" class="btn btn-primary">直接下载CHM到本机</a>
+        <a target="_blank" href="https://github.com/downloads/tjumyk/sdl-tutorial-cn/sdl_tutorial_cn.crx" class="btn btn-primary">安装Chrome插件</a>
 		<a href="#" class="btn" data-dismiss="modal">关闭窗口</a>
       </div>
     </div>	
-    <ul class="quick-links"> 
-     <li><a target="_blank" href="https://github.com/twitter/bootstrap/zipball/master">下载整个站点</a></li> 
-     <li><a target="_blank" href="https://github.com/twitter/bootstrap/issues?state=open">提交问题</a></li> 
-     <li><a target="_blank" href="https://github.com/twitter/bootstrap/wiki">路线图及更新日志</a></li> 
+    <ul class="quick-links">
+     <li><a target="_blank" href="https://github.com/tjumyk/sdl-tutorial-cn/zipball/gh-pages">下载整个站点</a></li> 
+     <li><a target="_blank" href="https://github.com/tjumyk/sdl-tutorial-cn/">在GitHub上浏览此项目</a></li>
+	 <li><a target="_blank" href="https://github.com/tjumyk/sdl-tutorial-cn/issues?state=open">提交问题</a></li> 
     </ul> 
     <p> <span class="label label-info">当前进度：6%， 更新时间：2012年6月21日</span> </p> 
     <div class="row"> 
@@ -146,7 +158,7 @@
       ================================================== --> 
    <footer class="footer">
    <div id="installChrome" class="row hidden-phone">
-        <p class="alert alert-info" align="center">页面显示混乱或不完整？可能是您的浏览器已经out了，推荐使用 <a target="_blank" href="http://chrome.google.com" rel="tooltip"  class="tooltip-test" data-original-title="点此安装最新Chrome浏览器"><img class="bs-icon" src="assets/img/chrome.png" /> Chrome</a>！这不是广告...</p>
+        <p class="alert alert-info" align="center">页面显示混乱或外观太难看？可能是因为您的浏览器已经out了，对HTML5和CSS3没有较好的支持。推荐使用 <a target="_blank" href="http://chrome.google.com" rel="tooltip"  class="tooltip-test" data-original-title="点此安装最新Chrome浏览器"><img class="bs-icon" src="assets/img/chrome.png" /> Chrome</a>！这是忠告，不是广告...</p>
     </div>
     <br />
     <br /> 
@@ -204,7 +216,7 @@
   </script>
   -->
   <script type="text/javascript">
-    $('#qrcode').qrcode({width:128,height:128,text:$('#downloadLink').attr('href')});
+    $('#qrcode').qrcode({width:160,height:160,text:$('#downloadLink').attr('href')});
   </script>
  </body>
 </html>
