@@ -1,214 +1,182 @@
 <!DOCTYPE html>
 <html>
- <head>
-  <meta charset="utf-8" /> 
-  <title>第1课(上) - 开始使用SDL &middot; 在Visual Studio.NET 2010 Express中使用SDL &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
-  <!-- Le styles --> 
-  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
-  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
-  <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]--> 
-  <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
-  </head> 
- <body data-spy="scroll" data-target=".subnav" data-offset="50">
-  <!-- Navbar
-    ================================================== --> 
-  <div class="navbar navbar-fixed-top"> 
-   <div class="navbar-inner"> 
-    <div class="container"> 
-     <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
-     <a class="brand" href="../../../../index.html">SDL中文教程</a> 
-     <div class="nav-collapse collapse"> 
-      <ul class="nav"> 
-       <li class=""><a href="../../../../index.html">简介</a></li> 
-       <li class=""><a href="../../../../contents.html">目录</a></li> 
-       <li class=""><a href="../../../../about.html">关于</a></li> 
-      </ul> 
-     </div> 
-    </div> 
-   </div> 
-  </div> 
-  <div class="container"> 
-   <div class="row"> 
-    <div class="span10 offset1"> 
-     <h1 align="center">第1课(上) - 开始使用SDL &middot; 在Visual Studio.NET 2010 Express中使用SDL</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
-     <ul class="quick-links"> 
-      <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson01/windows/msvsnet2010e/index.php">原文链接</a></li> 
-      <li><a class="btn" href="../../index.html">返回上层</a></li> 
-     </ul> 
-     <hr /> 
-    </div> 
-   </div> 
-   <!-- Main contents start from here --> 
-   <div class="row"> 
-    <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../../../about.html">联系我</a></strong>！ 
-     </div> 
-     <div class="content"> 
-      <div class="tutPreface"> 
-       <h1 class="tutHead">Setting up SDL in Visual Studio.NET 2010 Express</h1> 
-       <h6>Last Updated 6/13/10</h6> 
-      </div> 
-      <div class="tutText"> 
-       <a class="tutLink" name="1" href="#1">1)</a>First thing you need to do is download SDL headers and binaries. 
-       <br /> You will find them on the SDL website, specifically on 
-       <a class="tutLink" href="../../../../../www.libsdl.org/download-1.2.php">this page</a>. 
-       <br /> 
-       <br /> Scroll Down to the Development Libraries section and download the Windows development library: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="download.jpg" /> 
-       </div> 
-       <br /> Open the zip and there should be a folder inside of it. 
-       <br /> Copy that folder to where ever you want. In these tutorials I'm putting the folder in C:\. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="2" href="#2">2)</a>Start up Visual Studio and create a new empty project: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="new_project.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="3" href="#3">3)</a>Under configuration properties, click on VC++ directories, click on include directories and a button on the right will appear: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="vc_directories.png" /> 
-       </div> 
-       <br /> Click that button, then click edit: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="edit_directories.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="4" href="#4">4)</a>Click the folder icon and a new line with a new button will appear. Now click that new button. 
-       <div class="tutImg"> 
-        <img src="edit_include.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="5" href="#5">5)</a>Now select the include directory from the SDL directory you extracted: 
-       <div class="tutImg"> 
-        <img src="select_directory.png" /> 
-       </div> And then click ok. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="6" href="#6">6)</a>Next add the library directory in the same way: 
-       <div class="tutImg"> 
-        <img src="lib_1.png" /> 
-        <br /> 
-        <img src="lib_2.png" /> 
-        <br /> 
-        <img src="lib_3.png" /> 
-       </div> And then click ok. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="7" href="#7">7)</a>Under Linker in the Input menu, edit the Additional Dependencies: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="edit_linker.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="8" href="#8">8)</a>In the linker paste: 
-       <h6>SDL.lib; SDLmain.lib;</h6> in the Additional Dependencies field. 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="link.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="9" href="#9">9)</a>Then under System, set the Subsystem to be Windows: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="subsystem.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="10" href="#10">10)</a>Add a new source file to the project: 
-       <div class="tutImg"> 
-        <img src="new_cpp.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="11" href="#11">11)</a>Now paste the following code into your new source file: 
-      </div> 
-      <div class="tutCode">
-        #include &quot;SDL.h&quot; int main( int argc, char* args[] ) { //Start SDL SDL_Init( SDL_INIT_EVERYTHING ); //Quit SDL SDL_Quit(); return 0; } 
-      </div> 
-      <div class="tutText">
-        and save the source file. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="12" href="#12">12)</a>In the C/C++ menu under Code Generation, set &quot;Runtime Library&quot; to Multi-Threaded DLL: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="runtime_library.png" /> 
-       </div> 
-       <br /> 
-       <a class="tutLink" name="13" href="#13">13)</a>Now build. If there are any errors, make sure you didn't skip a step. Before you can run this SDL application (which does nothing visible) take the SDL.dll from the archive you downloaded (it should be inside the lib subfolder) and extract it. You're going to put this in the same directory as your project/exe after you compile it. 
-       <br /> 
-       <br /> Alternatively, you can copy SDL.dll to C:\WINDOWS\SYSTEM32 so your SDL app will find SDL.dll even if it's not in the same directory. If you're using a 64bit version of Windows, you'll want to put the dll in C:\Windows\SysWOW64. 
-       <br /> 
-       <br /> The problem with this method is if you have multiple SDL apps that use different versions of SDL, you'll have version conflicts. If you have SDL 1.2.8 in SYSTEM32 when the app uses 1.2.13 you're going to run into problems. Generally you want to have your SDL.dll in the same directory as your executable developing and you'll 
-       <b>always</b> want to have SDL.dll in the same directory as the exe when distributing your app. 
-       <br /> 
-      </div> 
-      <div class="tutFooter">
-        The tutorials use 
-       <b>#include &quot;SDL/SDL.h&quot;</b> to include their header files. Simply change it to 
-       <b>#include &quot;SDL.h&quot;</b> to make it work with Visual Studio. 
-       <br /> 
-       <br /> Also, In the archive you just downloaded there's a subfolder called &quot;docs&quot;. It contains the SDL documentation. 
-       <br /> 
-       <br /> I highly recommend that you extract them somewhere and keep it for reference. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../../../index.php">Tutorial Index</a> 
-       <a class="rightNav" href="../../index2.php">Part 2: Getting an Image on the Screen</a> 
-       <br /> 
-      </div> 
-     </div> 
-    </div> 
-   </div> 
-   <!-- End of main contents--> 
-   <!-- Footer
-      ================================================== --> 
-   <footer class="footer"> 
-    <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
-    <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
-    <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
-   </footer> 
-  </div> 
-  <!-- /container --> 
-  <!-- Le javascript
-    ================================================== --> 
-  <!-- Placed at the end of the document so the pages load faster --> 
-  <script src="../../../../assets/js/jquery.js"></script> 
-  <script src="../../../../assets/js/google-code-prettify/prettify.js"></script> 
-  <script src="../../../../assets/js/bootstrap-transition.js"></script> 
-  <script src="../../../../assets/js/bootstrap-alert.js"></script> 
-  <script src="../../../../assets/js/bootstrap-modal.js"></script> 
-  <script src="../../../../assets/js/bootstrap-dropdown.js"></script> 
-  <script src="../../../../assets/js/bootstrap-scrollspy.js"></script> 
-  <script src="../../../../assets/js/bootstrap-tab.js"></script> 
-  <script src="../../../../assets/js/bootstrap-tooltip.js"></script> 
-  <script src="../../../../assets/js/bootstrap-popover.js"></script> 
-  <script src="../../../../assets/js/bootstrap-button.js"></script> 
-  <script src="../../../../assets/js/bootstrap-collapse.js"></script> 
-  <script src="../../../../assets/js/bootstrap-carousel.js"></script> 
-  <script src="../../../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../../../assets/js/application.js"></script>  
- </body>
+  <head>
+    <meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
+    <meta charset="utf-8">
+    <title>第1课(上) - 开始使用SDL · 在Visual Studio.NET 2010 Express中使用SDL · SDL中文教程</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <link href="../../../../assets/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="../../../../assets/css/docs.css" rel="stylesheet">
+    <link href="../../../../assets/js/google-code-prettify/prettify.css"
+      rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>    <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+    <!-- Navbar
+    ================================================== -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container"> <button type="button" class="btn btn-navbar"
+            data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+              class="icon-bar"></span> <span class="icon-bar"></span> </button> <a
+            class="brand" href="../../../../index.html">SDL中文教程</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class=""><a href="../../../../index.html">简介</a></li>
+              <li class=""><a href="../../../../contents.html">目录</a></li>
+              <li class=""><a href="../../../../about.html">关于</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="span10 offset1">
+          <h1 align="center">第1课(上) - 开始使用SDL · 在Visual Studio.NET 2010 Express中使用SDL</h1>
+          <br>
+          <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p>
+          <ul class="quick-links">
+            <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson01/windows/msvsnet2010e/index.php">原文链接</a></li>
+            <li><a class="btn" href="../../index.html">返回上层</a></li>
+          </ul>
+          <hr> </div>
+      </div>
+      <!-- Main contents start from here -->
+      <div class="row">
+        <div class="well span10 offset1">
+          <div class="content translated">
+            <div class="tutText"> <a class="tutLink" id="1" href="#1">1)</a>首先你 需要下载SDL头文件和二进制文件。 <br>
+              你可以在SDL的官方网站上找到它们， <a class="tutLink" href="../../../../../www.libsdl.org/download-1.2.php">点此进入下载页</a>. <br>
+              <br>
+              向下滚动到Development Libraries部分，下载Windows开发包。 <br>
+              <div class="tutImg"> <img src="download.jpg"> </div>
+              <br>
+              打开zip压缩包，里面应该有一个文件夹。 <br>
+              将这个文件夹拷贝到你喜欢的任意地方。在本教程中，我把它放在C:\根目录 <br>
+              <br>
+              <a class="tutLink" id="2" href="#2">2)</a>启动Visual Studio并新建一个空工程： <br>
+              <div class="tutImg"> <img src="new_project.png"> </div>
+              <br>
+              <a class="tutLink" id="3" href="#3">3)</a>打开项目的<span class="label">属性</span>窗口，先在左侧单击<span
+                class="label">VC++目录</span>， 然后在右边单击<span class="label">Include目录</span>，此时右侧会出现一个按钮：
+              <div class="tutImg"> <img src="vc_directories.png"> </div>
+              <br>
+              单击这个按钮，然后点击<span class="label">编辑</span>：
+              <div class="tutImg"> <img src="edit_directories.png"> </div>
+              <br>
+              <a class="tutLink" id="4" href="#4">4)</a>单击文件夹图标，会出现新的一行和新的按钮，现在单击这个新出现的按钮：
+              <div class="tutImg"> <img src="edit_include.png"> </div>
+              <br>
+              <a class="tutLink" id="5" href="#5">5)</a>现在选择你解压出来的SDL目录中的 “Include”文件夹：<br>
+              <div class="tutImg"> <img src="select_directory.png"> </div>
+              然后点击<span class="label">OK</span>。<br>
+              <br>
+              <a class="tutLink" id="6" href="#6">6)</a>然后按照相同的方式添加“library”文件夹：
+              <div class="tutImg"> <img src="lib_1.png"> <br>
+                <img src="lib_2.png"> <br>
+                <img src="lib_3.png"> </div>
+              然后单击<span class="label">OK</span>。<br>
+              <br>
+              <a class="tutLink" id="7" href="#7">7)</a>展开左侧<span class="label">链 接器</span>，单击里面的<span
+                class="label">输入</span>选项，编辑右侧的<span class="label">附加依赖项</span>：
+              <div class="tutImg"> <img src="edit_linker.png"> </div>
+              <br>
+              <a class="tutLink" id="8" href="#8">8)</a>在附加依赖项窗口中添加下列内容：<br>
+              <br>
+              <p align="center"><code>SDL.lib; SDLmain.lib;</code></p>
+              <div class="tutImg"> <br>
+                <img src="link.png"> </div>
+              <br>
+              <a class="tutLink" id="9" href="#9">9)</a>接下来，先在左侧单击<span
+                class="label">系统</span>选项，然后将右侧的<span class="label">子系统</span>设置为“Windows窗体程序”：
+              <div class="tutImg"> <img src="subsystem.png"> </div>
+              <br>
+              <a class="tutLink" id="10" href="#10">10)</a>在工程里添加一个新的源文件：
+              <div class="tutImg"> <img src="new_cpp.png"> </div>
+              <br>
+              <a class="tutLink" id="11" href="#11">11)</a>现在，将下面的代码粘贴到新建的源文件中： <br>
+            </div>
+            <br>
+            <pre class="tutCode prettyprint linenums:1 lang-cpp">#include "SDL/SDL.h"
+int main( int argc, char* args[] ) 
+{ 
+    //Start SDL
+    SDL_Init( SDL_INIT_EVERYTHING );
+    
+    //Quit SDL 
+    SDL_Quit();
+    
+    return 0;
+} 
+</pre>
+            <div class="tutText"> <br>
+              <a class="tutLink" id="12" href="#12">12)</a>在左侧选择<span class="label">C/C++</span> 下面的<span
+                class="label">代码生成</span>，然后在右侧设置<span class="label">运行时库</span>为 “多线程DLL”：
+              <div class="tutImg"> <img src="runtime_library.png"> </div>
+              <br>
+              <a class="tutLink" id="13" href="#13">13)</a>现在开始编译，如果没有出错，你就成功了，否则，请查看前面的步骤，确保没有跳过任何一步。 在你能运行这个SDL程序前（虽然这个程序不会显示任何图形界面），你需要从下载的压缩包中解压出SDL.dll（应该位于“lib”子目录下），并在编译完成后，将它和编译生成的exe放在同一个目录中。<br>
+              <br>
+              另外，你也可以将SDL.dll拷贝到 “C:\WINDOWS\SYSTEM32”目录下，这样虽然SDL.dll与你的SDL程序不在同一个目录下，但程序仍能找到它。当然，如果你在使用64位的Windows系统，你就得把dll放于“C:\Windows\SysWOW64”目录中。<br>
+              <br>
+              可是，这样处理存在一个问题：如果你有多个使用不同版本SDL库的应用程序，这会导致版本冲突。 如果你将SDL 1.2.8放于System32中，而应用程序使用的是1.2.13，这必然会导致问题。通常情况下，你需要把SDL.dll和你开发的可执行程序放在同一个目录下，并且当你发布你的应用程序时，你<span
+                class="label label-info">总是</span>需要将SDL.dll与exe放在同一个目录下。 <br>
+              <br>
+            </div>
+            <div class="tutFooter"> 本教程中使用 <span class="label label-info">#include "SDL/SDL.h"</span>来添加SDL的头文件，而在使用Visual Studio时则需要将它改成<span
+                class="label label-info">#include "SDL.h"</span> ，这样才能正常工作。<br>
+              <br>
+              另外补充一句，在你刚刚下载的压缩包中，有一个“doc”子文件夹，其中包含了SDL的文档。<br>
+              <br>
+              我非常推荐您将文档解压到某一个地方，以便查阅。 <br>
+              <br>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p align="center"> <a class="btn btn-primary" href="../../../lesson02/index.html">下一课： 优化表面的加载和Blit</a> </p>
+      <!-- End of main contents-->
+      <!-- Footer
+      ================================================== -->
+      <footer class="footer">
+        <p class="pull-right"> <a href="#">返回页首</a> </p>
+        <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br>
+          由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p>
+        <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p>
+        <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a
+            target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p>
+      </footer>
+    </div>
+    <!-- /container -->
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../../../../assets/js/jquery.js"></script>
+    <script src="../../../../assets/js/google-code-prettify/prettify.js"></script>
+    <script src="../../../../assets/js/bootstrap-transition.js"></script>
+    <script src="../../../../assets/js/bootstrap-alert.js"></script>
+    <script src="../../../../assets/js/bootstrap-modal.js"></script>
+    <script src="../../../../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../../../../assets/js/bootstrap-scrollspy.js"></script>
+    <script src="../../../../assets/js/bootstrap-tab.js"></script>
+    <script src="../../../../assets/js/bootstrap-tooltip.js"></script>
+    <script src="../../../../assets/js/bootstrap-popover.js"></script>
+    <script src="../../../../assets/js/bootstrap-button.js"></script>
+    <script src="../../../../assets/js/bootstrap-collapse.js"></script>
+    <script src="../../../../assets/js/bootstrap-carousel.js"></script>
+    <script src="../../../../assets/js/bootstrap-typeahead.js"></script>
+    <script src="../../../../assets/js/application.js"></script>
+  </body>
 </html>
