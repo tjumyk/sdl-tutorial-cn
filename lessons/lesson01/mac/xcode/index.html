@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head>
- <meta charset="utf-8" /> 
-  <title>第1课(上) - 开始使用SDL &middot; 在XCode中使用SDL &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
+ <meta charset="utf-8"> 
+  <title>第1课(上) - 开始使用SDL · 在XCode中使用SDL · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png"> 
   
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
@@ -44,21 +45,21 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center">第1课(上) - 开始使用SDL &middot; 在XCode中使用SDL</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 align="center">第1课(上) - 开始使用SDL · 在XCode中使用SDL</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月28日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson01/mac/xcode/index.php">原文链接</a></li> 
       <li><a class="btn" href="../../index.html">返回上层</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
      <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
+      <strong>译者注：</strong>本页面还未完成翻译，主要是因为译者对XCode不太熟悉，不敢胡乱翻译。如有熟悉XCode并有兴趣翻译此文章者，请立即 
       <strong><a href="../../../../about.html">联系我</a></strong>！ 
      </div> 
      <div class="content"> 
@@ -68,59 +69,57 @@
       </div> 
       <div class="tutText"> 
        <a class="tutLink" name="1" href="#1">1)</a>First thing you need to do is download the SDL library. It's available on the SDL website. 
-       <br /> 
+       <br> 
        <div class="tutImg"> 
-        <img src="download.jpg" /> 
+        <img src="download.jpg"> 
        </div> You'll need to download both the runtime and developers packages. 
-       <br /> 
-       <br /> 
+       <br> 
+       <br> 
        <a class="tutLink" name="2" href="#2">2)</a>Open up the runtime package. Copy the SDL.framework folder to /Library/Frameworks. 
-       <br /> 
-       <br /> 
+       <br> 
+       <br> 
        <a class="tutLink" name="2" href="#2">2)</a>Open up the developer package and go inside of the XcodeTemplates folder. Go inside of the TemplatesForXcodeSnowLeopard and copy the set of folder inside of it. Go to /Library/Application Support/Developer/Shared/Xcode/Project Templates/Application and paste the set of folders inside here. If the folder does not exist, create it. 
-       <br /> 
-       <br /> 
+       <br> 
+       <br> 
        <a class="tutLink" name="3" href="#3">3)</a>Start up XCode and create a new XCode project. Select SDL Application, which should be under User Templates &gt; Application. 
-       <br /> 
+       <br> 
        <div class="tutImg"> 
-        <img src="new.png" /> 
+        <img src="new.png"> 
        </div> 
-       <br /> 
+       <br> 
        <a class="tutLink" name="4" href="#4">4)</a>Go to project settings: 
-       <br /> 
+       <br> 
        <div class="tutImg"> 
-        <img src="project_settings.png" /> 
+        <img src="project_settings.png"> 
        </div> 
-       <br /> 
+       <br> 
        <a class="tutLink" name="5" href="#5">5)</a>Set your base SDK to the latest version of Mac OS X you have available: 
-       <br /> 
+       <br> 
        <div class="tutImg"> 
-        <img src="base_sdk.png" /> 
+        <img src="base_sdk.png"> 
        </div> 
-       <br /> 
+       <br> 
        <a class="tutLink" name="6" href="#6">6)</a>Now build and run your project (which shows a blank window). 
-       <br /> 
-       <br /> If it compiles you're done. Otherwise go back and make sure you didn't skip a step. 
+       <br> 
+       <br> If it compiles you're done. Otherwise go back and make sure you didn't skip a step. 
       </div> 
       <div class="tutFooter">
         In the developer package there should be a folder contains the SDL documentation. 
-       <br /> 
-       <br /> I highly recommend that you extract them somewhere and keep it for reference. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../../../index.php">Tutorial Index</a> 
-       <a class="rightNav" href="../../index2.php">Part 2: Getting an Image on the Screen</a> 
-       <br /> 
+       <br> 
+       <br> I highly recommend that you extract them somewhere and keep it for reference. 
+       <br> 
+       <br>&nbsp; <a class="rightNav" href="../../index2.php"></a><br> 
       </div> 
      </div> 
     </div> 
    </div> 
+    <p align="center"> <a class="btn btn-primary" href="../../index2.html">下一部分： 在屏幕上显示一张图片</a> </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -143,6 +142,5 @@
   <script src="../../../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../../../assets/js/application.js"></script>
+</body></html>

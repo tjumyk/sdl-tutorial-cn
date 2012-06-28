@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第1课(上) - 开始使用SDL &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第1课(上) - 开始使用SDL · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,28 +45,28 @@
   <div class="container translated"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第1课(上) - 开始使用SDL</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第1课(上) - 开始使用SDL</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月28日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson01/index.php">原文链接</a></li> 
       <li><a class="btn" href="./index2.html">下一部分</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
   <div class="row"> 
     <div class="well span10 offset1"> 
      <div class="tutImg" align="center"> 
-      <img src="preview.jpg" /> 
+      <img src="preview.jpg"> 
      </div> 
-     <br /> SDL是一个第三方库，所以你必须下载并配置好后才能使用。本节课将一步一步地指导您下载和配置SDL库。 
-     <br /> 
-     <br /> 如果您在安装时遇到了一些问题，可以尝试咨询 
+     <br> SDL是一个第三方库，所以你必须下载并配置好后才能使用。本节课将一步一步地指导您下载和配置SDL库。 
+     <br> 
+     <br> 如果您在安装时遇到了一些问题，可以尝试咨询 
      <a href="http://www.libsdl.org/faq.html" class="tutLink">SDL Development FAQ</a>。 
-     <br /> 
-     <br /> 如果您已经配置好了SDL，请移步本课的下半部分， 
+     <br> 
+     <br> 如果您已经配置好了SDL，请移步本课的下半部分， 
      <a href="index2.html" class="tutLink">学习如何加载图片并将它显示到屏幕上</a>。 
     </div> 
    </div> 
@@ -78,19 +79,22 @@
      </div> 
      <table class="tutToC table table-bordered"> 
       <colgroup> 
-       <col width="20%" /> 
+       <col width="20%"> 
       </colgroup> 
       <tbody> 
        <tr> 
-        <td class="tutLink"><img src="windows/logo.jpg" /> <p align="center"> <br />Windows </p></td> 
-        <td class="tutLink"><a href="windows/devcpp/index.html" class="tutLink btn btn-large">Dev C++ 4.9.9.2</a> <a href="windows/codeblocks/index.html" class="tutLink btn btn-large">Code::Blocks 8.02</a> <a href="windows/msvsnet2010e/index.html" class="tutLink btn btn-large">Visual Studio.NET 2010 Express</a> <a href="windows/eclipse/index.html" class="tutLink btn btn-large">Eclipse 3.1</a></td> 
+        <td class="tutLink"><img src="windows/logo.jpg"> 
+<p align="center"> <br>Windows </p></td> 
+        <td class="tutLink"><a href="windows/devcpp/index.html" class="tutLink btn btn-large">Dev C++ 4.9.9.2</a> <a href="windows/codeblocks/index.html" class="tutLink btn btn-large">Code::Blocks 8.02</a> <a href="windows/msvsnet2010e/index.html" class="tutLink btn btn-large">Visual Studio.NET 2010 Express</a> </td> 
        </tr> 
        <tr> 
-        <td class="tutLink"><img src="linux/logo.jpg" /> <p align="center"> <br />Linux </p></td> 
+        <td class="tutLink"><img src="linux/logo.jpg"> 
+<p align="center"> <br>Linux </p></td> 
         <td class="tutLink"><a href="linux/eclipse/index.html" class="tutLink btn btn-large">Eclipse 3.0</a></td> 
        </tr> 
        <tr> 
-        <td class="tutLink"><img src="mac/logo.jpg" /> <p align="center"> <br />Max OS X </p></td> 
+        <td class="tutLink"><img src="mac/logo.jpg"> 
+<p align="center"> <br>Max OS X </p></td> 
         <td class="tutLink"><a href="mac/xcode/index.html" class="tutLink btn btn-large">XCode 3.2</a></td> 
        </tr> 
       </tbody> 
@@ -102,7 +106,7 @@
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -125,6 +129,5 @@
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>

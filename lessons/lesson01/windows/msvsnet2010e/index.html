@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
     <meta charset="utf-8">
     <title>第1课(上) - 开始使用SDL · 在Visual Studio.NET 2010 Express中使用SDL · SDL中文教程</title>
@@ -11,8 +11,7 @@
     <link href="../../../../assets/css/bootstrap.css" rel="stylesheet">
     <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="../../../../assets/css/docs.css" rel="stylesheet">
-    <link href="../../../../assets/js/google-code-prettify/prettify.css"
-      rel="stylesheet">
+    <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>    <![endif]-->
@@ -28,10 +27,7 @@
     ================================================== -->
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container"> <button type="button" class="btn btn-navbar"
-            data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span
-              class="icon-bar"></span> <span class="icon-bar"></span> </button> <a
-            class="brand" href="../../../../index.html">SDL中文教程</a>
+        <div class="container"> <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="brand" href="../../../../index.html">SDL中文教程</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class=""><a href="../../../../index.html">简介</a></li>
@@ -47,7 +43,7 @@
         <div class="span10 offset1">
           <h1 align="center">第1课(上) - 开始使用SDL · 在Visual Studio.NET 2010 Express中使用SDL</h1>
           <br>
-          <p align="center"> <span class="label label-info">更新时间：2012年6月27日</span> </p>
+          <p align="center"> <span class="label label-info">更新时间：2012年6月28日</span> </p>
           <ul class="quick-links">
             <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson01/windows/msvsnet2010e/index.php">原文链接</a></li>
             <li><a class="btn" href="../../index.html">返回上层</a></li>
@@ -59,7 +55,7 @@
         <div class="well span10 offset1">
           <div class="content translated">
             <div class="tutText"> <a class="tutLink" id="1" href="#1">1)</a>首先你 需要下载SDL头文件和二进制文件。 <br>
-              你可以在SDL的官方网站上找到它们， <a class="tutLink" href="../../../../../www.libsdl.org/download-1.2.php">点此进入下载页</a>. <br>
+              你可以在SDL的官方网站上找到它们， <a class="tutLink" target="_blank" href="http://www.libsdl.org/download-1.2.php">点此进入下载页</a>. <br>
               <br>
               向下滚动到Development Libraries部分，下载Windows开发包。 <br>
               <div class="tutImg"> <img src="download.jpg"> </div>
@@ -70,8 +66,7 @@
               <a class="tutLink" id="2" href="#2">2)</a>启动Visual Studio并新建一个空工程： <br>
               <div class="tutImg"> <img src="new_project.png"> </div>
               <br>
-              <a class="tutLink" id="3" href="#3">3)</a>打开项目的<span class="label">属性</span>窗口，先在左侧单击<span
-                class="label">VC++目录</span>， 然后在右边单击<span class="label">Include目录</span>，此时右侧会出现一个按钮：
+              <a class="tutLink" id="3" href="#3">3)</a>打开项目的<span class="label">属性</span>窗口，先在左侧单击<span class="label">VC++目录</span>， 然后在右边单击<span class="label">Include目录</span>，此时右侧会出现一个按钮：
               <div class="tutImg"> <img src="vc_directories.png"> </div>
               <br>
               单击这个按钮，然后点击<span class="label">编辑</span>：
@@ -90,8 +85,7 @@
                 <img src="lib_3.png"> </div>
               然后单击<span class="label">OK</span>。<br>
               <br>
-              <a class="tutLink" id="7" href="#7">7)</a>展开左侧<span class="label">链接器</span>，单击里面的<span
-                class="label">输入</span>选项，编辑右侧的<span class="label">附加依赖项</span>：
+              <a class="tutLink" id="7" href="#7">7)</a>展开左侧<span class="label">链接器</span>，单击里面的<span class="label">输入</span>选项，编辑右侧的<span class="label">附加依赖项</span>：
               <div class="tutImg"> <img src="edit_linker.png"> </div>
               <br>
               <a class="tutLink" id="8" href="#8">8)</a>在附加依赖项窗口中添加下列内容：<br>
@@ -100,8 +94,7 @@
               <div class="tutImg"> <br>
                 <img src="link.png"> </div>
               <br>
-              <a class="tutLink" id="9" href="#9">9)</a>接下来，先在左侧单击<span
-                class="label">系统</span>选项，然后将右侧的<span class="label">子系统</span>设置为“Windows窗体程序”：
+              <a class="tutLink" id="9" href="#9">9)</a>接下来，先在左侧单击<span class="label">系统</span>选项，然后将右侧的<span class="label">子系统</span>设置为“Windows窗体程序”：
               <div class="tutImg"> <img src="subsystem.png"> </div>
               <br>
               <a class="tutLink" id="10" href="#10">10)</a>在工程里添加一个新的源文件：
@@ -113,40 +106,36 @@
             <pre class="tutCode prettyprint linenums:1 lang-cpp">#include "SDL/SDL.h"
 int main( int argc, char* args[] ) 
 { 
-    //Start SDL
+    //启动SDL
     SDL_Init( SDL_INIT_EVERYTHING );
     
-    //Quit SDL 
+    //退出SDL 
     SDL_Quit();
     
     return 0;
 } 
 </pre>
             <div class="tutText"> <br>
-              <a class="tutLink" id="12" href="#12">12)</a>在左侧选择<span class="label">C/C++</span> 下面的<span
-                class="label">代码生成</span>，然后在右侧设置<span class="label">运行时库</span>为 “多线程DLL”：
+              <a class="tutLink" id="12" href="#12">12)</a>在左侧选择<span class="label">C/C++</span> 下面的<span class="label">代码生成</span>，然后在右侧设置<span class="label">运行时库</span>为 “多线程DLL”：
               <div class="tutImg"> <img src="runtime_library.png"> </div>
               <br>
               <a class="tutLink" id="13" href="#13">13)</a>现在开始编译，如果没有出错，你就成功了，否则，请查看前面的步骤，确保没有跳过任何一步。 在你能运行这个SDL程序前（虽然这个程序不会显示任何图形界面），你需要从下载的压缩包中解压出SDL.dll（应该位于“lib”子目录下），并在编译完成后，将它和编译生成的exe放在同一个目录中。<br>
               <br>
               另外，你也可以将SDL.dll拷贝到 “C:\WINDOWS\SYSTEM32”目录下，这样虽然SDL.dll与你的SDL程序不在同一个目录下，但程序仍能找到它。当然，如果你在使用64位的Windows系统，你就得把dll放于“C:\Windows\SysWOW64”目录中。<br>
               <br>
-              可是，这样处理存在一个问题：如果你有多个使用不同版本SDL库的应用程序，这会导致版本冲突。 如果你将SDL 1.2.8放于System32中，而应用程序使用的是1.2.13，这必然会导致问题。通常情况下，你需要把SDL.dll和你开发的可执行程序放在同一个目录下，并且当你发布你的应用程序时，你<span
-                class="label label-info">总是</span>需要将SDL.dll与exe放在同一个目录下。 <br>
+              可是，这样处理存在一个问题：如果你有多个使用不同版本SDL库的应用程序，这会导致版本冲突。 如果你将SDL 1.2.8放于System32中，而应用程序使用的是1.2.13，这必然会导致问题。通常情况下，你需要把SDL.dll和你开发的可执行程序放在同一个目录下，并且当你发布你的应用程序时，你<span class="label label-info">总是</span>需要将SDL.dll与exe放在同一个目录下。 <br>
               <br>
             </div>
-            <div class="tutFooter"> 本教程中使用 <span class="label label-info">#include "SDL/SDL.h"</span>来添加SDL的头文件，而在使用Visual Studio时则需要将它改成<span
-                class="label label-info">#include "SDL.h"</span> ，这样才能正常工作。<br>
+            <div class="tutFooter"> 本教程中使用 <span class="label label-info">#include "SDL/SDL.h"</span>来添加SDL的头文件，而在使用Visual Studio时则需要将它改成<span class="label label-info">#include "SDL.h"</span> ，这样才能正常工作。<br>
               <br>
               另外补充一句，在你刚刚下载的压缩包中，有一个“doc”子文件夹，其中包含了SDL的文档。<br>
               <br>
-              我非常推荐您将文档解压到某一个地方，以便查阅。 <br>
-              <br>
+              我非常推荐您将文档解压到某一个地方，以便查阅。 <br><br><div class="alert alert-warning"><strong>给Visual Studio用户的重要提醒</strong>：最新版本的供Visual Studio使用的SDL开发包中包含了两种版本的库和二进制文件，分别是32位系统使用的x86版本和64位系统使用的x64版本。如果你在使用64位操作系统，Visual Studio仍然默认使用32位方式编译。所以当你设定库目录时，应当将它指向lib目录下的x86子文件夹。</div>
             </div>
           </div>
         </div>
       </div>
-      <p align="center"> <a class="btn btn-primary" href="../../../lesson02/index.html">下一课： 优化表面的加载和Blit</a> </p>
+      <p align="center"> <a class="btn btn-primary" href="../../index2.html">下一部分： 在屏幕上显示一张图片</a></p>
       <!-- End of main contents-->
       <!-- Footer
       ================================================== -->
@@ -155,8 +144,7 @@ int main( int argc, char* args[] )
         <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br>
           由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p>
         <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p>
-        <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a
-            target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p>
+        <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p>
       </footer>
     </div>
     <!-- /container -->
@@ -178,5 +166,4 @@ int main( int argc, char* args[] )
     <script src="../../../../assets/js/bootstrap-carousel.js"></script>
     <script src="../../../../assets/js/bootstrap-typeahead.js"></script>
     <script src="../../../../assets/js/application.js"></script>
-  </body>
-</html>
+</body></html>
