@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第2课 - 优化表面的加载和Blit &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第2课 - 优化表面的加载和Blit · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,347 +45,277 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第2课 - 优化表面的加载和Blit</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第2课 - 优化表面的加载和Blit</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月29日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson02/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson01/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson03/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Optimized Surface Loading and Blitting</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
-       </div> 
-       <h6>Last Updated 12/28/09</h6> Now that you got an image on the screen in 
-       <a class="tutLink" href="../lesson01/index2.php">part 2 of the last tutorial</a>, it's time do your surface loading and blitting in a more efficient way. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The headers
-#include &quot;SDL/SDL.h&quot;
+        <img src="preview.jpg"> 
+       </div>既然你已经在<a class="tutLink" href="../lesson01/index2.html">上一课的第二部分</a>学会了在窗口中显示一张图片，那么现在是时候改用更高效的方法加载表面和Blit。<br><div class="alert alert-info"><b>译者注</b>：Blit的含义是内存中图像的位块传输，指的是将某一表面的全部或部分图像复制到另一表面上。只是我不清楚把它翻译成“位块传输”是否合适，故不翻译此词汇，应该不会影响阅读和理解。</div></div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//头文件
+#include "SDL/SDL.h"
 #include &lt;string&gt;
 </pre> 
-      <div class="tutText">
-        Here are our headers for this program. 
-       <br /> 
-       <br /> SDL.h is included because obviously we're going to need SDL's functions. 
-       <br /> 
-       <br /> The string header is used because ... eh I just like std::string over char* 
-       <br /> 
+      <div class="tutText">这些是这个程序所用到的头文件。<br> 
+       <br> SDL.h被包含了进来，很明显是因为我们要使用其中的函数。<br> 
+       <br> string头文件也被包含了进来...呃...我不喜欢使用char*，更喜欢用std::string。<br> 
       </div> 
-      <pre class="tutCode prettyprint linenums:4 lang-cpp">//The attributes of the screen
+      <pre class="tutCode prettyprint linenums:4 lang-cpp">//窗口属性
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP = 32;
 </pre> 
       <div class="tutText">
-        Here we have the various attributes of the screen. 
-       <br /> 
-       <br /> I'm pretty sure you can figure out what SCREEN_WIDTH and SCREEN_HEIGHT are. SCREEN_BPP is the bits per-pixel. In all of the tutorials, 32-bit color will be used. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:8 lang-cpp">//The surfaces that will be used
+        这里有多个不同的窗口属性。<br> 
+       <br>我确信你能看出来<code>SCREEN_WIDTH</code> 和 <code>SCREEN_HEIGHT</code> 的含义。<code>SCREEN_BPP</code> 是位/像素。这里所有的教程都是用的32位颜色。<br><div class="alert alert-info"><b>译者注</b>：目前基本所有图形化的操作系统默认都采用32位色（即“真彩色“）显示整个视窗系统，即每一像素用32位表示，其中分别是红色、绿色、蓝色和Alpha混合（即RGBA），各占8位。</div></div> 
+      <pre class="tutCode prettyprint linenums:8 lang-cpp">//将要使用的表面
 SDL_Surface *message = NULL;
 SDL_Surface *background = NULL;
 SDL_Surface *screen = NULL;
 </pre> 
       <div class="tutText">
-        These are the three images that are going to be used. 
-       <br /> 
-       <br /> &quot;background&quot; is obviously going to be the background image, &quot;message&quot; is the bitmap that says &quot;Hello&quot; and &quot;screen&quot; is obviously the screen. 
-       <br /> 
-       <br /> Remember: its a good idea to always set your pointers to NULL if they're not pointing to anything. 
+        这是3个即将使用的图像表面。<br> 
+       <br> "background" 很明显是背景图片， "message" 是一张写着"Hello"字样的图片， "screen" 很明显是程序窗口。<br> 
+       <br>记住：在不使用一个指针变量时，将它设为NULL，这是一个很好的习惯。. 
       </div> 
       <pre class="tutCode prettyprint linenums:12 lang-cpp">SDL_Surface *load_image( std::string filename ) 
 {
-    //Temporary storage for the image that's loaded
+    //临时的空间，用于存储刚刚加载好的图像
     SDL_Surface* loadedImage = NULL;
     
-    //The optimized image that will be used
+    //优化后的图像，实际使用的是这个图像
     SDL_Surface* optimizedImage = NULL;
 </pre> 
-      <div class="tutText">
-        Here we have our image loading function. 
-       <br /> 
-       <br /> What this function does is load the image, then returns a pointer to the optimized version of the loaded image. 
-       <br /> 
-       <br /> The argument &quot;filename&quot; is the path of the image to be loaded. &quot;loadedImage&quot; is the surface we get when the image is loaded. &quot;optimizedImage&quot; is the surface that is going to be used. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:19 lang-cpp">    //Load the image
+      <div class="tutText">这是我们加载图片的函数。 <br> 
+       <br>这个函数的作用是加载一张图片，然后返回一个指向优化后的图像表面的指针。<br> 
+       <br> 其中参数"filename"是要加载的图片的文件路径。 "loadedImage" 是我们加载好图像后得到的表面。"optimizedImage" 是最终实际使用的表面。</div> 
+      <pre class="tutCode prettyprint linenums:19 lang-cpp">    //加载图像
     loadedImage = SDL_LoadBMP( filename.c_str() );
 </pre> 
       <div class="tutText">
-        First the image is loaded using SDL_LoadBMP(). 
-       <br /> 
-       <br /> But it shouldn't be used immediately because the bitmap is 24-bit. The screen is 32-bit and it's not a good idea to blit a surface onto another surface that is a different format because SDL will have to change the format on the fly which causes slow down. 
-       <br /> 
+        一开始，图像是通过<code>SDL_LoadBMP()</code>加载的。 
+       <br> 
+       <br> 但是这个图像不能立即使用，因为这个位图是24位色的，而窗口是32位色的， 将一个表面blit到另一个不同格式的表面上不是一个好主意，因为这样SDL会在每次blit时做一次临时性的格式转换，这会导致程序的运行效率降低。<br> 
       </div> 
-      <pre class="tutCode prettyprint linenums:21 lang-cpp">    //If nothing went wrong in loading the image
+      <pre class="tutCode prettyprint linenums:21 lang-cpp">    //如果加载图片没有出错
     if( loadedImage != NULL )
     {
-        //Create an optimized image
+        //创建一个优化了的图像
         optimizedImage = SDL_DisplayFormat( loadedImage );
         
-        //Free the old image
+        //释放临时的图像
         SDL_FreeSurface( loadedImage );
     }
 </pre> 
-      <div class="tutText">
-        Next we check if the image was loaded properly. If there was an error, loadedImage will be NULL. 
-       <br /> 
-       <br /> If the image loaded fine, SDL_DisplayFormat() is called which creates a new version of &quot;loadedImage&quot; in the same format as the screen. The reason we do this is because when you try to stick one surface onto another one of a different format, SDL converts the surface so they're the same format. 
-       <br /> 
-       <br /> Creating the converted surface every time you blit wastes processing power which costs you speed. Because we convert the surface when we load it, when you want to apply the surface to the screen, the surface is already the same format as the screen. Now SDL won't have to convert it on the fly. 
-       <br /> 
-       <br /> So now we have 2 surfaces, the old loaded image and the new optimized image. 
-       <br /> 
+      <div class="tutText">下面我们要检查一下图片是否加载成功，如果加载发生了错误，loadedImage会被设为NULL。<br> 
+       <br> 如果图片加载成功，我们就调用<code>SDL_DisplayFormat()</code> 来创建一个与窗口拥有同样格式的新版本的图像。之所以这么做，是因为当你尝试将一个表面粘贴到另一个不同格式的表面时，SDL会自动转换它的格式，使它们具有相同的格式。<br><br> 而在每次blit时都创建一个转换后的表面会浪费机器的处理能力并降低程序运行速度。由于我们在加载表面时就已经将其格式转换好了，所以当你要将此表面应用到窗口上时，它已经与窗口具有相同格式，那么SDL就不必进行临时的格式转换了。<br> 
+       <br> 所以现在我们有2个表面：旧的加载得到的表面和新的优化处理后的表面。<br> 
        <div class="tutImg"> 
-        <img src="displayformat.jpg" /> 
-       </div> SDL_DisplayFormat() created a new optimized surface but didn't get rid of the old one. 
-       <br /> 
-       <br /> So we call SDL_FreeSurface() to get rid of the old loaded image. 
-       <br /> 
+        <img src="displayformat.jpg"> 
+       </div><code> SDL_DisplayFormat()</code> 创建了一个优化后的表面，但是没有去除原来的表面。<br> 
+       <br> 所以我们调用<code>SDL_FreeSurface()</code> 去掉原先加载得到的表面。<br> 
        <div class="tutImg"> 
-        <img src="freesurface.jpg" /> 
+        <img src="freesurface.jpg"> 
        </div> 
       </div> 
-      <pre class="tutCode prettyprint linenums:30 lang-cpp">    //Return the optimized image
+      <pre class="tutCode prettyprint linenums:30 lang-cpp">    //返回优化后的表面
     return optimizedImage;
 }
 </pre> 
       <div class="tutText">
-        Then the newly made optimized version of the loaded image is returned. 
-      </div> 
+        然后返回优化后的表面。</div> 
       <pre class="tutCode prettyprint linenums:33 lang-cpp">void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination )
 {
-    //Make a temporary rectangle to hold the offsets
+    //新建一个临时的矩形来保存偏移量
     SDL_Rect offset;
     
-    //Give the offsets to the rectangle
+    //将传入的偏移量保存到矩形中
     offset.x = x;
     offset.y = y;
 </pre> 
       <div class="tutText">
-        Here we have our surface blitting function. 
-       <br /> 
-       <br /> It takes in the coordinates of where you want to blit the surface, the surface you're going to blit and the surface you're going to blit it to. 
-       <br /> 
-       <br /> First we take the offsets and put them inside an SDL_Rect. We do this because SDL_BlitSurface() only accepts the offsets inside of an SDL_Rect. 
-       <br /> 
-       <br /> An SDL_Rect is a data type that represents a rectangle. It has four members representing the X and Y offsets, the width and the height of a rectangle. Here we're only concerned about x and y data members. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:41 lang-cpp">    //Blit the surface
+        这里我们有一个表面blit函数。<br> 
+       <br>它需要传入的参数分别是blit的位置坐标，blit的源表面和blit的目标表面。<br> 
+       <br> 首先我们将偏移量保存到一个SDL_Rect中。我们这么做是因为<code>SDL_BlitSurface()</code>仅接受SDL_Rect里设定的偏移量。 
+       <br> 
+       <br> SDL_Rect是一个表示矩形的数据类型。它包含了4个成员变量：矩形分别在X、Y轴上的偏移量和矩形的宽、高（即：x,y,width,height）。这里我们只关心其中的x和y。</div> 
+      <pre class="tutCode prettyprint linenums:41 lang-cpp">    //执行表面的Blit
     SDL_BlitSurface( source, NULL, destination, &amp;offset );
 }
 </pre> 
       <div class="tutText">
-        Now we actually blit the surface using SDL_BlitSurface(). 
-       <br /> 
-       <br /> The first argument is the surface we're using. 
-       <br /> Don't worry about the second argument, we'll just set it to NULL for now. 
-       <br /> The third argument is the surface we're going to blit on to. 
-       <br /> The fourth argument holds the offsets to where on the destination the source is going to be applied. 
-      </div> 
+        现在我们可以通过<code>SDL_BlitSurface()</code>执行表面的Blit。 
+       <br> 
+       <br> 其中第一个参数是我们要用到的源表面。<br>不用担心第二个参数，现在我们仅需将它设为NULL。<br>第三个参数是我们将要Blit的目标表面。<br>第四个参数保存了Blit的目标位置。</div> 
       <pre class="tutCode prettyprint linenums:44 lang-cpp">int main( int argc, char* args[] )
 {
 </pre> 
       <div class="tutText">
-        Now we start the main function. 
-       <br /> 
-       <br /> When using SDL, you should always use: 
-       <br /> int main( int argc, char* args[] ) 
-       <br /> 
-       <br /> or 
-       <br /> 
-       <br /> int main( int argc, char** args ) 
-       <br /> 
-       <br /> Using int main(), void main(), or any other kind won't work. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:46 lang-cpp">    //Initialize all SDL subsystems
+        现在开始我们的main函数。<br> 
+       <br>使用SDL时，你总是需要使用<br><code> int main( int argc, char* args[] ) 
+       </code><br>或者<br><code> int main( int argc, char** args ) 
+       </code><br> 
+       的方式声明main函数，<br>使用int main(), void main(), 或者任何其他类型的都不能正常工作。</div> 
+      <pre class="tutCode prettyprint linenums:46 lang-cpp">    //初始化SDL的所有子系统
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
         return 1;    
     }
 </pre> 
-      <div class="tutText">
-        Here we start up SDL using SDL_Init(). 
-       <br /> 
-       <br /> We give SDL_Init() SDL_INIT_EVERYTHING, which starts up every SDL subsystem. SDL subsystems are things like the video, audio, timers, etc that are the individual engine components used to make a game. 
-       <br /> 
-       <br /> We're not going to use every subsystem but it's not going to hurt us if they're initialized anyway. 
-       <br /> 
-       <br /> If SDL can't initialize, it returns -1. In this case we handle the error by returning 1, which will end the program. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:51 lang-cpp">    //Set up the screen
+      <div class="tutText">这里我们使用<code>SDL_Init()</code>来启动SDL。 
+       <br> 
+       <br> 我们传给<code>SDL_Init()</code> 的参数是SDL_INIT_EVERYTHING，这意味着启动SDL的所有子系统。SDL的子系统包含了视频、音频、计时器等等，它们都是用于构建游戏的独立的引擎组件。<br> 
+       <br>虽然我们可能并不使用所有的子系统，但即便把它们都启动了，也并不会对程序造成太大的影响。<br> 
+       <br>如果SDL不能初始化，这个函数会返回-1，此时我们通过返回1来解决这个错误，这会终止程序的运行。</div> 
+      <pre class="tutCode prettyprint linenums:51 lang-cpp">    //设置窗口
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
 </pre> 
       <div class="tutText">
-        Now it's time to make our window and get a pointer to the window's surface so we can blit images to the screen. 
-       <br /> 
-       <br /> You already know what the first 3 arguments do. The fourth argument creates the screen surface in system memory. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:53 lang-cpp">    //If there was an error in setting up the screen
+        现在是时候创建我们的窗口并获取窗口表面的指针了，这样我们就可以blit图像到窗口上了。<br> 
+       <br>你已经知道前三个参数的含义了，那么第四个参数的含义是在系统内存(译者注：或称”软件内存“)中创建窗口表面。</div> 
+      <pre class="tutCode prettyprint linenums:53 lang-cpp">    //如果设置窗口时出现错误
     if( screen == NULL )
     {
         return 1;    
     }
 </pre> 
-      <div class="tutText">
-        If there was a problem in making the screen pop up, screen will be set to NULL. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:58 lang-cpp">    //Set the window caption
-    SDL_WM_SetCaption( &quot;Hello World&quot;, NULL );
+      <div class="tutText">如果显示窗口时出现了问题，screen会被设为NULL。</div> 
+      <pre class="tutCode prettyprint linenums:58 lang-cpp">    //设置窗口标题
+    SDL_WM_SetCaption( "Hello World", NULL );
 </pre> 
       <div class="tutText">
-        Here the caption is set to &quot;Hello World&quot;. 
-       <br /> 
-       <br /> The caption is this part of the window: 
-       <br /> 
+        这里窗口的标题被设为"Hello World"。<br> 
+       <br>标题是窗口的一部分：<br> 
        <div class="tutImg"> 
-        <img src="caption.jpg" /> 
+        <img src="caption.jpg"> 
        </div> 
       </div> 
-      <pre class="tutCode prettyprint linenums:60 lang-cpp">    //Load the images
-    message = load_image( &quot;hello.bmp&quot; );
-    background = load_image( &quot;background.bmp&quot; );
+      <pre class="tutCode prettyprint linenums:60 lang-cpp">    //加载图片
+    message = load_image( "hello.bmp" );
+    background = load_image( "background.bmp" );
 </pre> 
       <div class="tutText">
-        Now the images are loaded using the image loading function we made. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:63 lang-cpp">    //Apply the background to the screen
+        现在使用我们写好的图像加载函数来加载这两张图片。</div> 
+      <pre class="tutCode prettyprint linenums:63 lang-cpp">    //将背景图片background应用到screen上
     apply_surface( 0, 0, background, screen );
 </pre> 
       <div class="tutText">
-        Now it's time to apply the background with the function we made. 
-       <br /> 
-       <br /> Before we blitted the background, the screen looked like this: 
-       <br /> 
+        现在是时候使用我们写好的函数将background应用到窗口上。<br> 
+       <br>在我们执行background的blit操作前，窗口就像这样：<br> 
        <div class="tutImg"> 
-        <img src="blank.jpg" /> 
+        <img src="blank.jpg"> 
        </div> 
-       <br /> But now that we blitted the background image, the screen looks like this in memory: 
-       <br /> 
+       <br> 但现在我们执行了background的blit，在内存中，窗口就像这样：<br> 
        <div class="tutImg"> 
-        <img src="background.jpg" /> 
+        <img src="background.jpg"> 
        </div> 
-       <br /> When you blit, you copy the pixels from one surface onto another. So now the screen has our background image in the top left corner, but we want to fill up the entire screen. Does that mean we have to load the background image 3 more times? 
-      </div> 
+       <br> 当你执行blit操作时，你是将一个表面中的许多像素拷贝到另一个表面中。所以现在窗口的左上角已经有了我们的背景图案，但我们想要让整个窗口填充完整。这难道意味着我们需要将背景图片再加载3次吗？</div> 
       <pre class="tutCode prettyprint linenums:65 lang-cpp">    apply_surface( 320, 0, background, screen );
     apply_surface( 0, 240, background, screen );
     apply_surface( 320, 240, background, screen );</pre> 
       <div class="tutText">
-        Nope. We can just blit the same surface 3 more times. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:68 lang-cpp">    //Apply the message to the screen
+        不是的。我们可以使用同一个背景表面，再执行3次blit操作。</div> 
+      <pre class="tutCode prettyprint linenums:68 lang-cpp">    //将message表面应用到窗口中
     apply_surface( 180, 140, message, screen );
 </pre> 
-      <div class="tutText">
-        Now we're going to apply the message surface onto the screen at x offset 180 and y offset 140. 
-       <br /> 
-       <br /> The thing is SDL coordinate system doesn't work like this: 
-       <br /> 
+      <div class="tutText">现在我们要将message表面应用到窗口上，并且x偏移量和y偏移量分别设为180和140。<br> 
+       <br> 注意：SDL的坐标系并<b>不是</b>这样的：<br> 
        <div class="tutImg"> 
-        <img src="cartesian.jpg" /> 
+        <img src="cartesian.jpg"> 
        </div> 
-       <br /> SDL's coordinate system works like this: 
-       <br /> 
+       <br> 事实上，SDL的坐标系应该是这样的：<br> 
        <div class="tutImg"> 
-        <img src="sdlcoord.jpg" /> 
-       </div> So the origin (0,0) is at the top left corner instead of the bottom left. 
-       <br /> 
-       <br /> So when you blit the message surface, it's going to blit it 180 pixels right, and 140 pixels down from the origin in the top left corner: 
-       <br /> 
+        <img src="sdlcoord.jpg"> 
+       </div> 所以，坐标原点(0,0)位于左上角，而不是左下角。<br><div class="alert alert-info"><b>译者注</b>：一般绝大多数图形程序的框架或引擎都采用下面这种坐标系，初次接触图形编程的同学一定要注意转换思维，否则在计算坐标时很容易出错。</div> 
+        所以当你blit message表面时，他会被blit到从左上角的坐标原点起向右180像素，向下140像素的位置。<br> 
        <div class="tutImg"> 
-        <img src="coorddemo.jpg" /> 
+        <img src="coorddemo.jpg"> 
        </div> 
-       <br /> SDL's coordinate system is awkward at first but you'll get used to it. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:70 lang-cpp">    //Update the screen
+       <br>一开始，你可能觉得SDL的坐标系很别扭，不过你会逐渐习惯的。</div> 
+      <pre class="tutCode prettyprint linenums:70 lang-cpp">    //更新窗口
     if( SDL_Flip( screen ) == -1 )
     {
         return 1;    
     }
 </pre> 
       <div class="tutText">
-        Even though we have applied our surfaces, the screen we see is still blank. 
-       <br /> 
-       <br /> Now we have to update the screen using SDL_Flip() so that the screen surface we have in memory matches the one shown on the screen. 
-       <br /> 
-       <br /> If there's an error it will return -1. 
-       <br /> 
+        尽管我们已经将一些表面应用到了窗口中，但我们看到的还是一个空窗口。<br> 
+       <br>现在我们必须使用<code>SDL_Flip()</code>来更新窗口，这样可以让内存中的screen表面与我们看到的窗口同步。<br> 
+       <br>如果发生了错误，这个函数会返回-1。<br> 
       </div> 
-      <pre class="tutCode prettyprint linenums:75 lang-cpp">    //Wait 2 seconds
+      <pre class="tutCode prettyprint linenums:75 lang-cpp">    //等待2秒
     SDL_Delay( 2000 );
 </pre> 
-      <div class="tutText">
-        We call SDL_Delay() so that the window doesn't just flash on the screen for a split second. SDL_Delay() accepts time in milliseconds, or 1/1000 of a second. 
-       <br /> 
-       <br /> So the window will stay up for 2000/1000 of a second or 2 seconds. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:77 lang-cpp">    //Free the surfaces
+      <div class="tutText">我们调用<code>SDL_Delay()</code>是为了防止窗口闪烁一下然后消失。这个函数的参数是以毫秒（或者说千分之一秒）为单位的时间。<br> 
+       <br>所以这个窗口会停留 2000 / 1000 = 2(秒) 长的时间。<br></div> 
+      <pre class="tutCode prettyprint linenums:77 lang-cpp">    //释放表面
     SDL_FreeSurface( message );
     SDL_FreeSurface( background );
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
     
-    //Return
+    //main函数返回
     return 0;
 }
 </pre> 
       <div class="tutText">
-        Now we do the end of the program clean up. 
-       <br /> 
-       <br /> SDL_FreeSurface() is used to get rid of the surfaces we loaded since we're not using them anymore. If we don't free the memory we used, we will cause a memory leak. 
-       <br /> 
-       <br /> Then SDL_Quit() is called to quit SDL. Then we return 0, ending the program. 
-       <br /> 
-       <br /> You may be asking yourself &quot;why aren't we freeing the screen surface?&quot;. Don't worry. SDL_Quit() will take care of that for us. 
-      </div> 
-      <div class="tutText">
-        If you run the program and the images don't show up or the window flashes for a second and you find in stderr.txt: 
-       <br /> Fatal signal: Segmentation Fault (SDL Parachute Deployed) 
-       <br /> 
-       <br /> It's because the program tried to access memory it wasn't supposed to. Odds are it's because it tried to access NULL when apply_surface() was called. This means you need to make sure the bitmap files are in the same directory as the program. 
-       <br /> 
-       <br /> If the window pops up and the image doesn't show up, again make sure the bitmaps are in the same folder as the program or in the project directory. 
-       <br /> 
-       <br /> If you're using Visual Studio and the compiler complains about 
-       <b>'SDL/SDL.h': No such file or directory</b>, go to the top of the source code and make sure it says 
-       <b>#include &quot;SDL.h&quot;</b>. 
-       <br /> 
-       <br /> Also if you're using Visual Studio and you get the error 
-       <b>&quot;The application failed to start because the application configuration is incorrect. Reinstalling the application may fix this problem.&quot;</b>, it's because you don't have the service pack update installed. 
-       <a class="tutLink" href="../lesson01/windows/vcsetup/index.php">Do not forget to have the latest version of your compiler/IDE with the service pack update for your compiler/IDE or SDL will not work with Visual Studio</a>. 
+        现在我们进行程序末端的清理工作。<br> 
+       <br> <code>SDL_FreeSurface()</code> 是用来清除我们加载的表面的，我们不再需要这些表面。如果我们不释放我们使用的内存，会导致内存泄露。<br> 
+       <br>然后我们调用<code>SDL_Quit()</code> 来退出SDL。接着我们返回0，从而结束程序。<br> 
+       <br>你可能会问：“为什么我们不释放screen表面？”不用担心，<code>SDL_Quit()</code>会自动为我们处理这个的。<br><br><hr>
+        <h1 class="tutHead">疑难解答</h1>
+        <table class="table table-bordered table-striped">
+<thead>
+<tr>
+<td><b>可能出现的问题</b><br></td>
+<td><b>解决方法</b><br></td></tr>
+</thead>
+<tbody>
+<tr>
+<td>使用Visual Studio编译时，编译器报错：<i>“SDL/SDL.h”：没有这个文件或目录。</i><br></td>
+<td>看一下代码顶部，确保写的是<code>#include "SDL.h"</code>。</td></tr>
+<tr>
+<td>生成成功，但运行时没有显示图形窗口或者窗口闪烁一下就消失，并且在程序目录下找到一个包含下列内容的stderr.txt文件：<br><i>Fatal signal: Segmentation Fault (SDL Parachute Deployed) </i><br></td>
+<td>这是由于程序在试图访问不属于它自己的内存空间。其中一种可能是程序在执行<code>apply_surface()</code>时试图访问<code>NULL</code>所指向的内存位置，这意味着图片加载出错，请确保图片文件和程序文件在同一个目录下。Visual Studio用户则需要将图片文件与vcproj文件放在同一目录下。</td></tr>
+<tr>
+<td>生成成功，程序可以运行，但没有显示图片<br></td>
+<td>与上一个问题一样，请确保图片文件和程序文件在同一个目录下。Visual Studio用户则需要将图片文件与vcproj文件放在同一目录下。</td></tr>
+<tr>
+<td>使用Visual Studio成功生成程序，但程序在运行时报错：<i>The application failed to start because the application configuration is incorrect. Reinstalling the application may fix this problem</i><br></td>
+<td>这是因为你没有为你的编译器或IDE安装最新的补丁或升级包，这会导致SDL无法与Visual Studio配合使用。<br></td></tr>
+</tbody></table>
+        <br><a class="tutLink" href="../lesson01/windows/vcsetup/index.php"></a>
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson02">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson01/index2.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson03/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson02">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson03/">下一课：使用SDL扩展库加载更多格式的图片</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -407,6 +338,5 @@ SDL_Surface *screen = NULL;
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
