@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第9课 - 鼠标事件 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第9课 - 鼠标事件 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,65 +45,57 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第9课 - 鼠标事件</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第9课 - 鼠标事件</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月30日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson09/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson08/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson10/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Mouse Events</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 12/31/10</h6> Time to learn to handle events from the mouse. This is a simple tutorial that will teach you to handle various mouse events to make a simple button. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The button
+        是时候学习处理鼠标事件了。本节课将教你处理各种不同类型的鼠标事件并实现一个简单的按钮。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//按钮类
 class Button
 {
     private:
-    //The attributes of the button
+    //按钮的属性
     SDL_Rect box;
     
-    //The part of the button sprite sheet that will be shown
+    //精灵图中显示出来的子图
     SDL_Rect* clip;
     
     public:
-    //Initialize the variables
+    //初始化变量
     Button( int x, int y, int w, int h );
     
-    //Handles events and set the button's sprite region
+    //处理事件并设置按钮的精灵图子图
     void handle_events();
     
-    //Shows the button on the screen
+    //将按钮显示在窗口中
     void show();
 };
 </pre> 
       <div class="tutText">
-        Here's the Button class which we're going to interact with. 
-       <br /> 
-       <br /> We have a rectangle to define the position and dimensions of the Button. We also have a pointer to the sprite from the sprite sheet being used by the Button. 
-       <br /> 
-       <br /> Then we have the constructor that sets the Button according to the attributes given in the arguments. Then we have our handle_events() function which handles mouse motion and mouse button events. 
-       <br /> 
-       <br /> Then there's show() function which shows the button on the screen. 
-      </div> 
+        这是我们的Button类，我们将与它进行交互。<br> 
+       <br>我们用一个矩形来定义按钮的位置和大小。我们还有一个指针，它指向了按钮所使用的精灵图子图。<br><div class="alert alert-warning"><b>译者注</b>：关于Sprite和Sprite Sheet这两个词的翻译，我不是很确定。Sprite应该是子图、子图形、子画面的意思，那么Sprite Sheet难道要翻译为“子图表”？好像没这个说法，一般称“精灵图”的比较多，读起来比较顺口，虽然意思上好像与“精灵”一点关系也没有。在此姑且分别翻译为“子图”和“精灵图”吧。<br></div><br> 
+       <br> 然后我们有一个构造函数，它依据传入的参数设置来按钮的属性。然后是我们的<code>handle_events()</code> 函数，它用于处理鼠标移动事件和鼠标按钮事件。<br> 
+       <br> 接下来是<code>show()</code> 函数，它会将按钮显示到窗口中。</div> 
       <pre class="tutCode prettyprint linenums:21 lang-cpp">void set_clips()
 {
-    //Clip the sprite sheet
+    //分割精灵图
     clips[ CLIP_MOUSEOVER ].x = 0;
     clips[ CLIP_MOUSEOVER ].y = 0;
     clips[ CLIP_MOUSEOVER ].w = 320;
@@ -124,102 +117,91 @@ class Button
     clips[ CLIP_MOUSEUP ].h = 240;    
 }
 </pre> 
-      <div class="tutText">
-        Here's our function that clips the images from our sprite sheet: 
-       <br /> 
+      <div class="tutText">这是我们从精灵图中分割子图的函数。<br> 
        <div class="tutImg"> 
-        <img src="button.png" /> 
-       </div> As you can see we have a sprite for the various mouse events. So we have an array of four SDL_Rects that clip each button sprite. Each button sprite has a constant associated with it. 
-      </div> 
+        <img src="button.png"> 
+       </div> 你可以看到，我们有一张显示不同类型鼠标事件的精灵图。所以我们有一个包含4个<code>SDL_Rect</code>类型数据的数组，它被用来从精灵图中分割出每个按钮子图。每个按钮子图都有一个与之相关的常量。</div> 
       <pre class="tutCode prettyprint linenums:44 lang-cpp">Button::Button( int x, int y, int w, int h )
 {
-    //Set the button's attributes
+    //设置按钮的属性
     box.x = x;
     box.y = y;
     box.w = w;
     box.h = h;
     
-    //Set the default sprite
+    //设置默认的子图
     clip = &amp;clips[ CLIP_MOUSEOUT ];
 }
 </pre> 
-      <div class="tutText">
-        The constructor for the Button class is pretty straight forward. It sets the x and y offsets of the button along with its width and height. 
-       <br /> 
-       <br /> It also sets the default sprite from the sprite sheet. 
-      </div> 
+      <div class="tutText">Button类的构造函数十分浅显易懂，它设置了按钮的X/Y轴上的偏移量以及其宽高。<br>
+<div class="alert alert-info"><b>译者注</b>：offset直译是“偏移量”，指的从坐标原点（注意是左上角）沿着某一坐标轴平移到某一点时所经过的距离，平移方向决定了+/-号，故含义上同“坐标”。因此本文中的“偏移量”与“坐标”指的是一个概念，并且为了保证语句通顺，“偏移量”与“坐标”两种翻译可能都会用到。</div> 
+       <br>并且它将精灵图中的某一个子图设为了默认子图。</div> 
       <pre class="tutCode prettyprint linenums:55 lang-cpp">void Button::handle_events()
 {
-    //The mouse offsets
+    //鼠标坐标
     int x = 0, y = 0;
     
-    //If the mouse moved
+    //如果鼠标发生了移动
     if( event.type == SDL_MOUSEMOTION )
     {
-        //Get the mouse offsets
+        //获得鼠标坐标
         x = event.motion.x;
         y = event.motion.y;
         
-        //If the mouse is over the button
+        //如果鼠标在按钮上方
         if( ( x &gt; box.x ) &amp;&amp; ( x &lt; box.x + box.w ) &amp;&amp; ( y &gt; box.y ) &amp;&amp; ( y &lt; box.y + box.h ) )
         {
-            //Set the button sprite
+            //设置按钮子图
             clip = &amp;clips[ CLIP_MOUSEOVER ];    
         }
-        //If not
+        //如果不是
         else
         {
-            //Set the button sprite
+            //设置按钮子图
             clip = &amp;clips[ CLIP_MOUSEOUT ];
         }    
     }
 </pre> 
-      <div class="tutText">
-        In the event handler, the first thing we check is if the mouse moved. When the mouse moves, a SDL_MOUSEMOTION event occurs. 
-       <br /> 
-       <br /> If the mouse was moved, we get the mouse offsets from the event structure, then check if the mouse is over the Button. If the mouse is over the Button, we set the Button's sprite to be the mouse over sprite, otherwise it is set to the mouse out sprite. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:80 lang-cpp">    //If a mouse button was pressed
+      <div class="tutText">在事件处理函数中，我们首先要做的是检查鼠标是否发生了移动。鼠标移动后，会产生一个<code>SDL_MOUSEMOTION</code> 事件。<br> 
+       <br> 如果鼠标发生了移动，我们从事件结构体中获取鼠标的偏移量，然后检查鼠标是否在按钮的上方。如果鼠标在按钮的上方，我们将按钮的子图设为“Mouse Over”子图，否则设为“Mouse Out”子图。</div> 
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">    //如果一个鼠标按钮被按下了
     if( event.type == SDL_MOUSEBUTTONDOWN )
     {
-        //If the left mouse button was pressed
+        //如果鼠标左键被按下了
         if( event.button.button == SDL_BUTTON_LEFT )
         {
-            //Get the mouse offsets
+            //获取鼠标坐标
             x = event.button.x;
             y = event.button.y;
         
-            //If the mouse is over the button
+            //如果鼠标在按钮上方
             if( ( x &gt; box.x ) &amp;&amp; ( x &lt; box.x + box.w ) &amp;&amp; ( y &gt; box.y ) &amp;&amp; ( y &lt; box.y + box.h ) )
             {
-                //Set the button sprite
+                //设置按钮子图
                 clip = &amp;clips[ CLIP_MOUSEDOWN ];
             }
         }
     }
 </pre> 
       <div class="tutText">
-        Then we check if a mouse button was pressed. When a mouse button is pressed, a SDL_MOUSEBUTTONDOWN event occurs. 
-       <br /> 
-       <br /> We only want the button to react to the left mouse button, so we check if the left mouse button was pressed. 
-       <br /> 
-       <br /> Then we check if the mouse button was pressed over the Button. If it was we set the Button's sprite to be the mouse down sprite. 
-       <br /> 
+        然后我们检查是否有鼠标按钮被按下了。如果一个鼠标按钮被按下，它会产生一个<code>SDL_MOUSEBUTTONDOWN</code>事件。<br> 
+       <br>因为我们想让按钮只与鼠标左键交互，所以我们检查一下鼠标左键是否被按下。<br> 
+       <br>然后我们再检查一下是否是当鼠标位于按钮上方时，发生了左键单击事件。如果是的，将按钮子图设为“Mouse Down”子图。<br> 
       </div> 
-      <pre class="tutCode prettyprint linenums:98 lang-cpp">    //If a mouse button was released
+      <pre class="tutCode prettyprint linenums:98 lang-cpp">    //如果一个鼠标按钮被释放了
     if( event.type == SDL_MOUSEBUTTONUP )
     {
-        //If the left mouse button was released
+        //如果鼠标左键被释放了
         if( event.button.button == SDL_BUTTON_LEFT )
         { 
-            //Get the mouse offsets
+            //获取鼠标坐标
             x = event.button.x;
             y = event.button.y;
         
-            //If the mouse is over the button
+            //如果鼠标在按钮上方
             if( ( x &gt; box.x ) &amp;&amp; ( x &lt; box.x + box.w ) &amp;&amp; ( y &gt; box.y ) &amp;&amp; ( y &lt; box.y + box.h ) )
             {
-                //Set the button sprite
+                //设置按钮子图
                 clip = &amp;clips[ CLIP_MOUSEUP ];
             }
         }
@@ -227,91 +209,75 @@ class Button
 }
 </pre> 
       <div class="tutText">
-        Then we check if the mouse button was released over the button with a SDL_MOUSEBUTTONUP event. 
-       <br /> 
-       <br /> In this program we got the mouse offsets by getting them from the event structure. It would have been more efficient to get the mouse offsets via SDL_GetMouseState(), but.... eh I'm too lazy to go back and change the code. 
-      </div> 
+        然后我们检查是否有鼠标按钮被释放了。如果一个鼠标按钮被释放，它会产生一个<code>SDL_MOUSEBUTTONUP</code> 事件。 
+       <br> 
+       <br>在这个程序里，我们通过事件结构体来获取鼠标的坐标。实际上，通过<code>SDL_GetMouseState()</code>这个函数来获取鼠标坐标会更高效，但是...呃...我懒得回去改代码了。</div> 
       <pre class="tutCode prettyprint linenums:117 lang-cpp">void Button::show()
 {
-    //Show the button
+    //显示按钮
     apply_surface( box.x, box.y, buttonSheet, screen, clip );
 }
 </pre> 
-      <div class="tutText">
-        Then in the show function we show the button's sprite on the screen. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:122 lang-cpp">    //Clip the sprite sheet
+      <div class="tutText">接下来，我们让按钮的子图显示在窗口中。</div> 
+      <pre class="tutCode prettyprint linenums:122 lang-cpp">    //分割精灵图
     set_clips();
     
-    //Make the button
+    //新建按钮
     Button myButton( 170, 120, 320, 240 );
     
 </pre> 
-      <div class="tutText">
-        At the top of the main() function after we've initialized and loaded everything, we set clip the sprite sheet and set our button. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:128 lang-cpp">    //While the user hasn't quit
+      <div class="tutText">在main()函数的顶部，我们在做完初始化和加载后，要先分割精灵图并新建我们的按钮。</div> 
+      <pre class="tutCode prettyprint linenums:128 lang-cpp">    //当用户还没有退出
     while( quit == false )
     {
-        //If there's events to handle
+        //如果有事件需要处理
         if( SDL_PollEvent( &amp;event ) )
         {
-            //Handle button events
+            //处理鼠标按钮事件
             myButton.handle_events();
             
-            //If the user has Xed out the window
+            //如果用户点击了窗口右上角的关闭按钮
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }    
         }
 
-        //Fill the screen white
-        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+        //使用白色填充整个窗口
+        SDL_FillRect( screen, &amp;screen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
         
-        //Show the button
+        //显示按钮
         myButton.show();
         
-        //Update the screen
+        //更新窗口
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
     }
 </pre> 
-      <div class="tutText">
-        Here's the button class in action inside our main loop. 
-       <br /> 
-       <br /> First we handle events. As you can see we use Button's event handler and we also check for a user quit. 
-       <br /> 
-       <br /> Typically a while loop is used to handle events but in this tutorial (and the previous one) we used &quot;if&quot;. This is so one event is handled per frame and it's easier to see the individual events. In most real applications you use &quot;while&quot; because you want to handle all events on queue every frame. 
-       <br /> 
-       <br /> After the event is handled, we clear the screen by filling it white. Then we show the button on the screen and update the screen. 
-       <br /> 
-       <br /> Then the main loop continues so we can render another frame until the user quits. 
-      </div> 
-      <div class="tutText">
-        For those of you on faster computers you may not see the CLIP_MOUSEUP sprite. This is because the program runs so fast it only shows up for a split second. Fortunately there's a set of tutorials dealing with timing and regulating frame rate coming up. If you slow the program down to 20 frames per second you should at least be able to notice it. 
-      </div> 
+      <div class="tutText">这里展示了Button类在主循环中的具体用法。<br> 
+       <br>一开始我们要处理事件。你可以看出来，我们使用了Button类的事件处理函数并且我们也检查用户是否需要退出。<br> 
+       <br>一般情况下，我们使用while循环来处理事件，但在本节课中（以及前面一节课中），我们都用了“if”。这么做会使得每一帧中仅有一个事件被处理，于是可以更容易地观察到单独的事件。但在绝大多数真实的应用中，你会使用“while”循环，因为你需要在每一帧中处理所有新的事件。<br> 
+       <br>事件处理完毕后，我们用填充白色的方法清除窗口中旧的图像。然后我们让按钮显示出来并更新窗口。<br> 
+       <br>下面主循环会继续运行，所以我们可以一帧一帧地渲染，直到用户请求退出。<br><br></div> 
+      <div class="tutText">对于你们当中使用较快电脑的人来说，可能看不到“Mouse Up”子图。这是因为这程序跑得太快了，以至于这个子图仅仅显示了极短的时间。幸运的是，我们下面会有一系列关于计时和调节帧率的教程。如果你将程序的运行速度调节到20帧每秒以下，你至少应该可以注意到这个子图。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson09">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson08/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson10/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson09">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson10/">下一课：按键状态</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -334,6 +300,5 @@ class Button
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>

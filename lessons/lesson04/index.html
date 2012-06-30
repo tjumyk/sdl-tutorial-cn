@@ -47,7 +47,7 @@
     <div class="span10 offset1"> 
      <h1 id="content_title" align="center">第4课 - 事件驱动编程</h1> 
      <br> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月29日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月30日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson04/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson03/index.html" id="prev_link">上一课</a></li> 
@@ -244,8 +244,9 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination 
     }
 </pre> 
       <div class="tutText">
-        当用户单击窗口右上角的关闭按钮时，事件的类型会是<code>SDL_QUIT</code>。<br> 
-       <br>But when the user does that it does not end the program, all it does inform us the user wants to exit the program. <br><div class="alert alert-warning"><b>译者注</b>：本句未翻译。这里没理解原作者的意图，“当用户做非关闭操作时，仅仅会通知我们用户想要退出程序”？意思搞反了吧？</div> 
+        当用户单击窗口右上角的关闭按钮时，事件的类型会是<code>SDL_QUIT</code>。<br>
+<div class="alert alert-info"><b>译者注</b>:“X out the window” 这个词组采用意译，翻译为“单击窗口右上角的关闭按钮”，虽然有点罗嗦，但如果直译为“叉掉窗口”，会显得很不正式，且表意不明确。<br></div> 
+       But when the user does that it does not end the program, all it does inform us the user wants to exit the program. <br><div class="alert alert-warning"><b>译者注</b>：本句未翻译。这里没理解原作者的意图，“当用户做非关闭操作时，仅仅会通知我们用户想要退出程序”？意思搞反了吧？</div> 
        因为我们想要这个程序在用户点击关闭按钮时退出，所以我们此时将quit设为true，这样可以中断并退出主循环。</div> 
       <pre class="tutCode prettyprint linenums:135 lang-cpp">    //清理表面并退出SDL
     clean_up();

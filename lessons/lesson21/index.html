@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第21课 - 滚动 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第21课 - 滚动 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,146 +45,129 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第21课 - 滚动</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第21课 - 滚动</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年6月30日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson21/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson20/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson22/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Scrolling</h1> 
+        <div class="alert alert-warning"><b>译者注</b>:本篇翻译处于推敲阶段，不保证翻译准确，甚至不保证逻辑上正确。如有意见或建议，请及时<a href="../../about.html">联系我</a>！</div>
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
-       </div> 
-       <h6>Last Updated 12/28/09</h6> Up until now, you've been working with environments that were 640 x 480. In this lesson we're going to redo the motion tutorial only this time we're going to be able to move around an area of any size thanks to scrolling. 
-      </div> 
+        <img src="preview.jpg"> 
+       </div>直到现在，你一直是工作在640 x 480的环境下。本节课中，我们将重新写一遍“运动”那一课教程中的程序，只是这次我们将能够在任意大小的区域里移动了，多亏了“滚动”。</div> 
       <div class="tutText">
-        When you have a game that requires scrolling, the only real difference is that there has to be a camera. 
-       <br /> 
-       <br /> Since you can't show the entire level on the screen you have to take the part you want to see: 
-       <br /> 
+        当你有一个需要滚动的游戏时，（与没有滚动的游戏相比较）它们唯一的不同是带滚动的游戏必须要有一个“相机”。<br>
+<div class="alert alert-info"><b>译者注</b>:camera的翻译有很多种，有“相机”、“摄像头”、“摄像机”，我不太清楚用哪种最好，挑个最短的吧。</div><br> 
+       <br>因为你不能将整个关卡显示在窗口中，所以你必须选取你想看到的那一部分：<br> 
        <div class="tutImg"> 
-        <img src="camera.jpg" /> 
+        <img src="camera.jpg"> 
        </div> 
-       <br /> and cut it out and show it on the screen: 
-       <br /> 
+       <br>然后将它切割出来并把它显示在窗口中：<br> 
        <div class="tutImg"> 
-        <img src="screen.jpg" /> 
+        <img src="screen.jpg"> 
        </div> 
-       <br /> It does take some more work since you have to move the camera around to show what you want to. In this program, the camera will follow the dot we move around. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//Screen attributes
+       <br> 由于你必须移动相机来表明你想要做的事情，这会带来更多的工作。在这个程序里，相机会随着我们所控制的小黑点的运动而运动。<br></div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//窗口属性
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP = 32;
 
-//The frame rate
+//帧率
 const int FRAMES_PER_SECOND = 20;
 
-//The dot dimensions
+//小黑点的大小
 const int DOT_WIDTH = 20;
 const int DOT_HEIGHT = 20;
 
-//The dimensions of the level
+//关卡地图的大小
 const int LEVEL_WIDTH = 1280;
 const int LEVEL_HEIGHT = 960;
 
-//The surfaces
+//表面
 SDL_Surface *dot = NULL;
 SDL_Surface *background = NULL;
 SDL_Surface *screen = NULL;
 
-//The event structure
+//事件结构体
 SDL_Event event;
 
-//The camera
+//相机
 SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 </pre> 
-      <div class="tutText">
-        Here we have our global variables. 
-       <br /> 
-       <br /> We have our standard constants, surfaces, event structure and all that good stuff, but this time we have 2 new constants defining the level width and height. Since we can scroll, we don't confine everything inside of the screen, but now we confine the dot within a level. 
-       <br /> 
-       <br /> As I mentioned before, we need a camera to define what part of the level we will show on the screen. Since the screen is a rectangular area, the camera is a SDL_Rect. Here we initialize the camera in the top left corner and set the width and height to be that of the screen. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:27 lang-cpp">//The dot
+      <div class="tutText">这些是我们的全局变量。<br> 
+       <br>我们有标准常量、表面、事件结构体以及其他的一些好东西，只是这次我们有两个新的常量，它们分别定义了关卡地图的宽和高。因为我们可以滚动，所以我们并不把所有东西都限制在窗口中，但是现在我们要将小黑点限制在关卡地图中。<br><br> 就像我先前提到的，我们需要一个相机来定义我们要显示在窗口中的那一部分区域。由于窗口是一个矩形的区域，所以相机是个SDL_Rect类型的结构体。<br>这里我们将相机初始化，将其位置设为地图左上角，宽高设为窗口的宽高。<br></div> 
+      <pre class="tutCode prettyprint linenums:27 lang-cpp">//小黑点
 class Dot
 {
     private:
-    //The X and Y offsets of the dot
+    //点的坐标
     int x, y;
     
-    //The velocity of the dot
+    //点的速度
     int xVel, yVel;
     
     public:
-    //Initializes the variables
+    //初始化变量
     Dot();
     
-    //Takes key presses and adjusts the dot's velocity
+    //处理按键事件并调节点的速度
     void handle_input();
     
-    //Moves the dot
+    //移动小黑点
     void move();
     
-    //Shows the dot on the screen
+    //将点显示在窗口中
     void show();
     
-    //Sets the camera over the dot
+    //根据点的位置设定相机
     void set_camera();
 };
 </pre> 
-      <div class="tutText">
-        Here we have the definition of the dot class. 
-       <br /> 
-       <br /> It's pretty much the same as from previous lessons, but this time we have a function that centers the camera over the dot. 
-      </div> 
+      <div class="tutText">这里是我们的dot类的定义。<br> 
+       <br> 这个和前面课程里的几乎一模一样，但这次我们有一个根据点的位置将相机居中的函数。<br></div> 
       <pre class="tutCode prettyprint linenums:53 lang-cpp">void Dot::move()
 {
-    //Move the dot left or right
+    //向左或向右移动小黑点
     x += xVel;
     
-    //If the dot went too far to the left or right
+    //如果小黑点移动到左右边界外
     if( ( x &lt; 0 ) || ( x + DOT_WIDTH &gt; LEVEL_WIDTH ) )
     {
-        //move back
+        //撤销移动
         x -= xVel;    
     }
     
-    //Move the dot up or down
+    //向上或向下移动小黑点
     y += yVel;
     
-    //If the dot went too far up or down
+    //如果小黑点移动到上下边界外
     if( ( y &lt; 0 ) || ( y + DOT_HEIGHT &gt; LEVEL_HEIGHT ) )
     {
-        //move back
+        //撤销移动
         y -= yVel;    
     }    
 }
 </pre> 
       <div class="tutText">
-        The move function is pretty much the same but there is one key difference. We no longer keep the dot inside the screen, but now keep it inside of the boundaries of the level. 
-      </div> 
+        这个函数与前面的很类似，但这里有一个关键的不同点：我们不再将点约束在窗口内了，现在我们是将点约束在整个关卡地图里。</div> 
       <pre class="tutCode prettyprint linenums:75 lang-cpp">void Dot::set_camera()
 {
-    //Center the camera over the dot
+    //根据点的位置将相机居中
     camera.x = ( x + DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
     camera.y = ( y + DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
     
-    //Keep the camera in bounds.
+    //将相机约束在地图边界内
     if( camera.x &lt; 0 )
     {
         camera.x = 0;    
@@ -203,60 +187,56 @@ class Dot
 }
 </pre> 
       <div class="tutText">
-        When we set the camera, we first center it over the dot. 
-       <br /> 
-       <br /> Since we don't want to show anything outside of the level, we have to keep the camera in bounds after we center it over the dot. 
-       <br /> 
-       <br /> We check if the camera is inside the level, and if any part of it is outside the level, we push it back inside. 
-      </div> 
+        当我们设置相机时，我们先依据点的位置将相机居中。<br> 
+       <br> 因为我们不想让任何关卡外的东西显示在窗口中，所以我们还必须在相机居中后将它约束在关卡边界内。<br> 
+       <br>于是我们要检测相机是否在地图边界内，如果发现它有一部分超出了边界，我们就将它移回边界内。</div> 
       <pre class="tutCode prettyprint linenums:99 lang-cpp">void Dot::show()
 {    
-    //Show the dot
+    //显示小黑点
     apply_surface( x - camera.x, y - camera.y, dot, screen );
 }
 </pre> 
       <div class="tutText">
-        The show function now blits the dot on the screen relative to the camera to make sure it matches up with the background. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:104 lang-cpp">    //While the user hasn't quit
+        这个函数以相对于相机的坐标将小黑点blit到窗口中，这样可以保证它能与背景匹配。</div> 
+      <pre class="tutCode prettyprint linenums:104 lang-cpp">    //当用户还没有请求退出时
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计时器
         fps.start();
         
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the dot
+            //为小黑点处理事件
             myDot.handle_input();
             
-            //If the user has Xed out the window
+            //如果用户单击了窗口右上角的关闭按钮
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the dot
+        //移动小黑点
         myDot.move();
         
-        //Set the camera
+        //设置相机
         myDot.set_camera();
         
-        //Show the background
+        //显示背景
         apply_surface( 0, 0, background, screen, &amp;camera );
         
-        //Show the dot on the screen
+        //显示小黑点
         myDot.show();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //捕获帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -264,28 +244,22 @@ class Dot
     }
 </pre> 
       <div class="tutText">
-        Now here's the program's main loop. 
-       <br /> 
-       <br /> We handle events, move the dot, set the camera, apply the part of the background inside of the camera, show the dot, update the screen and cap the frame rate. 
-      </div> 
-      <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson21">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson20/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson22/index.php">Next Tutorial</a> 
-       <br /> 
+        现在这个是程序的主循环。<br> 
+       <br> 我们处理事件、移动小黑点、设置相机、将背景中位于相机内的区域应用到窗口中、显示小黑点、更新窗口，最后捕获帧率。<br></div> 
+      <div class="tutFooter"><br>本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson21">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson22/">下一课：滚动背景</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -308,6 +282,5 @@ class Dot
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
