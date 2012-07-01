@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第3课 - 使用SDL扩展库加载更多格式的图片 &middot; 在Visual Studio.NET 2010 Express中使用SDL扩展库 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第3课 - 使用SDL扩展库加载更多格式的图片 · 在Visual Studio.NET 2010 Express中使用SDL扩展库 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50"> 
   <!-- Navbar
@@ -43,130 +44,148 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center">第3课 - 使用SDL扩展库加载更多格式的图片 &middot; 在Visual Studio.NET 2010 Express中使用SDL扩展库</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 align="center">第3课 - 使用SDL扩展库加载更多格式的图片 · 在Visual Studio.NET 2010 Express中使用SDL扩展库</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月1日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson03/windows/msvsnet2010e/index.php">原文链接</a></li> 
       <li><a class="btn" href="../../index.html">返回上层</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content"> 
       <div class="tutPreface"> 
-       <h1 class="tutHead">Setting up SDL Extension Libraries in Visual Studio.NET 2010 Express</h1> 
-       <h6>Last Updated 6/03/10</h6> In this tutorial you're going to learn to set up SDL_image. If you know how to set up this extension, you can set any of them up. 
-       <br /> 
-       <br /> SDL_image is located on 
-       <a class="tutLink" href="../../../../../www.libsdl.org/projects/SDL_image/default.htm">this page</a>. 
-      </div> 
+        
+        <strong></strong>在本节课中，你将学会安装SDL_image扩展库。如果你掌握了安装这一个扩展库的方法，那么你将能够安装所有的扩展库。<br> 
+       <br> SDL_image可从<a class="tutLink" target="_blank" href="http://www.libsdl.org/projects/SDL_image/">此处下载</a> 
+       。<br><br></div> 
       <div class="tutText"> 
-       <a class="tutLink" name="1" href="#1">1)</a>Scroll down to the Binary section and download the Windows development library: 
-       <br /> 
+       <a class="tutLink" name="1" href="#1">1)</a>向下滚动到Binary部分，下载Windows开发包。<br> 
        <div class="tutImg"> 
-        <img src="download.jpg" /> 
+        <img src="download.jpg"> 
        </div> 
-       <br /> Every extension libary has 3 essential parts: 
-       <br /> 
+       <br> 每个扩展库都有3个必备的部分：<br> 
        <ol> 
-        <li>The header file.</li> 
-        <li>The lib file.</li> 
-        <li>The *.dll file(s)</li> 
-       </ol> They're all set up pretty much the same way no matter which extension you're setting up. 
-       <br /> 
-       <br /> Open up the zip archive and there should be a folder inside. 
-       <br /> Open the folder and it'll contain 2 subfolders. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="2" href="#2">2)</a>First, open the include subfolder in the archive and you should see a header file. Put that header file in the directory with all the other header files in the SDL folder you extracted in lesson 1. 
-       <br /> 
-       <br /> For example, I extracted the SDL version 1.2.12 folder to &quot;C:\&quot;, so I put the SDL_image.h (or SDL_ttf.h or SDL_mixer.h) header in C:\SDL-1.2.12\include\. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="3" href="#3">3)</a>Next extract the lib file that's inside of lib subfolder of the archive to your SDL lib folder. In my case it was at C:\SDL-1.2.12\lib\. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="4" href="#4">4)</a>Now extract 
-       <b>all</b> of the *.dll file(s) from the archive and put them in the same directory as your exe. 
-       <br /> 
-       <br /> Like before, you can copy them to C:\WINDOWS\SYSTEM32 (or C:\Windows\SysWOW64 on 64bit Windows) so your SDL app will find the *.dll(s) even if they're not in the same directory. The problem with this method is if you have multiple SDL apps that use different versions of SDL, you'll have version conflicts. If you have an old version in SYSTEM32 when the app uses the new version you're going to run into problems. Generally you want to have your the *.dll(s) in the same directory as your executable developing and you'll 
-       <b>always</b> want to have *.dll(s) in the same directory as the exe when distributing your app. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="5" href="#5">5)</a>Now open up your SDL project and go to the project properties. 
-       <br /> 
+        <li>头文件(*.h)</li> 
+        <li>静态库文件(*.lib)</li> 
+        <li>动态库文件(*.dll)</li> 
+       </ol>无论你在安装哪个扩展库，它们的安装方法都几乎一模一样。<br> 
+       <br>打开zip压缩包，里面应该有一个文件夹。<br>打开这个文件夹，里面应该包含两个子文件夹。<br> 
+       <br> 
+       <a class="tutLink" name="2" href="#2">2)</a>首先，打开include子文件夹，你会看到一个头文件。将这个头文件解压出来，并把它与你在第一课中从SDL目录中解压出来的其它头文件放到同一个文件夹中。<br> 
+       <br>例如，我将SDL 1.2.12解压到"C:\"，那么我会将头文件“SDL_image.h” (或者是“SDL_ttf.h”、 “SDL_mixer.h”)放到“C:\SDL-1.2.12\include\SDL\”。<br> 
+       <br> 
+       <a class="tutLink" name="3" href="#3">3)</a>下面，将压缩包中的lib子文件夹中的lib文件解压到你的SDL的lib文件夹中。在我的例子中，那就是“C:\SDL-1.2.12\lib\”。<br> 
+       <br> 
+       <a class="tutLink" name="4" href="#4">4)</a>现在将压缩包中所有的dll解压出来，并将它们与你的exe放到同一个文件夹中。<br> 
+       <br> 和前面的一样，你可以把它们拷贝到“C:\WINDOWS\SYSTEM32”下 (对于64位Windows系统，那就是“C:\Windows\SysWOW64”)，这样你的SDL应用就可以找到这些dll，哪怕它们不在同一个文件夹中。但这样会有一个问题：如果你有多个使用不同版本SDL库的应用程序，这会导致版本冲突。 如果你将一个旧版的SDL放于System32中，而应用程序使用的是新版的SDL，这必然会导致问题。通常情况下，你需要把dll文件和你开发的可执行程序放在同一个目录下，并且当你发布你的应用程序时，你总是需要将dll文件与exe放在同一个目录下。 <br><br> 
+       <a class="tutLink" name="5" href="#5">5)</a>现在，打开你的SDL工程并进入<span class="label">项目属性</span>。<br> 
        <div class="tutImg"> 
-        <img src="project_properties.png" /> 
+        <img src="project_properties.png"> 
        </div> 
-       <br /> 
-       <a class="tutLink" name="6" href="#6">6)</a>In the Linker menu under Input, paste: 
-       <h6>SDL_image.lib;</h6> in the additional dependencies field after &quot;SDL.lib; SDLmain.lib;&quot;. 
-       <br /> 
+       <br> 
+       <a class="tutLink" name="6" href="#6">6)</a>打开<span class="label">输入</span>菜单下面的<span class="label">连接器</span>，在右边的<span class="label">附加依赖项</span>中，在<code>SDL.lib; SDLmain.lib;</code>后面附加上如下命令：<br><br><p align="center"><code>SDL_image.lib;</code></p> <br> 
        <div class="tutImg"> 
-        <img src="extension.png" /> 
+        <img src="extension.png"> 
        </div> 
-       <br /> If you were linking SDL_ttf you'd put 
-       <h6>SDL_ttf.lib;</h6> if you were linking SDL_mixer you'd put 
-       <h6>SDL_mixer.lib;</h6> etc, etc. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="7" href="#7">7)</a>To use SDL_image make sure to include the header file. 
+       <br>如果你想连接SDL_ttf，那么你就加上：<p align="center"><code>SDL_ttf.lib;</code></p>如果你想连接SDL_mixer，那么你就加上：
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p align="center"><code>SDL_mixer.lib;</code></p> 等等。<br> 
+       <br> 
+       <a class="tutLink" name="7" href="#7">7)</a>要使用SDL_image，确保先包含它的头文件：</div> 
+      <p class="tutCode" align="center"><code>
+        #include "SDL_image.h" 
+      </code></p> 
+      <div class="tutText">如果你在安装SDL_ttf，你就这样写：
+
+
+
+
+
+
+
+
+
+
+
+<p align="center"><code>#include "SDL_ttf.h"</code></p> 如果你在安装SDL_mixer，你就这样写：
+
+
+
+
+
+
+
+
+
+
+
+
+<p align="center"><code>#include "SDL_mixer.h"</code></p>等等。<br> 
+       <br> 现在扩展库就安装好了。<br><br></div> 
+      <div class="tutText">现在你可以使用SDL_image的函数了。<br> 
+       <br>其中，你最想了解的应该是<code>IMG_Load()</code>函数。 
+       <br> 
       </div> 
-      <div class="tutCode">
-        #include &quot;SDL_image.h&quot; 
-      </div> 
-      <div class="tutText">
-        If you were setting up SDL_ttf you'd put 
-       <h6>#include &quot;SDL_ttf.h&quot;</h6> If you were setting up SDL_mixer you'd put 
-       <h6>#include &quot;SDL_mixer.h&quot;</h6> etc, etc. 
-       <br /> 
-       <br /> Now the extension library is all set up. 
-      </div> 
-      <div class="tutText">
-        Now you can use SDL_image functions. 
-       <br /> 
-       <br /> The main one you want to know about is IMG_Load(). 
-       <br /> 
-      </div> 
-      <div class="tutCode">
-        SDL_Surface *load_image( std::string filename ) { //The image that's loaded SDL_Surface* loadedImage = NULL; //The optimized image that will be used SDL_Surface* optimizedImage = NULL; //Load the image using SDL_image loadedImage = IMG_Load( filename.c_str() ); //If the image loaded if( loadedImage != NULL ) { //Create an optimized image optimizedImage = SDL_DisplayFormat( loadedImage ); //Free the old image SDL_FreeSurface( loadedImage ); } //Return the optimized image return optimizedImage; } 
-      </div> 
-      <div class="tutText">
-        Here is a revised version of the image loading function from the previous tutorial. As you can see IMG_Load() functions exactly the same as SDL_LoadBMP(), but there's one big exception: IMG_Load() can load BMP, PNM, XPM, LBM, PCX, GIF, JPEG, TGA and PNG files. 
-       <br /> 
-       <br /> From this tutorial on, PNG image files will be the primary image format used. PNGs have excellent lossless compression. 
-      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">SDL_Surface *load_image( std::string filename ) 
+{
+    //加载的图像
+    SDL_Surface* loadedImage = NULL;
+    
+    //优化后的图像
+    SDL_Surface* optimizedImage = NULL;
+    
+    //使用SDL_image加载图像
+    loadedImage = IMG_Load( filename.c_str() );
+    
+    //如果图像加载成功
+    if( loadedImage != NULL )
+    {
+        //创建一个优化后的图像
+        optimizedImage = SDL_DisplayFormat( loadedImage );
+        
+        //释放原先加载的图像
+        SDL_FreeSurface( loadedImage );
+    }
+    
+    //返回优化后的图像
+    return optimizedImage;
+}</pre> 
+      <div class="tutText">这是上一课中的图像加载函数的修改版。你可以看到，<code>IMG_Load()</code>函数与<code>SDL_LoadBMP()</code>函数的功能看上去完全相同，但实际上有一个很大的不同点，就是<code>IMG_Load()</code>可以加载BMP, PNM, XPM, LBM, PCX, GIF, JPEG, TGA 和 PNG 格式的文件。 
+       <br> 
+       <br> 从这节课开始，PNG将会是主要用到的图像格式。PNG有着极佳的无损压缩特性。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a href="../../../../downloads/index.php@file=SDLTut_lesson03" class="tutLink">here</a>. 
-       <br /> 
-       <br /> I highly recommend that you download the documentation for SDL_image and keep it handy. 
-       <br /> 
-       <br /> It can be found 
-       <a class="tutLink" href="../../../../../jcatki.no-ip.org_3A8080/SDL_image/SDL_image_html.tar.gz">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../../../lesson02/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../../../lesson04/index.php">Next Tutorial</a> 
-       <br /> 
+        我十分推荐你下载SDL_image的文档并将它放在手边，以方便查阅。你可以从<a href="http://jcatki.no-ip.org:8080/SDL_image/SDL_image_html.tar.gz">此处下载</a>。<br><br>本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson03">此处下载</a>。<br> 
       </div> 
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../../../lesson04/">下一课：事件驱动编程</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -189,6 +208,5 @@
   <script src="../../../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../../../assets/js/application.js"></script>
+</body></html>

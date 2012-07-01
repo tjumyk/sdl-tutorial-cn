@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第3课 - 使用SDL扩展库加载更多格式的图片 &middot; 在Eclipse中使用SDL扩展库 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第3课 - 使用SDL扩展库加载更多格式的图片 · 在Eclipse中使用SDL扩展库 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50"> 
   <!-- Navbar
@@ -43,95 +44,158 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center">第3课 - 使用SDL扩展库加载更多格式的图片 &middot; 在Eclipse中使用SDL扩展库</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 align="center">第3课 - 使用SDL扩展库加载更多格式的图片 · 在Eclipse中使用SDL扩展库</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月1日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" href="http://lazyfoo.net/SDL_tutorials/lesson03/linux/eclipse/index.php">原文链接</a></li> 
       <li><a class="btn" href="../../index.html">返回上层</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content"> 
       <div class="tutPreface"> 
-       <h1 class="tutHead">Setting up SDL Extension Libraries in Eclipse</h1> 
-       <h6>Last Updated 12/09/07</h6> 
+        
+        
       </div> 
       <div class="tutText"> 
-       <a class="tutLink" name="1" href="#1">1)</a>Open up your SDL project and go to the project properties. 
-       <br /> 
+        在本节课中，你将学会安装SDL_image扩展库。如果你掌握了安装这一个扩展库的方法，那么你将能够安装所有的扩展库。<br><br>以下是在不同情况下，安装SDL_image的方法：<br>
+<table class="table table-bordered">
+<tbody>
+<tr>
+<td>使用Ubuntu的用户<br></td>
+<td>你又要使用包管理器了。打开后搜索<code>libsdl-image1.2-dev</code>，这是SDL_image的开发包。如果找到了，单击它开始安装。<br><br>如果你要安装SDL_ttf，你得搜索<code>libsdl-ttf2.0-dev</code><br><br>如果你要安装SDL_mixer，你得搜索<code>libsdl-mixer1.2-dev</code><br><br>等等。<br></td></tr>
+<tr>
+<td>使用基于RPM发行版的用户<br></td>
+<td>您需要SDL_image RPM开发包， 你可以从<a class="tutLink" target="_blank" href="http://www.libsdl.org/projects/SDL_image/">此处下载</a>。<br>
+  <div class="tutImg"><img src="../download.png"></div>
+  <br>向下滚动到Binary部分，下载Linux开发包。 <br>接下来启动RPM，使用它完成安装。<br>
+  </td></tr>
+  <tr>
+<td>使用apt-get或者yum commands的用户<br></td>
+<td>您在第1课中已经安装好了SDL_image, SDL_ttf以及SDL_mixer。<br>
+  </td></tr>
+  </tbody></table>
+<br><br>&nbsp;<a class="tutLink" name="1" href="#1">1)</a>现在，打开你的SDL工程并进入<span class="label">项目属性</span>。<br> 
        <div class="tutImg"> 
-        <img src="project_properties.png" /> 
+        <img src="project_properties.png"> 
        </div> 
-       <br /> 
-       <a class="tutLink" name="2" href="#2">2)</a>In the libraries section add in: 
-       <h6>SDL_image</h6> after SDL. 
-       <br /> 
+       <br> 
+       <a class="tutLink" name="2" href="#2">2)</a>在<span class="label">库</span>中，在<code>SDL</code>的后面附加上如下代码：<p align="center"><code>SDL_image</code></p>. 
+       <br> 
        <div class="tutImg"> 
-        <img src="extension.png" /> 
+        <img src="extension.png"> 
        </div> 
-       <br /> If you were linking SDL_ttf you'd put 
-       <h6>SDL_ttf</h6>if you were linking SDL_mixer you'd put 
-       <h6>SDL_mixer</h6> etc, etc. 
-       <br /> 
-       <br /> 
-       <a class="tutLink" name="3" href="#3">3)</a>To use SDL_image make sure to include the header file. 
+       <br> 如果你想连接SDL_ttf，那么你就加上：<p align="center"><code>SDL_ttf</code></p>如果你想连接SDL_mixer，那么你就加上：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p align="center"><code>SDL_mixer</code></p> 等等。<br> 
+       <br> 
+       <a class="tutLink" name="7" href="#7">7)</a>要使用SDL_image，确保先包含它的头文件：</div> 
+      <p class="tutCode" align="center"><code>
+        #include "SDL/SDL_image.h" 
+      </code></p> 
+      <div class="tutText">如果你在安装SDL_ttf，你就这样写：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p align="center"><code>#include "SDL/SDL_ttf.h"</code></p> 如果你在安装SDL_mixer，你就这样写：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p align="center"><code>#include "SDL/SDL_mixer.h"</code></p>等等。<br> 
+       <br> 现在扩展库就安装好了。<br><br></div> 
+      <div class="tutText">现在你可以使用SDL_image的函数了。<br> 
+       <br>其中，你最想了解的应该是<code>IMG_Load()</code>函数。 
+       <br> 
       </div> 
-      <div class="tutCode">
-        #include &quot;SDL/SDL_image.h&quot; 
-      </div> 
-      <div class="tutText">
-        If you were setting up SDL_ttf you'd put 
-       <h6>#include &quot;SDL/SDL_ttf.h&quot;</h6> If you were setting up SDL_mixer you'd put 
-       <h6>#include &quot;SDL/SDL_mixer.h&quot;</h6> etc, etc. 
-       <br /> 
-       <br /> Now the extension library is all set up. 
-      </div> 
-      <div class="tutText">
-        Now you can use SDL_image functions. 
-       <br /> 
-       <br /> The main one you want to know about is IMG_Load(). 
-       <br /> 
-      </div> 
-      <div class="tutCode">
-        SDL_Surface *load_image( std::string filename ) { //The image that's loaded SDL_Surface* loadedImage = NULL; //The optimized image that will be used SDL_Surface* optimizedImage = NULL; //Load the image using SDL_image loadedImage = IMG_Load( filename.c_str() ); //If the image loaded if( loadedImage != NULL ) { //Create an optimized image optimizedImage = SDL_DisplayFormat( loadedImage ); //Free the old image SDL_FreeSurface( loadedImage ); } //Return the optimized image return optimizedImage; } 
-      </div> 
-      <div class="tutText">
-        Here is a revised version of the image loading function from the previous tutorial. As you can see IMG_Load() functions exactly the same as SDL_LoadBMP(), but there's one big exception: IMG_Load() can load BMP, PNM, XPM, LBM, PCX, GIF, JPEG, TGA and PNG files. 
-       <br /> 
-       <br /> From this tutorial on, PNG image files will be the primary image format used. PNGs have excellent lossless compression. 
-      </div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">SDL_Surface *load_image( std::string filename ) 
+{
+    //加载的图像
+    SDL_Surface* loadedImage = NULL;
+    
+    //优化后的图像
+    SDL_Surface* optimizedImage = NULL;
+    
+    //使用SDL_image加载图像
+    loadedImage = IMG_Load( filename.c_str() );
+    
+    //如果图像加载成功
+    if( loadedImage != NULL )
+    {
+        //创建一个优化后的图像
+        optimizedImage = SDL_DisplayFormat( loadedImage );
+        
+        //释放原先加载的图像
+        SDL_FreeSurface( loadedImage );
+    }
+    
+    //返回优化后的图像
+    return optimizedImage;
+}</pre> 
+      <div class="tutText">这是上一课中的图像加载函数的修改版。你可以看到，<code>IMG_Load()</code>函数与<code>SDL_LoadBMP()</code>函数的功能看上去完全相同，但实际上有一个很大的不同点，就是<code>IMG_Load()</code>可以加载BMP, PNM, XPM, LBM, PCX, GIF, JPEG, TGA 和 PNG 格式的文件。 
+       <br> 
+       <br> 从这节课开始，PNG将会是主要用到的图像格式。PNG有着极佳的无损压缩特性。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a href="../../../../downloads/index.php@file=SDLTut_lesson03" class="tutLink">here</a>. 
-       <br /> 
-       <br /> I highly recommend that you download the documentation for SDL_image and keep it handy. 
-       <br /> 
-       <br /> It can be found 
-       <a class="tutLink" href="../../../../../jcatki.no-ip.org_3A8080/SDL_image/SDL_image_html.tar.gz">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../../../lesson02/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../../../lesson04/index.php">Next Tutorial</a> 
-       <br /> 
+        我十分推荐你下载SDL_image的文档并将它放在手边，以方便查阅。你可以从<a href="http://jcatki.no-ip.org:8080/SDL_image/SDL_image_html.tar.gz">此处下载</a>。<br><br>本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson03">此处下载</a>。<br> 
       </div> 
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../../../lesson04/">下一课：事件驱动编程</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -154,6 +218,5 @@
   <script src="../../../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../../../assets/js/application.js"></script>
+</body></html>
