@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第6课 - 局部Blit和拼贴图 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第6课 - 局部Blit和精灵图 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,167 +45,140 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第6课 - 局部Blit和精灵图</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年7月4日</span> </p> 
+     <h1 id="content_title" align="center">第6课 - 局部Blit和精灵图</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月5日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson06/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson05/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson07/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Clip Blitting and Sprite Sheets</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 12/28/09</h6> Sprite sheets are collections of images held in a single image file. They're useful for when you have large amounts of images but don't want to have to deal with many image files. 
-       <br /> 
-       <br /> In order to get the individual images you have to be able to clip the part you want when blitting. Now in this lesson we have a sprite sheet with 4 different dot sprites on it. This tutorial covers how to clip a sprite from a sprite sheet. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The surfaces
+       精灵图是一系列保存在同一个图像文件中的图像。当你有数量庞大的图像，但不想处理那么多的图像文件时，精灵图就派上用场了。<br><div class="alert alert-warning"><b>译者注</b>：关于Sprite和Sprite
+  Sheet这两个词的翻译，我不是很确定。Sprite应该是子图、子图形、子画面的意思，那么Sprite
+  Sheet难道要翻译为“子图表”？好像没这个说法，一般称“精灵图”的比较多，读起来比较顺口，虽然意思上好像与“精灵”一点关系也没有。在此姑且分别
+  翻译为“子图”和“精灵图”吧。<br>
+</div>
+ 
+        在blit时，为了获得单独的图像，你必须能够剪切出你需要的那部分。现在，在本节课中，我们有一张包含了4个不同的圆点子图的精灵图。本节教程将介绍如何从精灵图中剪切出一个子图。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//表面
 SDL_Surface *dots = NULL;
 SDL_Surface *screen = NULL;
 
-//The event structure
+//事件结构体
 SDL_Event event;
 
-//The portions of the sprite map to be blitted
+//精灵图中将要blit的部分
 SDL_Rect clip[ 4 ];
 </pre> 
-      <div class="tutText">
-        Here we have some global variables. There's the screen surface, and the event structure from before. We also have the &quot;dots&quot; surface which is the sprite sheet that contains all the dot sprites. 
-       <br /> 
-       <br /> There's also an array of four SDL_Rects. These hold the offsets and dimensions of the 4 dot sprites. 
-      </div> 
+      <div class="tutText">这里我们有一些全局变量。其中包括了和以前一样的窗口表面和事件结构体。我们还有一个“点”表面，它是一个包含了所有“点”子图的精灵图。<br> 
+       <br>另外，还有一个包含4个SDL_Rects的数组。它们分别保存了4个“点”子图的坐标和大小。</div> 
       <pre class="tutCode prettyprint linenums:10 lang-cpp">void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL )
 {
-    //Holds offsets
+    //用于保存坐标
     SDL_Rect offset;
     
-    //Get offsets
+    //获得坐标
     offset.x = x;
     offset.y = y;
     
-    //Blit
+    //Blit操作
     SDL_BlitSurface( source, clip, destination, &amp;offset );
 }
 </pre> 
-      <div class="tutText">
-        Here's the surface blitting function from before but with some adjustments. 
-       <br /> 
-       <br /> The new argument is the SDL_Rect called &quot;clip&quot; that defines the rectangular piece of the surface we want to blit. 
-       <br /> 
-       <br /> We set NULL to be the default argument, which means 
-       <br /> apply_surface( 0, 0, image, screen, NULL ); 
-       <br /> 
-       <br /> and 
-       <br /> 
-       <br /> apply_surface( 0, 0, image, screen ); 
-       <br /> do the exact same thing. 
-       <br /> 
-       <br /> We also changed the way we call SDL_BlitSurface(). We no longer just set the second argument to NULL, we now put the &quot;clip&quot; argument in it. 
-       <br /> 
-       <br /> Now SDL_BlitSurface() will blit the region of the source surface defined by &quot;clip&quot;. If &quot;clip&quot; is NULL, then it will blit the entire source surface. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:22 lang-cpp">    //Clip range for the top left
+      <div class="tutText">这是来自前面教程的表面blit函数，但做了一些调整。<br> 
+       <br>其中，新的参数是一个叫做“剪切”的<code>SDL_Rect</code>结构体，它定义了表面中需要blit的矩形区域。<br> 
+       <br>我们还给它设置了默认值NULL，这意味着<br><code> apply_surface( 0, 0, image, screen, NULL ); 
+       </code><br> 与<br> <code>apply_surface( 0, 0, image, screen ); 
+       </code><br>做了完全相同的事情。<br> 
+       <br>我们也改变了调用<code>SDL_BlitSurface()</code>的方式。我们不再仅仅去将第二个参数设为NULL，现在我们将clip参数传了进去。<br> 
+       <br>现在，<code>SDL_BlitSurface()</code>能够blit源表面中由“剪切”结构体所定义的区域了。如果“剪切”结构体是NULL，这个函数会blit整个源表面。<br></div> 
+      <pre class="tutCode prettyprint linenums:22 lang-cpp">    //左上角的剪切区域
     clip[ 0 ].x = 0;
     clip[ 0 ].y = 0;
     clip[ 0 ].w = 100;
     clip[ 0 ].h = 100;
     
-    //Clip range for the top right
+    //右上角的剪切区域
     clip[ 1 ].x = 100;
     clip[ 1 ].y = 0;
     clip[ 1 ].w = 100;
     clip[ 1 ].h = 100;
     
-    //Clip range for the bottom left
+    //左下角的剪切区域
     clip[ 2 ].x = 0;
     clip[ 2 ].y = 100;
     clip[ 2 ].w = 100;
     clip[ 2 ].h = 100;
     
-    //Clip range for the bottom right
+    //右下角的剪切区域
     clip[ 3 ].x = 100;
     clip[ 3 ].y = 100;
     clip[ 3 ].w = 100;
     clip[ 3 ].h = 100;
 </pre> 
-      <div class="tutText">
-        In the main function after everything is initialized and the files are loaded, we set the clip rectangles. 
-       <br /> 
-       <br /> We're going to take this sprite sheet: 
-       <br /> 
+      <div class="tutText">在主函数中，当初始化完成并加载好文件时，我们设置了“剪切”矩形。<br> 
+       <br>我们将使用这一张精灵图：<br> 
        <div class="tutImg"> 
-        <img src="sheet.jpg" /> 
+        <img src="sheet.jpg"> 
        </div> 
-       <br /> and set the clip rectangles to their designated regions: 
-       <br /> 
+       <br> 并为指定区域设置剪切矩形：<br> 
        <div class="tutImg"> 
-        <img src="sprites.jpg" /> 
-       </div> like so. 
-       <br /> 
-       <br /> Now we're ready to blit the individual sprites from the sprite sheet. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:45 lang-cpp">    //Fill the screen white
-    SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+        <img src="sprites.jpg"> 
+       </div>就像这样。<br> 
+       <br> 现在，我们已经准备好blit精灵图中单独的子图了。<br></div> 
+      <pre class="tutCode prettyprint linenums:45 lang-cpp">    //用白色填充窗口
+    SDL_FillRect( screen, screen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
 </pre> 
-      <div class="tutText">
-        Now we fill the screen white using SDL_FillRect(). What SDL_FillRect() does is take the surface in the first argument, and fill the region in the second argument with color in the third argument. 
-       <br /> 
-       <br /> The region in the second argument is the surface's clip_rect or the entire region of the surface. 
+      <div class="tutText">现在我们使用<code>SDL_FillRect()</code>函数将窗口填充成白色。这个函数的作用是在第一个参数定义的表面上，并在第二个参数定义的区域内，使用第三个参数定义的颜色进行填充操作。<br> 
+       <br>这里我们传入的第二个参数是表面的<code>clip_rect</code> ，这实际上是这个表面的整个区域。 
       </div> 
-      <pre class="tutCode prettyprint linenums:47 lang-cpp">    //Apply the images to the screen
+      <pre class="tutCode prettyprint linenums:47 lang-cpp">    //将图像应用到窗口中
     apply_surface( 0, 0, dots, screen, &amp;clip[ 0 ] );
     apply_surface( 540, 0, dots, screen, &amp;clip[ 1 ] );
     apply_surface( 0, 380, dots, screen, &amp;clip[ 2 ] );
     apply_surface( 540, 380, dots, screen, &amp;clip[ 3 ] );
     
-    //Update the screen
+    //更新窗口
     if( SDL_Flip( screen ) == -1 )
     {
         return 1;    
     }
 </pre> 
       <div class="tutText">
-        Now we actually blit the sprites. Notice that every time we're blitting the same surface. The only difference is that we're blitting a different piece of the surface. 
-       <br /> 
-       <br /> The final result should look like this: 
-       <br /> 
+        现在我们是真正地blit子图了。注意一点，每次我们都blit了同一个表面，但是不同之处在于我们每次blit了表面中的不同子图。<br> 
+       <br>最终结果应该看上去像这样：<br> 
        <div class="tutImg"> 
-        <img src="result.jpg" /> 
+        <img src="result.jpg"> 
        </div> 
-       <br /> Now when you have many images you want to use, you don't have to keep thousands of image files. You can put collections of sprites in a single image and just blit the portion you want to use. 
-      </div> 
+       <br> 现在，当你想要使用很多图片时，你不必保存成千上万个图片文件。你可以将一个子图集合放入一个单独的图片文件中，并blit你想要使用的部分。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson06">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson05/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson07/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson06">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson07/">下一课：True Type字体</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -227,6 +201,5 @@ SDL_Rect clip[ 4 ];
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
