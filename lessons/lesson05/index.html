@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第5课 - 颜色键值 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第5课 - 颜色键值 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,151 +45,123 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第5课 - 颜色键值</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第5课 - 关键色</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月4日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson05/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson04/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson06/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
-      <div class="tutPreface"> 
-       <h1 class="tutHead">Color Keying</h1> 
+       
+      <div class="tutText"> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 6/25/08</h6> Now you're going to learn how to color key. In English that means this lesson is going to teach you how to remove the background color when applying a surface. 
-       <br /> 
-       <br /> The SDL_Surface structure has an element called the color key. The color key is the color you don't want to show up when blitting the surface. It's what you use when you want to have transparent backgrounds. 
-      </div> 
-      <div class="tutText">
-        Say you wanted to apply this stick figure named &quot;Foo&quot;: 
-       <br /> 
+       现在你将学会如何处理关键色。用口语解释就是：本节课将教你如何在应用表面时除去背景色。<br> 
+       <br><code>SDL_Surface</code> 结构体中有一个叫做关键色的元素。关键色是你在blit一个表面时，不想显示出来的颜色。当你需要得到透明的背景时，你得使用这个。<br>比如你想要把这个名叫”Foo“的小人：<br> 
        <div class="tutImg"> 
-        <img src="foo.jpg" /> 
+        <img src="foo.jpg"> 
        </div> 
-       <br /> To this background: 
-       <br /> 
+       <br>应用到这张背景图中：<br> 
        <div class="tutImg"> 
-        <img src="background.jpg" /> 
+        <img src="background.jpg"> 
        </div> 
-       <br /> But you didn't want this blue background from the stick figure to pop up: 
-       <br /> 
+       <br> 但是你不想让小人的浅蓝色背景出现：<br> 
        <div class="tutImg"> 
-        <img src="nokey.jpg" /> 
+        <img src="nokey.jpg"> 
        </div> 
-       <br /> In order for the blue background not to show up you have to set the background's color (which in this case is Red 0, Green FF, Blue FF) to be the surface's color key. 
-       <br /> 
-       <br /> The color key is typically set when the image is loaded. 
-      </div> 
+       <br>为了让浅蓝色背景不出现，你必须设置表面的关键色为浅蓝色。 
+       <br> 
+       <br>一般关键色是在图像被加载时设置的。</div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">SDL_Surface *load_image( std::string filename ) 
 {
-    //The image that's loaded
+    //加载的图像
     SDL_Surface* loadedImage = NULL;
     
-    //The optimized image that will be used
+    //优化的图像
     SDL_Surface* optimizedImage = NULL;
     
-    //Load the image
+    //加载图像
     loadedImage = IMG_Load( filename.c_str() );
     
-    //If the image loaded
+    //如果加载成功
     if( loadedImage != NULL )
     {
-        //Create an optimized image
+        //创建一个优化的图像
         optimizedImage = SDL_DisplayFormat( loadedImage );
         
-        //Free the old image
+        //释放一开始加载的图像
         SDL_FreeSurface( loadedImage );
 </pre> 
-      <div class="tutText">
-        So here's the image loading function we're going alter. 
-       <br /> 
-       <br /> First we load and optimize the image like before. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:20 lang-cpp">        //If the image was optimized just fine
+      <div class="tutText">所以，这是我们将要修改的图像加载函数。<br> 
+       <br> 首先，我们加载并优化图像，这和前面一样。</div> 
+      <pre class="tutCode prettyprint linenums:20 lang-cpp">        //如果图像优化成功
         if( optimizedImage != NULL )
         {
-            //Map the color key
+            //映射关键色
             Uint32 colorkey = SDL_MapRGB( optimizedImage-&gt;format, 0, 0xFF, 0xFF );
 </pre> 
-      <div class="tutText">
-        Then we check if the image was optimized. 
-       <br /> 
-       <br /> If the image was optimized, we have to map the color we want to set as the color key. We call SDL_MapRGB() to take the red, green, and blue values and give us the pixel value back in the same format as the surface. You can learn more about pixels in 
-       <a class="tutLink" href="../../articles/article03/index.php">article 3</a>. 
+      <div class="tutText">然后我们检查一下图像是否被成功优化。<br> 
+       <br>如果图像被成功优化，我们就要将我们想要设为关键色的颜色映射出来。我们通过调用<code>SDL_MapRGB()</code>并输入红、绿、蓝三色的颜色值，来获得与表面具有相同格式的像素值。你可以从<a target="_blank" href="http://lazyfoo.net/SDL_tutorials/articles/article03/index.php">文章3</a>中学到更多有关像素的知识（译者注：这里仅提供英文原版链接）。<br> 
       </div> 
-      <pre class="tutCode prettyprint linenums:25 lang-cpp">            //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
+      <pre class="tutCode prettyprint linenums:25 lang-cpp">            //将所有颜色为（R 0, G 0xFF, B 0xFF）的像素设为透明。
             SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );
         }
 </pre> 
       <div class="tutText">
-        Now it's time to do the actual color keying. 
-       <br /> 
-       <br /> The first argument is the surface we want to set the color key to. 
-       <br /> 
-       <br /> The second argument holds the flags we want to place. The SDL_SRCCOLORKEY flag makes sure that we use the color key when blitting this surface onto another surface. 
-       <br /> 
-       <br /> The third argument is the color we want to set as the color key. As you see it's the color we mapped just a moment ago. 
-       <br /> 
+        现在是时候真正地处理关键色了。<br> 
+       <br>第一个参数是我们想要设置关键色的表面。<br> 
+       <br>第二个参数是我们想要设置的标志。<code>SDL_SRCCOLORKEY</code>标志保证了关键色仅当blit这个表面到另一个表面上时才被使用。<br> 
+       <br>第三个参数是我们想要设置的关键色。你可以看出来，那是我们刚刚映射出来的颜色。<br> 
       </div> 
-      <pre class="tutCode prettyprint linenums:28 lang-cpp">    //Return the optimized image
+      <pre class="tutCode prettyprint linenums:28 lang-cpp">    //返回优化后的图像
     return optimizedImage;
 }
 </pre> 
-      <div class="tutText">
-        Then the surface loading function returns the optimized and color keyed surface. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:31 lang-cpp">    //Apply the surfaces to the screen
+      <div class="tutText">然后表面加载函数返回优化并设置关键色后的表面。</div> 
+      <pre class="tutCode prettyprint linenums:31 lang-cpp">    //将表面应用到窗口中
     apply_surface( 0, 0, background, screen );
     apply_surface( 240, 190, foo, screen );
     
-    //Update the screen
+    //更新窗口
     if( SDL_Flip( screen ) == -1 )
     {
         return 1;    
     }
 </pre> 
       <div class="tutText">
-        Now the background is blitted, then the color keyed stick figure image is blitted. 
-       <br /> 
+        现在，先blit背景图，然后blit做过关键色处理的小人。<br> 
        <div class="tutImg"> 
-        <img src="key.jpg" /> 
-       </div> Now there's no blue background around the stick figure. 
-       <br /> 
-       <br /> For those of you using transparent PNGs, IMG_Load() will automatically handle transparency. Trying to color key an image that already has a transparent background is going to cause funky results. You'll also lose the alpha transparency if you use SDL_DisplayFormat() instead of SDL_DisplayFormatAlpha(). To retain transparency on the PNG simply don't color key it. IMG_Load() will also handle alpha from TGA images. Look in the SDL documentation for more detailed information on color keying. 
-       <br /> 
-       <br /> 
+        <img src="key.jpg"> 
+       </div>现在，小人周围不再出现浅蓝色的背景了。<br> 
+       <br> 对于那些使用带透明色的PNG图片的人来说，<code>IMG_Load()</code>函数会自动地为他们处理透明色。在一个已经具有透明背景色的图片上设置关键色会导致糟糕的结果。另外，如果你使用<code>SDL_DisplayFormat()</code>，而不是<code>SDL_DisplayFormatAlpha()</code>，你也会丢失Alpha透明色。要保持PNG中的透明色，请不要设置关键色。<code>IMG_Load()</code>也会处理TGA图像的Alpha透明色。你可以在SDL的文档里得到更详细的有关关键色的信息。<br> 
+       <br> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson05">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson04/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson06/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson05">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson06/">下一课：局部Blit和精灵图</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -211,6 +184,5 @@
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
