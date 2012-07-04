@@ -112,7 +112,7 @@
             Uint32 colorkey = SDL_MapRGB( optimizedImage-&gt;format, 0, 0xFF, 0xFF );
 </pre> 
       <div class="tutText">然后我们检查一下图像是否被成功优化。<br> 
-       <br>如果图像被成功优化，我们就要将我们想要设为关键色的颜色映射出来。我们通过调用<code>SDL_MapRGB()</code>并输入红、绿、蓝三色的颜色值，来获得与表面具有相同格式的像素值。你可以从<a target="_blank" href="http://lazyfoo.net/SDL_tutorials/articles/article03/index.php">文章3</a>中学到更多有关像素的知识（译者注：这里仅提供英文原版链接）。<br> 
+       <br>如果图像被成功优化，我们就要将我们想要设为关键色的颜色映射出来。我们通过调用<code>SDL_MapRGB()</code>并输入红、绿、蓝三色的颜色值，来获得与表面具有相同格式的像素值。你可以从<a target="_blank" href="http://lazyfoo.net/articles/article03/index.php">文章3</a>中学到更多有关像素的知识（译者注：这里仅提供英文原版链接）。<br> 
       </div> 
       <pre class="tutCode prettyprint linenums:25 lang-cpp">            //将所有颜色为（R 0, G 0xFF, B 0xFF）的像素设为透明。
             SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );
