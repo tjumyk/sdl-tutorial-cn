@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第7课 - True Type字体 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第7课 - True Type字体 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,204 +45,171 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第7课 - True Type字体</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第7课 - True Type字体</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月6日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson07/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson06/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson08/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">True Type Fonts</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 12/31/10</h6> Now it's time to render text. SDL does not support *.ttf files natively so the SDL_ttf extension library is needed. SDL_ttf is an extension library that allows you to generate surfaces from true type fonts. 
-       <br /> 
-       <br /> You can get SDL_ttf from 
-       <a class="tutLink" href="../../../www.libsdl.org/projects/SDL_ttf/default.htm">here</a>. 
-       <br /> 
-       <br /> To install SDL_ttf just follow the 
-       <a class="tutLink" href="../lesson03/index.php">extension library tutorial</a>. Installing SDL_ttf is done pretty much the way SDL_image is, so just replace where you see SDL_image with SDL_ttf. 
-       <br /> 
-       <br /> *nix users may also have to link against freetype. 
-       <br /> 
-       <br /> This tutorial covers the basics of using SDL_ttf. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The surfaces
+        现在是时候渲染文本了。SDL本身不原生地支持TTF文件，所以你需要使用SDL_ttf扩展库。SDL_ttf是一个能从True Type字体中生成表面的的扩展库。<br> 
+       <br><a target="_blank" href="http://www.libsdl.org/projects/SDL_ttf/"></a>SDL_ttf 可从<a target="_blank" href="http://www.libsdl.org/projects/SDL_ttf/">此处下载</a>。<br> 
+       <br>要安装SDL_ttf，请查看前面的<a href="../lesson03/">扩展库安装教程</a>。安装SDL_ttf的方法与安装SDL_image极其相似，你仅需将前面教程中的SDL_image替换为SDL_ttf。<br> 
+       <br> Linux/Unix 用户还需要链接freetype库。<br> 
+       <br>本课介绍了SDL_ttf的基本用法。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//表面
 SDL_Surface *background = NULL;
 SDL_Surface *message = NULL;
 SDL_Surface *screen = NULL;
 
-//The event structure
+//事件结构体
 SDL_Event event;
 
-//The font that's going to be used
+//将要用到的字体
 TTF_Font *font = NULL;
 
-//The color of the font
+//字体的颜色
 SDL_Color textColor = { 255, 255, 255 };
 </pre> 
       <div class="tutText">
-        Here we have our variables. There's the background and screen surface and the event structure from before. We also have the &quot;message&quot; surface which will hold the surface with the text. 
-       <br /> 
-       <br /> There's also the new data type &quot;TTF_Font&quot; which is the font we're going to use, and there's also the SDL_Color which is the color we are going to render the text. In this case it is set to white. 
-       <br /> 
-       <br /> If you want to know more about the SDL_Color data type, you can look it up in the SDL documentation. 
-      </div> 
+        这里，我们有一些变量。其中包括了前面教程中所涉及的背景表面、窗口表面以及事件结构体。此外我们还有一个用于存储文本的“信息”表面。<br> 
+       <br>这里还有一个新的数据类型<code>TTF_Font</code>，它是我们将要使用的字体，另外还有一个<code>SDL_Color</code>类型的变量，它是我们渲染文本时将要使用的颜色。在本课中，我们使用白色来渲染文本。<br> 
+       <br>如果你想要了解更多有关<code>SDL_Color</code> 数据类型的信息，你可以查看SDL文档。</div> 
       <pre class="tutCode prettyprint linenums:14 lang-cpp">bool init()
 {
-    //Initialize all SDL subsystems
+    //初始化所有SDL子系统
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
         return false;    
     }
     
-    //Set up the screen
+    //设置窗口
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
     
-    //If there was an error in setting up the screen
+    //如果设置窗口出错
     if( screen == NULL )
     {
         return false;    
     }
     
-    //Initialize SDL_ttf
+    //初始化SDL_ttf
     if( TTF_Init() == -1 )
     {
         return false;    
     }
     
-    //Set the window caption
-    SDL_WM_SetCaption( &quot;TTF Test&quot;, NULL );
+    //设置窗口标题
+    SDL_WM_SetCaption( "TTF Test", NULL );
     
-    //If everything initialized fine
+    //如果所有初始化都成功
     return true;
 }
 </pre> 
       <div class="tutText">
-        Here's our initialization function. It's pretty much the same as before but this time we have to initialize SDL_ttf. 
-       <br /> 
-       <br /> SDL_ttf is initialized by calling TTF_Init(). TTF_Init() returns -1 when there is an error. 
-       <br /> 
-       <br /> TTF_Init() has to be called before using any SDL_ttf functions. 
-      </div> 
+        这是我们的初始化函数。这和之前的很相似，只是这次我们还要初始化SDL_ttf。<br> 
+       <br> SDL_ttf 是通过调用<code>TTF_Init()</code>完成初始化的。如果期间出现错误，该函数会返回 -1。<br> 
+       <br><code> TTF_Init()</code> 必须在使用任何其他 SDL_ttf 的函数前被调用。</div> 
       <pre class="tutCode prettyprint linenums:43 lang-cpp">bool load_files()
 {
-    //Load the background image
-    background = load_image( &quot;background.png&quot; );
+    //加载背景图片
+    background = load_image( "background.png" );
     
-    //Open the font
-    font = TTF_OpenFont( &quot;lazy.ttf&quot;, 28 );
+    //打开字体
+    font = TTF_OpenFont( "lazy.ttf", 28 );
     
-    //If there was a problem in loading the background
+    //如果背景加载出错
     if( background == NULL )
     {
         return false;    
     }
     
-    //If there was an error in loading the font
+    //如果字体加载出错
     if( font == NULL )
     {
         return false;
     }
     
-    //If everything loaded fine
+    //如果加载正常
     return true;    
 }
 </pre> 
-      <div class="tutText">
-        Here's the file loading function. To load the *.ttf font, TTF_OpenFont() must be called. 
-       <br /> 
-       <br /> The first argument of TTF_OpenFont() is the filename of the *.ttf font you want to open, the second argument is the size you want to set the font to when you open it. 
-       <br /> 
-       <br /> When there's an error loading the font, TTF_OpenFont() will return NULL. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:66 lang-cpp">    //Render the text
-    message = TTF_RenderText_Solid( font, &quot;The quick brown fox jumps over the lazy dog&quot;, textColor );
+      <div class="tutText">这是文件加载函数。要加载 *.ttf 字体，必须使用<code>TTF_OpenFont()</code> 函数。<br> 
+       <br>该函数的第一个参数是你想要打开的字体文件的文件名，第二个参数是你在打开字体文件时想要设定的字体大小。<br> 
+       <br>如果加载字体时出现错误，<code>TTF_OpenFont()</code> 会返回NULL。</div> 
+      <pre class="tutCode prettyprint linenums:66 lang-cpp">    //渲染文本
+    message = TTF_RenderText_Solid( font, "The quick brown fox jumps over the lazy dog", textColor );
     
-    //If there was an error in rendering the text
+    //如果渲染文本时出现了错误
     if( message == NULL )
     {
         return 1;    
     }
     
-    //Apply the images to the screen
+    //将图像应用到窗口上
     apply_surface( 0, 0, background, screen );
     apply_surface( 0, 150, message, screen );
     
-    //Update the screen
+    //更新窗口
     if( SDL_Flip( screen ) == -1 )
     {
         return 1;    
     }
 </pre> 
       <div class="tutText">
-        Here's the rendering code inside the main() function. 
-       <br /> 
-       <br /> The fastest way to render text is to use TTF_RenderText_Solid(). 
-       <br /> 
-       <br /> TTF_RenderText_Solid() takes the font in the first argument, and creates a surface with the text in the second argument with the color in the third argument. TTF_RenderText_Solid() returns NULL when there's an error. 
-       <br /> 
-       <br /> There are other ways to render text, check them out in the 
-       <a class="tutLink" href="../../../jcatki.no-ip.org/SDL_ttf/SDL_ttf_html.tar.gz">SDL_ttf documentation</a>. For some Linux users TTF_RenderText_Solid() won't work, so make sure to upgrade freetype (the library SDL_ttf is based on) and SDL_ttf. If that doesn't work, try using TTF_RenderText_Shaded() instead. 
+        这里是main函数里的进行渲染的代码。<br> 
+       <br>最快的渲染文本的方式是使用<code>TTF_RenderText_Solid()</code>函数。 
+       <br> 
+       <br>该函数的第一个参数是字体，第二个参数是文本，第三个参数是颜色，它会使用这些来创建一个表面。<br>如果出现错误，该函数返回NULL。<br> 
+       <br> 当然还有别的渲染文本的方式，请到 <a class="tutLink" href="http://jcatki.no-ip.org/SDL_ttf/SDL_ttf_html.tar.gz">SDL_ttf 文档</a>中查看。对于部分Linux用户，<code>TTF_RenderText_Solid()</code>可能不能正常工作，此时请升级一下freetype（这是SDL_ttf 所依赖的库）和SDL_ttf。如果这样还不行，请改用<code>TTF_RenderText_Shaded()</code>。<br> 
       </div> 
       <pre class="tutCode prettyprint linenums:84 lang-cpp">void clean_up()
 {
-    //Free the surfaces
+    //释放表面
     SDL_FreeSurface( background );
     SDL_FreeSurface( message );
     
-    //Close the font that was used
+    //关闭用过的字体
     TTF_CloseFont( font );
     
-    //Quit SDL_ttf
+    //退出SDL_ttf
     TTF_Quit();
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
 }
 </pre> 
-      <div class="tutText">
-        Here we have the clean up function. First we free the background surface, then get rid of the text surface we generated. 
-       <br /> 
-       <br /> We also close the font we opened using TTF_CloseFont(), and then quit SDL_ttf using TTF_Quit(). 
-       <br /> 
-       <br /> After that we quit SDL as usual. 
-      </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson07">here</a>. 
-       <br /> 
-       <br /> I highly recommend that you download the 
-       <a class="tutLink" href="../../../jcatki.no-ip.org_3A8080/SDL_ttf/SDL_ttf_html.tar.gz">SDL_ttf documentation</a>, and keep it around for reference. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson06/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson08/index.php">Next Tutorial</a> 
-       <br /> 
+        这里我们有执行清理的函数。首先我们释放背景表面，然后去除我们生成的文本表面。<br> 
+       <br>我们还使用<code>TTF_CloseFont()</code>关闭我们已经打开的字体，然后使用<code>TTF_Quit()</code>退出SDL_ttf。 
+       <br> 
+       <br>接着，我们按照通常的做法，退出SDL。<br><br> 我十分推荐你下载SDL_ttf的文档并将它放在手边，以方便查阅。你可以从<a href="http://jcatki.no-ip.org:8080/SDL_ttf/SDL_ttf_html.tar.gz">此处下载</a>。<br><br>本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson07">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson08/">下一课：按键操作</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -264,6 +232,5 @@ SDL_Color textColor = { 255, 255, 255 };
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
