@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第10课 - 按键状态 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第10课 - 按键状态 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,121 +45,104 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第10课 - 按键状态</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第10课 - 按键状态</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月7日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson10/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson09/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson11/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Key States</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 4/25/08</h6> Here you're going to check if a key is pressed without even using events. This is possible due to keystates. Sometimes just checking if a key is up or down is easier than monitoring events. 
-       <br /> 
-       <br /> This tutorial will teach you to check if the key is pressed, rather than monitoring key events. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">    //While the user hasn't quit
+        这里你将在不使用事件的情况下检查一个按键是否被按下。通过按键状态，这是完全可能的。有时，检查一个按键是否被按下或弹起比监听事件要容易得多。<br> 
+       <br>本节课将教你检查一个按键是否被按下，而不涉及监听键盘事件。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">    //当用户还没退出时
     while( quit == false )
     {
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //If the user has Xed out the window
+            //如果用户点击了窗口右上角的关闭按钮
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }    
         }
 </pre> 
       <div class="tutText">
-        As you can see, despite the fact that we're showing the messages based on key presses we don't check for any key events. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:14 lang-cpp">        //Get the keystates
+        你可以看到，尽管我们要根据按键按下的动作来显示信息，我们并没有检查任何键盘事件。</div> 
+      <pre class="tutCode prettyprint linenums:14 lang-cpp">        //获取按键状态
         Uint8 *keystates = SDL_GetKeyState( NULL );
 </pre> 
-      <div class="tutText">
-        Instead what we do is use SDL_GetKeyState(). 
-       <br /> 
-       <br /> What SDL_GetKeyState() does is give us the key state array. The key state array is a list of every key and whether the key is pressed or not, kind of like this: 
-       <br /> 
+      <div class="tutText">事实上，我们使用了<code>SDL_GetKeyState()</code>函数。<br> 
+       <br> 这个函数能为我们提供一个按键状态数组，那是一个包含了每个按键以及每个按键是否被按下的列表，就像这样：<br> 
        <div class="tutImg"> 
-        <img src="keystate.jpg" /> 
+        <img src="keystate.jpg"> 
        </div> 
-       <br /> Now we can tell which key is down. 
-       <br /> 
-       <br /> Just for information's sake, the argument we give SDL_GetKeyState() gets the number of keys available. Since we don't care about how many keys there are, we just set it to NULL. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:16 lang-cpp">        //If up is pressed
+       <br> 现在我们可以分辨出是哪些按键被按下了。<br> 
+       <br> 为了提供更多信息，我们给函数<code>SDL_GetKeyState()</code>传入的参数是用来获得可用按键数量的。因为我们不关心共有多少按键，所以我们仅需将它设为NULL。</div> 
+      <pre class="tutCode prettyprint linenums:16 lang-cpp">        //如果"上方向键"被按下
         if( keystates[ SDLK_UP ] )
         {
             apply_surface( ( SCREEN_WIDTH - up-&gt;w ) / 2, ( SCREEN_HEIGHT / 2 - up-&gt;h ) / 2, up, screen );
         }
     
-        //If down is pressed
+        //如果"下方向键"被按下
         if( keystates[ SDLK_DOWN ] )
         {
             apply_surface( ( SCREEN_WIDTH - down-&gt;w ) / 2, ( SCREEN_HEIGHT / 2 - down-&gt;h ) / 2 + ( SCREEN_HEIGHT / 2 ), down, screen );
         }
     
-        //If left is pressed
+        //如果"左方向键"被按下
         if( keystates[ SDLK_LEFT ] )
         {
             apply_surface( ( SCREEN_WIDTH / 2 - left-&gt;w ) / 2, ( SCREEN_HEIGHT - left-&gt;h ) / 2, left, screen );
         }
     
-        //If right is pressed
+        //如果"右方向键"被按下
         if( keystates[ SDLK_RIGHT ] )
         {
             apply_surface( ( SCREEN_WIDTH / 2 - right-&gt;w ) / 2 + ( SCREEN_WIDTH / 2 ), ( SCREEN_HEIGHT - right-&gt;h ) / 2, right, screen );
         }
 		
-        //Update the screen
+        //更新窗口
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
 </pre> 
       <div class="tutText">
-        Here's a basic if up is pressed show the up message, if down is pressed show the down message, etc. 
-       <br /> 
-       <br /> Had this program been done with events, the code would be a good size longer. 
-       <br /> 
-       <br /> SDL_GetKeyState() and other state functions like SDL_GetModState(), SDL_GetMouseState(), SDL_JoystickGetAxis() and others can be incredibly useful. Learn more about them in the SDL API reference, which you should have handy on your computer. 
-      </div> 
+        这是一个基本的例子，当”上方向键“被按下时窗口里显示”上“，当”下方向键“被按下时显示”下“，以此类推。<br> 
+       <br> 如果这个程序通过事件来编写，代码会长很多。<br> 
+       <br><code> SDL_GetKeyState()</code> 和其他的状态函数，如：<code>SDL_GetModState()</code>, <code>SDL_GetMouseState()</code>, <code>SDL_JoystickGetAxis()</code> 等等，都是极其有用的。请在SDL的API参考中学习更多有关内容，你应该把它放在手边的。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson10">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson09/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson11/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson10">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson11/">下一课：播放声音</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -181,6 +165,5 @@
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
