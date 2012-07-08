@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第11课 - 播放声音 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第11课 - 播放声音 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,226 +45,205 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第11课 - 播放声音</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第11课 - 播放声音</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月8日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson11/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson10/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson12/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Playing Sounds</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 12/31/10</h6> Playing sound is another key concept of game programming. SDL's native sound functions can be quite confusing. So you're going to learn to play sound effects and music using the extension library SDL_mixer. SDL_mixer is an extension library that makes using sound braindead easy. 
-       <br /> 
-       <br /> You can get SDL_mixer from 
-       <a class="tutLink" href="../../../www.libsdl.org/projects/SDL_mixer/default.htm">here</a>. 
-       <br /> 
-       <br /> To install SDL_mixer just follow the 
-       <a class="tutLink" href="../lesson03/index.php">extension library tutorial</a>. Installing SDL_mixer is done pretty much the way SDL_image is, so just replace where you see SDL_image with SDL_mixer. 
-       <br /> 
-       <br /> This tutorial covers the basics playing music and sound effects using SDL_mixer to play sound effects and &quot;music&quot; I made by tapping on my monitor. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The music that will be played
+       播放声音是游戏编程的又一个关键概念。SDL原生的声音函数可能会让人很纠结。所以，你将学习使用SDL_mixer扩展库来播放声效和音乐。SDL_mixer扩展库将使用声音变得非常容易。<br> 
+       <br> SDL_mixer可从<a target="_blank" href="http://www.libsdl.org/projects/SDL_mixer/">此处下载</a>。<br> 
+       <br> 要安装SDL_mixer，请查看前面的<a href="../lesson03/">扩展库安装教程</a>。安装SDL_mixer的方法与安装SDL_image极其相似，你仅需将前面教程中的SDL_image替换为SDL_mixer。<br> 
+       <br> 本节课介绍了使用SDL_mixer播放音乐和声效的基本方法，并播放了我通过敲打我的显示器制作出来的声效和“音乐”。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//将要播放的音乐
 Mix_Music *music = NULL;
 
-//The sound effects that will be used
+//将要使用的声效
 Mix_Chunk *scratch = NULL;
 Mix_Chunk *high = NULL;
 Mix_Chunk *med = NULL;
 Mix_Chunk *low = NULL;
 </pre> 
       <div class="tutText">
-        Here's the new data types we are going to be working with. 
-       <br /> 
-       <br /> Mix_Music is the data type we use for music, and Mix_Chunk is the data type used for sound effects. 
-       <br /> 
+        这里有新的数据类型，我们将与和它们打交道。<br> 
+       <br><code> Mix_Music</code> 是我们用于音乐的数据类型，<code>Mix_Chunk</code> 是用于声效的数据类型。<br> 
       </div> 
       <pre class="tutCode prettyprint linenums:9 lang-cpp">bool init()
 {
-    //Initialize all SDL subsystems
+    //初始化SDL的所有子系统
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
         return false;    
     }
     
-    //Set up the screen
+    //设置窗口
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
     
-    //If there was an error in setting up the screen
+    //如果设置窗口出错
     if( screen == NULL )
     {
         return false;    
     }
     
-    //Initialize SDL_ttf
+    //初始化SDL_ttf
     if( TTF_Init() == -1 )
     {
         return false;    
     }
     
-    //Initialize SDL_mixer
+    //初始化SDL_mixer
     if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
     {
         return false;    
     }
     
-    //Set the window caption
-    SDL_WM_SetCaption( &quot;Monitor Music&quot;, NULL );
+    //设置窗口标题
+    SDL_WM_SetCaption( "Monitor Music", NULL );
     
-    //If everything initialized fine
+    //如果所有初始化成功
     return true;
 }
 </pre> 
       <div class="tutText">
-        In the initialization function, we call Mix_OpenAudio() to initialize SDL_mixer's audio functions. 
-       <br /> 
-       <br /> Mix_OpenAudio()'s first argument is the sound frequency we use, and in this case it's 22050 which is what's recommended. The second argument is the sound format used which we set to the default. The third argument is how many channels we plan to use. We set it to 2 so we have stereo sound, if it was set to one we'd have mono sound. The last argument is the sample size, which is set to 4096. 
-       <br /> 
-       <br /> For those of you using OGG, MOD, or other sound formats other than WAV, look into using Mix_Init() to initialize decoders and Mix_Quit() to close the decoders. We're only using WAV files here so let's not add more code for something we're not going to use. 
-      </div> 
+        在初始化函数中，我们调用<code>Mix_OpenAudio()</code> 来初始化SDL_mixer中的声音函数。<br> 
+       <br> 该函数的第一个参数是我们使用的声音频率，在本课中，它被设为22050，这也是推荐设置的值。第二个参数是声音格式，我们使用了默认的格式。第三个参数是我们计划使用的频道数量。我们将它设为2来获得立体声，如果设为1，将只有单声道声音。最后一个参数是样本大小，这里被设为4096。<br> 
+       <br> 对于那些使用OGG, MOD或者其他非WAV声音格式的人，请使用<code>Mix_Init()</code>来初始化解码器，并使用<code>Mix_Quit()</code>来关闭解码器。因为这里我们仅仅使用了WAV文件，所以我们不必为了用不到的东西来添加更多代码。</div> 
       <pre class="tutCode prettyprint linenums:44 lang-cpp">bool load_files()
 {
-    //Load the background image
-    background = load_image( &quot;background.png&quot; );
+    //加载背景图
+    background = load_image( "background.png" );
     
-    //Open the font
-    font = TTF_OpenFont( &quot;lazy.ttf&quot;, 30 );
+    //打开字体
+    font = TTF_OpenFont( "lazy.ttf", 30 );
     
-    //If there was a problem in loading the background
+    //如果加载背景出错
     if( background == NULL )
     {
         return false;    
     }
     
-    //If there was an error in loading the font
+    //如果加载字体出错
     if( font == NULL )
     {
         return false;
     }
     
-    //Load the music
-    music = Mix_LoadMUS( &quot;beat.wav&quot; );
+    //加载音乐
+    music = Mix_LoadMUS( "beat.wav" );
     
-    //If there was a problem loading the music
+    //如果加载音乐出了问题
     if( music == NULL )
     {
         return false;    
     }
 
-    //Load the sound effects
-    scratch = Mix_LoadWAV( &quot;scratch.wav&quot; );
-    high = Mix_LoadWAV( &quot;high.wav&quot; );
-    med = Mix_LoadWAV( &quot;medium.wav&quot; );
-    low = Mix_LoadWAV( &quot;low.wav&quot; );
+    //加载声效
+    scratch = Mix_LoadWAV( "scratch.wav" );
+    high = Mix_LoadWAV( "high.wav" );
+    med = Mix_LoadWAV( "medium.wav" );
+    low = Mix_LoadWAV( "low.wav" );
     
-    //If there was a problem loading the sound effects
+    //如果加载声效出了问题
     if( ( scratch == NULL ) || ( high == NULL ) || ( med == NULL ) || ( low == NULL ) )
     {
         return false;    
     }
     
-    //If everything loaded fine
+    //如果一切加载正常
     return true;    
 }
 </pre> 
       <div class="tutText">
-        Here we have the file loading function. 
-       <br /> 
-       <br /> To load the music, we use Mix_LoadMUS(). Mix_LoadMUS() takes in the filename of the music file and returns the music data. It return NULL if there's an error. 
-       <br /> 
-       <br /> To load sound effects, we use Mix_LoadWAV(). It loads the sound file of the given file name, and returns a Mix_Chunk or NULL if there was an error. 
-      </div> 
+        这是我们的文件加载函数。<br> 
+       <br> 要加载音乐，我们使用<code>Mix_LoadMUS()</code>。这个函数接受一个音乐文件的文件名并返回其中的音乐数据。如果出错，它会返回NULL。<br> 
+       <br>要加载声效，我们使用<code>Mix_LoadWAV()</code>。它加载了传入的文件名所对应的声音文件，并返回了一个<code>Mix_Chunk</code>，如果出错了，则返回NULL。</div> 
       <pre class="tutCode prettyprint linenums:88 lang-cpp">void clean_up()
 {
-    //Free the surfaces
+    //释放表面
     SDL_FreeSurface( background );
     
-    //Free the sound effects
+    //释放声效
     Mix_FreeChunk( scratch );
     Mix_FreeChunk( high );
     Mix_FreeChunk( med );
     Mix_FreeChunk( low );
     
-    //Free the music
+    //释放音乐
     Mix_FreeMusic( music );
     
-    //Close the font
+    //关闭字体
     TTF_CloseFont( font );
     
-    //Quit SDL_mixer
+    //退出SDL_mixer
     Mix_CloseAudio();
     
-    //Quit SDL_ttf
+    //退出SDL_ttf
     TTF_Quit();
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
 }
 </pre> 
       <div class="tutText">
-        In the clean up function, we call Mix_FreeChunk() to get rid of the sound effects and Mix_FreeMusic() to free the music. 
-       <br /> 
-       <br /> Then after we're done using SDL_mixer, Mix_CloseAudio() is called. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:114 lang-cpp">    //While the user hasn't quit
+        在清理函数中，我们调用<code>Mix_FreeChunk()</code> 来清除声效，并用<code>Mix_FreeMusic()</code>来释放音乐。<br> 
+       <br> 然后，我们结束了SDL_mixer的使用，调用了<code>Mix_CloseAudio()</code>。</div> 
+      <pre class="tutCode prettyprint linenums:114 lang-cpp">    //当用户还没退出
     while( quit == false )
     {
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //If a key was pressed
+            //如果一个按键被按下
             if( event.type == SDL_KEYDOWN )
             {
 </pre> 
-      <div class="tutText">
-        In our main function after the initialization, file loading and background and messages have been blitted, we enter our main loop. Then we start handling events, starting with key presses. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:123 lang-cpp">                //If 1 was pressed
+      <div class="tutText">在main函数中，在初始化、文件加载、背景和信息的blit完成后，我们进入了主循环。然后我们开始处理事件，首先是按键事件。<br></div> 
+      <pre class="tutCode prettyprint linenums:123 lang-cpp">                //如果数字键“1”被按下
                 if( event.key.keysym.sym == SDLK_1 )
                 {
-                    //Play the scratch effect
+                    //播放“挠”的声效
                     if( Mix_PlayChannel( -1, scratch, 0 ) == -1 )
                     {
                         return 1;    
                     }
                 }
-                //If 2 was pressed
+                //如果数字键“2”被按下
                 else if( event.key.keysym.sym == SDLK_2 )
                 {
-                    //Play the high hit effect
+                    //播放“重击”的声效
                     if( Mix_PlayChannel( -1, high, 0 ) == -1 )
                     {
                         return 1;    
                     }
                 }
-                //If 3 was pressed
+                //如果数字键“3”被按下
                 else if( event.key.keysym.sym == SDLK_3 )
                 {
-                    //Play the medium hit effect
+                    //播放“中度击打”的声效
                     if( Mix_PlayChannel( -1, med, 0 ) == -1 )
                     {
                         return 1;    
                     }
                 }
-                //If 4 was pressed
+                //如果数字键“4”被按下
                 else if( event.key.keysym.sym == SDLK_4 )
                 {
-                    //Play the low hit effect
+                    //播放“轻击”的声效
                     if( Mix_PlayChannel( -1, low, 0 ) == -1 )
                     {
                         return 1;    
@@ -271,23 +251,19 @@ Mix_Chunk *low = NULL;
                 }
 </pre> 
       <div class="tutText">
-        When checking the key presses, first we check if 1, 2, 3, or 4 have been pressed. These are the keys that play the sound effects. 
-       <br /> 
-       <br /> If one of the these keys have been pressed, we call Mix_PlayChannel() to play the key's associated sound effect. 
-       <br /> 
-       <br /> Mix_PlayChannel()'s first argument is which mixing channel we're going to play the sound in. Since it's set to -1, Mix_PlayChannel() just looks for the first channel that's available and plays the sound. 
-       <br /> 
-       <br /> The second argument in the Mix_Chunk that's going to be played. The third is how many times the sound effect is going to loop. Since it's set to 0, it will only play once. 
-       <br /> 
-       <br /> When there's a problem playing the sound, Mix_PlayChannel() will return -1. 
+        在检查按键按下的事件时，首先我们检查数字键1, 2, 3, 或 4是否被按下。这些是播放声效的按键。<br> 
+       <br>如果这些键中的一个被按下，我们就调用<code>Mix_PlayChannel()</code>来播放与其关联的声效。<br> 
+       <br>这个函数的第一个参数是我们将要播放声音的混音频道。由于它被设为了-1，这个函数会自动寻找第一个可用的频道，并播放声音。<br> 
+       <br> 第二个参数是将要播放的<code>Mix_Chunk</code>。第三个参数是声效将要重复的次数。由于它被设为0，声效将只会播放一次。<br> 
+       <br>当播放声音出了问题时，<code>Mix_PlayChannel()</code> 会返回 -1。 
       </div> 
-      <pre class="tutCode prettyprint linenums:159 lang-cpp">                //If 9 was pressed
+      <pre class="tutCode prettyprint linenums:159 lang-cpp">                //如果数字键“9”被按下
                 else if( event.key.keysym.sym == SDLK_9 )
                 {
-                    //If there is no music playing
+                    //如果没有音乐在播放
                     if( Mix_PlayingMusic() == 0 )
                     {
-                        //Play the music
+                        //播放音乐
                         if( Mix_PlayMusic( music, -1 ) == -1 )
                         {
                             return 1;
@@ -295,71 +271,60 @@ Mix_Chunk *low = NULL;
                     }
 </pre> 
       <div class="tutText">
-        Next we handle when 9 is pressed, which is supposed to play/pause the music. 
-       <br /> 
-       <br /> First we check if the music is playing with Mix_PlayingMusic(). If no music is playing we call Mix_PlayMusic() to play the music. 
-       <br /> 
-       <br /> The first argument of Mix_PlayMusic() is the music we're going to play. The second argument is how many times it will loop the music. Since it's set to -1, it will loop until it is manually stopped. 
-       <br /> 
-       <br /> If there's a problem in playing the music Mix_PlayMusic() will return -1. 
+        接下来，我们处理数字键“9”被按下的事件，这里我们应该播放或暂停音乐。<br> 
+       <br>首先，我们通过<code>Mix_PlayingMusic()</code>检查是否有音乐正在播放。如果没有音乐在播放，我们调用<code>Mix_PlayMusic()</code> 来播放音乐。<br> 
+       <br> 函数<code>Mix_PlayMusic()</code>的第一个参数是我们将要播放的音乐。第二个参数是音乐将要循环的次数。由于它被设为了-1，音乐将在手动停止前不停地循环下去。<br> 
+       <br>如果播放音乐出现问题，该函数会返回-1。 
       </div> 
-      <pre class="tutCode prettyprint linenums:171 lang-cpp">                    //If music is being played
+      <pre class="tutCode prettyprint linenums:171 lang-cpp">                    //如果音乐已进入播放状态
                     else
                     {
-                        //If the music is paused
+                        //如果音乐被暂停了
                         if( Mix_PausedMusic() == 1 )
                         {
-                            //Resume the music
+                            //恢复播放
                             Mix_ResumeMusic();
                         }
-                        //If the music is playing
+                        //如果音乐正在播放
                         else
                         {
-                            //Pause the music
+                            //暂停音乐
                             Mix_PauseMusic();
                         }
                     }
                 }
 </pre> 
       <div class="tutText">
-        Now if music was playing when the user pressed 9, we either pause or unpause the music. 
-       <br /> 
-       <br /> First we check if the music is playing using Mix_PausedMusic(). If it is, we unpause the music using Mix_ResumeMusic(). If the music is not paused, we pause it using Mix_PauseMusic() 
-      </div> 
-      <pre class="tutCode prettyprint linenums:188 lang-cpp">                //If 0 was pressed
+        现在，如果当用户按下“9”时，音乐正在播放，我们则暂停或恢复音乐播放。<br> 
+       <br> 首先，我们使用<code>Mix_PausedMusic()</code>检查音乐是否已被暂停。如果是的，我们通过<code>Mix_ResumeMusic()</code>来恢复播放。如果音乐没有被暂停，我们使用<code>Mix_PauseMusic()</code>来将它暂停。</div> 
+      <pre class="tutCode prettyprint linenums:188 lang-cpp">                //如果数字键“0”被按下
                 else if( event.key.keysym.sym == SDLK_0 )
                 {
-                    //Stop the music
+                    //停止音乐
                     Mix_HaltMusic();
                 }
             }
 </pre> 
       <div class="tutText">
-        Lastly, We check if the user presses 0. 
-       <br /> 
-       <br /> If the user presses 0, the music is stopped using Mix_HaltMusic(). 
+        最后，我们检查用户是否按下了“0”。<br> 
+       <br> 如果用户按下了0，我们使用<code>Mix_HaltMusic()</code>来停止音乐的播放。<br><br>我十分推荐你下载SDL_mixer的文档并将它放在手边，以方便查阅。你可以从<a href="http://jcatki.no-ip.org:8080/SDL_mixer/SDL_mixer_html.zip">此处下载</a>。<br> 
+       <br> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson11">here</a>. 
-       <br /> 
-       <br /> I highly recommend that you download the 
-       <a class="tutLink" href="../../../jcatki.no-ip.org_3A8080/SDL_mixer/SDL_mixer_html.zip">SDL_mixer documentation</a>, and keep it around for reference. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson10/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson12/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson11">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson12/">下一课：计时</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -382,6 +347,5 @@ Mix_Chunk *low = NULL;
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
