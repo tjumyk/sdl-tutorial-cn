@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第12课 - 计时 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第12课 - 计时 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,100 +45,89 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第12课 - 计时</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第12课 - 计时</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月10日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson12/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson11/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson13/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Timing</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 11/19/11</h6> You've already learned about stuff that's event driven, now it's time to do things that are time driven. Knowing how to deal with time is key in making games. In this lesson we'll make a simple timer that can start and stop. 
+       你已经学习了有关事件驱动的东西，现在是时候来做一些时间驱动的事情了。理解如何处理时间是制作游戏的关键。在本节课中，我们将编写一个简单的可以启动和停止的计时器。<br></div> 
+      <div class="tutText">现在假如你想要为某事计时30秒，但是你没有停表。如果有一个带秒针的时钟挂在墙上，你会等它到了15秒的倍数：<br> 
+       <div class="tutImg"> 
+        <img src="start.jpg"> 
+       </div> 
+       <br> 然后你会一直等到秒针到达从起点向前30秒的地方。<br> 
+       <div class="tutImg"> 
+        <img src="stop.jpg"> 
+       </div> 
+       <br> 这里的计时器使用了相同的原理。SDL在你的程序里运行了一个计时器，你可以通过<code>SDL_GetTicks()</code>获取它的时间，结果以毫秒为单位。如果你想为了某事计时1000毫秒，你会先保存开始时间，然后一直等到当前时间与开始时间相差1000毫秒的时刻。<br> 
       </div> 
-      <div class="tutText">
-        Now say if you needed to time 30 seconds of something but you didn't have a stop watch. If there was a clock on the wall with a second hand, you'd wait until it reached a multiple of 15: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="start.jpg" /> 
-       </div> 
-       <br /> and then you'd wait until it was 30 seconds away from the starting point. 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="stop.jpg" /> 
-       </div> 
-       <br /> This timer functions on the same principle. SDL has a timer running in your program and you can get its time in milliseconds using SDL_GetTicks(). If you need to time something for 1000 milliseconds, you'd store the time you started waiting and wait until the difference between the time you started and the current time to be 1000. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The headers
-#include &quot;SDL/SDL.h&quot;
-#include &quot;SDL/SDL_image.h&quot;
-#include &quot;SDL/SDL_ttf.h&quot;
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//头文件
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
+#include "SDL/SDL_ttf.h"
 #include &lt;string&gt;
 #include &lt;sstream&gt;
 </pre> 
       <div class="tutText">
-        Along with the usual headers we include the string stream header. I'll explain what a string stream does later. 
-      </div> 
+        除了通常使用的头文件，我们还包含了string stream的头文件。我会在后面解释string stream的作用。</div> 
       <pre class="tutCode prettyprint linenums:7 lang-cpp">int main( int argc, char* args[] )
 {
-    //Quit flag
+    //退出标志
     bool quit = false;
     
-    //The timer starting time
+    //计时器启动时间
     Uint32 start = 0;
     
-    //The timer start/stop flag
+    //计时器的启动/停止标志
     bool running = true;
 </pre> 
       <div class="tutText">
-        At the top of our main function we have the two variables we're going to use to make our timer. There's &quot;start&quot; which holds the time our timer started and &quot;running&quot; flag which keeps track of whether our timer is running. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:17 lang-cpp">    //Start the timer
+        在我们的主函数的顶部，我们有两个将要用于制作计时器的变量。其中，“start”变量保存了计时器启动的时间，"running"标志跟踪了计时器是否正在运行。<br></div> 
+      <pre class="tutCode prettyprint linenums:17 lang-cpp">    //启动计时器
     start = SDL_GetTicks();
     
-    //While the user hasn't quit
+    //当用户还没有退出时
     while( quit == false )
     {
 </pre> 
       <div class="tutText">
-        After we initialized and loaded the surfaces it's time to start the timer. 
-       <br /> 
-       <br /> We start our timer by getting the current time by using SDL_GetTicks(). Then we enter our main loop. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:23 lang-cpp">        //While there's an event to handle
+        当我们完成初始化并加载好表面时，是时候启动计时器了。<br> 
+       <br>我们通过调用<code>SDL_GetTicks()</code>获得当前时间并启动计时器，然后进入我们的主循环。</div> 
+      <pre class="tutCode prettyprint linenums:23 lang-cpp">        //当有时间需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //If a key was pressed
+            //如果有一个按键被按下
             if( event.type == SDL_KEYDOWN )
             {
-                //If s was pressed
+                //如果“s”被按下
                 if( event.key.keysym.sym == SDLK_s )
                 {
-                    //If the timer is running
+                    //如果计时器正在运行
                     if( running == true )
                     {
-                        //Stop the timer
+                        //停止计时器
                         running = false;
                         start = 0;  
                     }
                     else
                     {
-                        //Start the timer
+                        //启动计时器
                         running = true;
                         start = SDL_GetTicks();  
                     }
@@ -145,42 +135,34 @@
             }
 </pre> 
       <div class="tutText">
-        Here we handle when the 's' key is pressed which starts and stops the timer. 
-       <br /> 
-       <br /> If the timer is running, we set the &quot;running&quot; flag to false, and set start to 0 just because I don't like stray values. If the timer is stopped, we set the flag to true and start the timer just like we did when we entered the main loop. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:47 lang-cpp">        //If the timer is running
+        这里我们处理了“s”键被按下的事件，此时我们启动或停止计时器。<br> 
+       <br> 如果计时器正在运行，我们将"running"标志设为false，然后将start设为0，这么做是因为我不喜欢杂散值。如果计时器已经停止，我们将"running"标志设为true，然后使用我们在进入主循环前所采用的方式启动计时器。<br></div> 
+      <pre class="tutCode prettyprint linenums:47 lang-cpp">        //如果计时器正在运行
         if( running == true )
         {
-            //The timer's time as a string
+            //以string形式存储的计时器时间
             std::stringstream time;
         
-            //Convert the timer's time to a string
-            time &lt;&lt; &quot;Timer: &quot; &lt;&lt; SDL_GetTicks() - start;
+            //将计时器时间转换为string
+            time &lt;&lt; "Timer: " &lt;&lt; SDL_GetTicks() - start;
 </pre> 
       <div class="tutText">
-        After we apply the background and the message surface we check if the timer is running. If it is, we show the timer's time. 
-       <br /> 
-       <br /> The formula to calculate the timer's time is: 
-       <h5>time = current time - start time.</h5> So if you started the timer when SDL_GetTicks() was 10,000 and now SDL_GetTicks() is 20,000, it will return 10,000 meaning 10 seconds have passed since the timer started. 
-       <br /> 
-       <br /> So here we put &quot;Timer: &quot; + the timer's time in the string stream. 
-       <br /> 
-       <br /> We make a string stream object named &quot;time&quot; which will hold the message containing the timer's time. String stream objects allow you make strings out of multiple variables. As you can see it functions a lot like cout, but instead of taking everything and dumping the text to the console it just stores the text in the string stream so we can use it. 
-       <br /> 
-       <br /> For those of you who are still using VC++ 6.0 you'll need to cast (SDL_GetTicks() - start) to an integer. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:55 lang-cpp">            //Render the time surface
+        在我们应用完背景表面和信息表面后，我们检查一下计时器是否正在运行。如果是的，我们将计时器时间显示出来。<br> 
+       <br>计算计时器时间的公式是：<h5>计时时间 = 当前时间 - 开始时间</h5>所以，如果你在<code>SDL_GetTicks()</code>返回10,000的时候启动计时器，并且现在SDL_GetTicks() 的结果为 20,000, 那么这个式子的运算结果是10,000，意味着从计时器启动时开始，已经经过了10秒钟的时间。<br> 
+       <br>所以这里我们将"Timer: " + 计时器时间传入string stream中。<br> 
+       <br> 我们创建了一个叫做“time”的string stream对象，它保存了计时器的信息。String stream对象允许你传入不同类型的变量来构造string。就和你看到的一样，它的功能类似于cout，但它不会将所有东西输出到控制台，而是将文本保存在string stream中，以供我们使用。<br> 
+       <br>对于那些还在使用VC++ 6.0的人来说，你可能需要将SDL_GetTicks() - start转换成一个整数。</div> 
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">            //渲染时间表面
             seconds = TTF_RenderText_Solid( font, time.str().c_str(), textColor );
             
-            //Apply the time surface
+            //应用时间表面
             apply_surface( ( SCREEN_WIDTH - seconds-&gt;w ) / 2, 50, seconds, screen );
         
-            //Free the time surface
+            //释放时间表面
             SDL_FreeSurface( seconds );
         }
         
-        //Update the screen
+        //更新窗口
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
@@ -188,28 +170,23 @@
     }
 </pre> 
       <div class="tutText">
-        Then we render the text surface that shows the timer's time using the text inside the string stream. Then we apply the timer's time on the screen and free the surface. 
-       <br /> 
-       <br /> After that the screen is updated and we continue the main loop. 
-      </div> 
+        然后，我们使用string stream中的文本渲染出计时器时间，接着将其应用到窗口中，最后再将它释放。<br> 
+       <br> 在窗口更新后，我们继续执行主循环。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson12">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson11/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson13/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson12">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson13/">下一课：高级计时</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -232,6 +209,5 @@
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
