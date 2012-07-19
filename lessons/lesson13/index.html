@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第13课 - 高级计时 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第13课 - 高级计时 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
- <body data-spy="scroll" data-target=".subnav" data-offset="50">
+ <body data-offset="50" data-target=".subnav" data-spy="scroll">
    ﻿ 
   <!-- Navbar
     ================================================== --> 
@@ -44,76 +45,69 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第13课 - 高级计时</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第13课 - 高级计时</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月19日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson13/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson12/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson14/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
        <h1 class="tutHead">Advanced Timers</h1> 
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 12/28/09</h6> You've already learned to make a very basic timer. Here you're going to learn to make a timer class with start, stop, and pause functions that you would need when programming a game. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The timer
+       你已经学会编写一个非常简单的计时器了。这里，你将学习编写一个包含了start，stop，pause函数的timer类，你在编写一个游戏时会用到它。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//Timer类
 class Timer
 {
     private:
-    //The clock time when the timer started
+    //计时器启动时的时间
     int startTicks;
     
-    //The ticks stored when the timer was paused
+    //计时器暂停时保存的滴答数
     int pausedTicks;
     
-    //The timer status
+    //计时器状态
     bool paused;
     bool started;
     
     public:
-    //Initializes variables
+    //初始化变量
     Timer();
     
-    //The various clock actions
+    //各种时钟动作
     void start();
     void stop();
     void pause();
     void unpause();
     
-    //Gets the timer's time
+    //获取计时器时间
     int get_ticks();
     
-    //Checks the status of the timer
+    //检查计时器状态
     bool is_started();
     bool is_paused();    
 };
 </pre> 
       <div class="tutText">
-        Here we have the rundown of the timer class. 
-       <br /> 
-       <br /> &quot;startTicks&quot; is the starting point of the timer, and &quot;pausedTicks&quot; is the time the timer had when it was paused. 
-       <br /> 
-       <br /> The constructor initializes the variables, and I'm pretty sure you can figure out what start(), stop(), pause(), and unpause() do. 
-       <br /> 
-       <br /> The function get_ticks() gets the timer's time in milliseconds. is_started() checks if the timer has started, and is_paused() checks if the timer is paused. 
-      </div> 
+        这里我们有timer类的纲要。<br> 
+       <br> "startTicks"是计时器的起始点，"pausedTicks"是计时器暂停时所保存的时间。<br> 
+       <br>构造函数对变量进行了初始化，我很确定你能明白<code>start()</code>, <code>stop()</code>, <code>pause()</code>, 和 <code>unpause()</code> 函数的作用。 
+       <br> 
+       <br> 函数 <code>get_ticks()</code> 可获取计时器的时间，以毫秒为单位。<code>is_started()</code> 检查计时器是否已经启动，<code>is_paused()</code> 检查计时器是否已暂停。</div> 
       <pre class="tutCode prettyprint linenums:32 lang-cpp">Timer::Timer()
 {
-    //Initialize the variables
+    //初始化各种变量
     startTicks = 0;
     pausedTicks = 0;
     paused = false;
@@ -121,107 +115,93 @@ class Timer
 }
 </pre> 
       <div class="tutText">
-        Here we have the constructor initializing the variables. Nothing much to explain here. 
-      </div> 
+        这里我们有一个构造函数，它初始化了许多变量。这没有什么需要解释的。</div> 
       <pre class="tutCode prettyprint linenums:40 lang-cpp">void Timer::start()
 {
-    //Start the timer
+    //启动计时器
     started = true;
     
-    //Unpause the timer
+    //将计时器设为非暂停状态
     paused = false;
     
-    //Get the current clock time
+    //获取当前时钟时间
     startTicks = SDL_GetTicks();    
 }
 </pre> 
-      <div class="tutText">
-        Now when we start the timer, we set the started status to true, we unpause the timer, and we set our starting time to the current time using SDL_GetTicks(). 
-      </div> 
+      <div class="tutText">现在当我们启动计时器时，我们将started状态设为true，将计时器设为非暂停状态，然后我们使用<code>SDL_GetTicks()</code>获得当前时间，并将它设为计时器的启动时间。</div> 
       <pre class="tutCode prettyprint linenums:51 lang-cpp">void Timer::stop()
 {
-    //Stop the timer
+    //停止计时器
     started = false;
     
-    //Unpause the timer
+    //将计时器设为非暂停状态
     paused = false;    
 }
 </pre> 
       <div class="tutText">
-        When we stop it, we set the started status to false and we unpause the timer. 
-      </div> 
+        当我们停止计时器的时候，我们将started状态设为false，并将计时器设为非暂停状态。</div> 
       <pre class="tutCode prettyprint linenums:59 lang-cpp">int Timer::get_ticks()
 {
-    //If the timer is running
+    //如果计时器正在运行
     if( started == true )
     {
-        //If the timer is paused
+        //如果计时器暂停中
         if( paused == true )
         {
-            //Return the number of ticks when the timer was paused
+            //返回计时器暂停时的滴答数
             return pausedTicks;
         }
         else
         {
-            //Return the current time minus the start time
+            //返回当前时间减去启动时间的差值
             return SDL_GetTicks() - startTicks;
         }    
     }
     
-    //If the timer isn't running
+    //如果计时器没有在运行
     return 0;    
 }
 </pre> 
-      <div class="tutText">
-        Here we have the function that gets the timer's time. 
-       <br /> 
-       <br /> First we check if the timer is running. If it is, we then check if the timer is paused. 
-       <br /> 
-       <br /> If the timer is paused, we return the time the timer had when it was paused. We'll talk about pausing/unpausing later. 
-       <br /> 
-       <br /> If the timer isn't paused, we return the difference in the time from when the timer started and the current time. As you can see it's the exact same formula from the last tutorial. 
-       <br /> 
-       <br /> If the timer was never running in the first place, the function returns 0. 
-      </div> 
+      <div class="tutText">这里我们有获取计时器时间的函数。<br> 
+       <br>首先，我们检查一下计时器是否在运行。如果是的话，然后检查它是否处于暂停状态。<br> 
+       <br>如果计时器暂停中，我们返回计时器暂停时所保存的时间。我们将在后面讨论暂停和取消暂停。<br> 
+       <br>如果计时器没有暂停，我们返回从计时器启动到当前的时间差。你可以看出来，这与上一课中所提到的公式完全相同。<br> 
+       <br>如果计时器没有运行，函数将返回0。</div> 
       <pre class="tutCode prettyprint linenums:80 lang-cpp">void Timer::pause()
 {
-    //If the timer is running and isn't already paused
+    //如果计时器正在运行但没有暂停
     if( ( started == true ) &amp;&amp; ( paused == false ) )
     {
-        //Pause the timer
+        //暂停计时器
         paused = true;
     
-        //Calculate the paused ticks
+        //计算暂停时的滴答数
         pausedTicks = SDL_GetTicks() - startTicks;
     }
 }
 </pre> 
       <div class="tutText">
-        Now when we want to pause the timer, first we check if the timer is running and if it's not already paused. If we can pause the timer, we set the paused status to true, and store the timer's time in &quot;pausedTicks&quot;. 
-      </div> 
+        现在当我们想要暂停计时器时，首先我们检查一下计时器是否正在运行并且还没有暂停，如果我们可以暂停计时器，我们将paused状态设为true，并且将计时器的时间保存在"pausedTicks"中。</div> 
       <pre class="tutCode prettyprint linenums:92 lang-cpp">void Timer::unpause()
 {
-    //If the timer is paused
+    //如果计时器暂停中
     if( paused == true )
     {
-        //Unpause the timer
+        //取消暂停
         paused = false;
     
-        //Reset the starting ticks
+        //重置开始时间
         startTicks = SDL_GetTicks() - pausedTicks;
         
-        //Reset the paused ticks
+        //重置暂停时间
         pausedTicks = 0;
     }
 }
 </pre> 
       <div class="tutText">
-        When we want to unpause the timer, we check if the timer is paused first. 
-       <br /> 
-       <br /> If it is, we set the paused status to false, then set the start time to the current clock time minus the time the timer had when it was paused. 
-       <br /> 
-       <br /> Finally, we set &quot;pausedTicks&quot; to 0 for no real reason other than I don't like stray variables. 
-      </div> 
+        当我们想要取消暂停时，我们先检查一下计时器是否暂停中。<br> 
+       <br>如果是的，我们将paused状态设为false，然后将开始时间设为当前时钟时间减去计时器暂停时保存时间之差。<br> 
+       <br>最后，我们将"pausedTicks"设为0，没有什么真正的原因，我只是不喜欢杂散变量。</div> 
       <pre class="tutCode prettyprint linenums:107 lang-cpp">bool Timer::is_started()
 {
     return started;    
@@ -233,89 +213,84 @@ bool Timer::is_paused()
 }
 </pre> 
       <div class="tutText">
-        Here are the functions that check the timer's status. I'm pretty sure you can figure out what they do. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:116 lang-cpp">    //Make the timer
+        这里是检查计时器状态的函数。我很确信你能搞清楚它们是做什么的。</div> 
+      <pre class="tutCode prettyprint linenums:116 lang-cpp">    //新建计时器
     Timer myTimer;
     
-    //Generate the message surfaces
-    startStop = TTF_RenderText_Solid( font, &quot;Press S to start or stop the timer&quot;, textColor );
-    pauseMessage = TTF_RenderText_Solid( font, &quot;Press P to pause or unpause the timer&quot;, textColor );
+    //生成信息表面
+    startStop = TTF_RenderText_Solid( font, "Press S to start or stop the timer", textColor );
+    pauseMessage = TTF_RenderText_Solid( font, "Press P to pause or unpause the timer", textColor );
 </pre> 
       <div class="tutText">
-        Now in our main function after we do our initialization and file loading, we declare a timer object and render our message surfaces. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:122 lang-cpp">    //Start the timer
+        现在在我们的main函数中，在我们完成初始化和文件加载后，我们声明了一个计时器对象并渲染了我们的信息表面。</div> 
+      <pre class="tutCode prettyprint linenums:122 lang-cpp">    //启动计时器
     myTimer.start();
     
-    //While the user hasn't quit
+    //当用户还没退出时
     while( quit == false )
     {
 </pre> 
       <div class="tutText">
-        Before we enter our main loop we start the timer. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:128 lang-cpp">        //While there's an event to handle
+        在我们进入主循环前，我们先启动计时器。</div> 
+      <pre class="tutCode prettyprint linenums:128 lang-cpp">        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //If a key was pressed
+            //如果有一个按键被按下
             if( event.type == SDL_KEYDOWN )
             {
-                //If s was pressed
+                //如果“s”被按下
                 if( event.key.keysym.sym == SDLK_s )
                 {
-                    //If the timer is running
+                    //如果计时器在运行
                     if( myTimer.is_started() == true )
                     {
-                        //Stop the timer
+                        //停止计时器
                         myTimer.stop();    
                     }
                     else
                     {
-                        //Start the timer
+                        //启动计时器
                         myTimer.start();    
                     }
                 }
 </pre> 
       <div class="tutText">
-        This is where we handle our key presses. When &quot;s&quot; is pressed, if the timer is running it is stopped, otherwise the timer is started. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:149 lang-cpp">                //If p was pressed
+        这里我们处理了按键按下的事件。当“s”被按下时，如果计时器还在运行，就将它停止，否则就启动它。</div> 
+      <pre class="tutCode prettyprint linenums:149 lang-cpp">                //如果“p”被按下
                 if( event.key.keysym.sym == SDLK_p )
                 {
-                    //If the timer is paused
+                    //如果计时器暂停中
                     if( myTimer.is_paused() == true )
                     {
-                        //Unpause the timer
+                        //取消暂停
                         myTimer.unpause();
                     }
                     else
                     {
-                        //Pause the timer
+                        //暂停计时器
                         myTimer.pause();
                     }
                 }
             }
 </pre> 
       <div class="tutText">
-        Now when &quot;p&quot; is pressed, if the timer is paused we unpause it, otherwise we pause it. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:165 lang-cpp">        //The timer's time as a string
+        现在，当“p”被按下，如果计时器正在暂停中，我们就取消其暂停，否则我们将其暂停。</div> 
+      <pre class="tutCode prettyprint linenums:165 lang-cpp">        //保存计时器时间的字符串
         std::stringstream time;
             
-        //Convert the timer's time to a string
-        time &lt;&lt; &quot;Timer: &quot; &lt;&lt; myTimer.get_ticks() / 1000.f;
+        //将计时器的时间转换为字符串
+        time &lt;&lt; "Timer: " &lt;&lt; myTimer.get_ticks() / 1000.f;
         
-        //Render the time surface
+        //渲染时间表面
         seconds = TTF_RenderText_Solid( font, time.str().c_str(), textColor );
         
-        //Apply the time surface
+        //应用时间表面
         apply_surface( ( SCREEN_WIDTH - seconds-&gt;w ) / 2, 0, seconds, screen );
  
-        //Free the time surface
+        //释放时间表面
         SDL_FreeSurface( seconds );
                
-        //Update the screen
+        //更新窗口
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
@@ -323,30 +298,23 @@ bool Timer::is_paused()
     }
 </pre> 
       <div class="tutText">
-        After the events are handled and the background and message surfaces are blitted we show the timer's time on the screen. 
-       <br /> 
-       <br /> First we create a string stream object, and then we put the timer's time in the string stream. Since we want the timer's time in seconds, we divide it by 1000 since there's 1000 milliseconds per second. 
-       <br /> 
-       <br /> Next, we create a surface from the string holding the timer's time. Then the new surface showing the timer's time is blitted to the screen, then free since we're done with it. After that the screen is updated and we continue the main loop. 
-      </div> 
-      <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson13">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson12/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson14/index.php">Next Tutorial</a> 
-       <br /> 
+        在事件处理完并且背景表面和信息表面都blit完毕后，我们将计时器的时间显示在屏幕上。<br> 
+       <br> 首先，我们创建一个string stream对象，然后我们将计时器的时间放入这个string stream。由于我们需要显示的计时器的时间是以秒为单位，又因为1秒=1000毫秒，所以我们将时间除以1000。<br> 
+       <br> 下面，我们使用保存着时间的string创建一个表面。然后这个新建的显示了计时器时间的表面被blit到窗口上，接着我们将这个表面释放，因为我们已经用完它了。之后，窗口被更新，我们继续运行主循环。</div> 
+      <div class="tutFooter"><br>本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson12">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson14/">下一课：调节帧率</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -369,6 +337,5 @@ bool Timer::is_paused()
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
