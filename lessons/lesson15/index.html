@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第15课 - 计算帧率 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第15课 - 计算帧率 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,132 +45,114 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第15课 - 计算帧率</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第15课 - 计算帧率</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年7月26日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson15/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson14/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson16/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Calculating Frame Rate</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
-       </div> 
-       <h6>Last Updated 11/15/07</h6> Performance is always a concern when dealing with games. Whether you need to know what frame rate your game can run at, or you're just wondering how much juice you can get out of SDL's rendering, knowing how to calculate frame rate is a useful skill. This tutorial will teach you to make a simple frames per second test. 
+        <img src="preview.jpg"> 
+       </div>在处理游戏时，性能始终是一个需要关心的问题。无论你是否需要知道你的游戏可以以多快的帧率运行，或者你只是想知道你能从SDL的渲染中得到多大益处，了解如何计算帧率是一个有用的技能。本节课将教你制作一个简单的帧率测试。<br> 
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">    //Keep track of the frame count
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">    //跟踪帧数
     int frame = 0;
     
-    //Timer used to calculate the frames per second
+    //计算帧率的计时器
     Timer fps;
     
-    //Timer used to update the caption
+    //更新标题的计时器
     Timer update;
 </pre> 
-      <div class="tutText">
-        Here are the 3 key variables in our frames per second test. &quot;frame&quot; keeps track of how many frames have been rendered. &quot;fps&quot; is the timer that keeps track of how much time that has been spent rendering. &quot;update&quot; is the timer that we use to update the caption, which is where we show the frames per second. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:9 lang-cpp">    //Start the update timer
+      <div class="tutText">这是我们的帧率测试程序中的3个关键变量。其中，"frame"跟踪了已经渲染了多少帧，"fps"是跟踪渲染已用时间的计时器，"update"是我们用来更新标题的计时器，标题内容就是我们要展示的帧率。<br></div> 
+      <pre class="tutCode prettyprint linenums:9 lang-cpp">    //启动update计时器
     update.start();
     
-    //Start the frame timer
+    //启动frame计时器
     fps.start();
     
-    //While the user hasn't quit
+    //当用户还没退出
     while( quit == false )
     {
 </pre> 
       <div class="tutText">
-        After everything has been initialized and loaded, we start the timers then enter the main loop. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:18 lang-cpp">        //While there's events to handle
+        当所有初始化完毕并且加载完成后，我们启动计时器，然后进入主循环。</div> 
+      <pre class="tutCode prettyprint linenums:18 lang-cpp">        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //If the user has Xed out the window
+            //如果用户单击了窗口右上角的关闭按钮
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
 </pre> 
       <div class="tutText">
-        There's no advanced event handling here, we just deal with the user wanting to X out. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:28 lang-cpp">        //Apply the surface
+        这里没有高级的事件处理，我们仅仅处理了用户的关闭操作。</div> 
+      <pre class="tutCode prettyprint linenums:28 lang-cpp">        //应用表面
         apply_surface( 0, 0, image, screen );
         
-        //Update the screen
+        //更新窗口
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Increment the frame counter
+        //增加帧计数器的值
         frame++;
 </pre> 
-      <div class="tutText">
-        After we handle events, we apply the surface, update the screen, then increment the frame counter. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:39 lang-cpp">        //If a second has passed since the caption was last updated
+      <div class="tutText">处理了事件后，我们应用了表面，更新了窗口，然后增加了帧计数器的值。</div> 
+      <pre class="tutCode prettyprint linenums:39 lang-cpp">        //自从标题上次更新已经过了1秒
         if( update.get_ticks() &gt; 1000 )
         {
-            //The frame rate as a string
+            //以string形式表示的帧率
             std::stringstream caption;
             
-            //Calculate the frames per second and create the string
-            caption &lt;&lt; &quot;Average Frames Per Second: &quot; &lt;&lt; frame / ( fps.get_ticks() / 1000.f );
+            //计算帧率并创建string
+            caption &lt;&lt; "Average Frames Per Second: " &lt;&lt; frame / ( fps.get_ticks() / 1000.f );
             
-            //Reset the caption
+            //重置标题
             SDL_WM_SetCaption( caption.str().c_str(), NULL );
             
-            //Restart the update timer
+            //重启update计时器
             update.start();    
         }
     }
 </pre> 
       <div class="tutText">
-        Here is where we show the frames per second. 
-       <br /> 
-       <br /> First we check if it has been at least one second since the caption has last been updated. 
-       <br /> 
-       <br /> If it is time to update the caption, we create a string stream object, and put the FPS in the string stream. 
-       <br /> 
-       <br /> Frames per second is calculated by taking the amount of frames rendered divided by the time it took to render them (in seconds). 
-       <br /> 
-       <br /> After that we update the caption, and restart the update timer. The we continue our FPS test program. 
-      </div> 
+        这里是我们展示帧率的代码。<br> 
+       <br>首先我们检查一下自从上次更新标题到现在是否至少经过了1秒。<br> 
+       <br>如果是时候更新标题，我们创建一个string stream对象，并将帧率信息放入其中。<br> 
+       <br>帧率是通过帧数除以渲染时间（以秒为单位）计算出来的。<br> 
+       <br>我们更新了标题后，继续运行我们的帧率测试程序。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson15">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson14/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson16/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson15">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson16/">下一课：运动</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -192,6 +175,5 @@
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
