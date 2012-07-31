@@ -874,8 +874,15 @@ float:right;
 .btn-large{
 margin: 5px 5px 5px 5px;
 }
+
 .mylogo{
 	 -webkit-border-radius: 10px;
      -moz-border-radius: 10px;
      border-radius: 10px;
+	 height: 300px;
+}
+
+.myname{
+	font-size: 72px;
+	padding-top: 20px;
 }

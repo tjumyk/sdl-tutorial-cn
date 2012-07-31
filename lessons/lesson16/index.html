@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第16课 - 运动 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第16课 - 运动 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,83 +45,76 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第16课 - 运动</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第16课 - 运动</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年8月1日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson16/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson15/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson17/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Motion</h1> 
+        <div class="alert alert-info"><b>特别声明</b>：从本课开始，本教程将告别呆板的翻译，来自哈尔滨工业大学的<b>西瓜</b>同学将为我们带来生动活泼的译作。敬请留意<a href="#foot-sign"><b>页面左下角</b></a>作者署名的变化！<br></div>
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 6/21/11</h6> Now it's the moment you've been waiting for, it's time to move a dot around on the screen. It can be more difficult than it sounds. It requires a good understanding of key events. Here you're going to get walked through the basic concepts of moving an object around on the screen. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The dot that will move around on the screen
+        万众期待的时刻到了，现在我们要让这样的一个小圆点在屏幕上溜达溜达。这可能会比看起来的要困难一些，因为它需要你对关键事件有较深的认识。这节课你将学习让物体在屏幕上运动的相关基本概念。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//待会儿要在屏幕上溜达的小圆点
 class Dot
 {
     private:
-    //The X and Y offsets of the dot
+    //圆点的X，Y坐标
     int x, y;
     
-    //The velocity of the dot
+    //圆点分别在X，Y方向上的速度分量
     int xVel, yVel;
     
     public:
-    //Initializes the variables
+    //初始化变量
     Dot();
     
-    //Takes key presses and adjusts the dot's velocity
+    //接收键盘输入并改变圆点的速度
     void handle_input();
     
-    //Moves the dot
+    //溜圆点函数
     void move();
     
-    //Shows the dot on the screen
+    //显示原点
     void show();
 };
 </pre> 
       <div class="tutText">
-        Here we have the rundown of our dot class. 
-       <br /> 
-       <br /> &quot;x&quot; and &quot;y&quot; are the offsets of the dot. &quot;xVel&quot; and &quot;yVel&quot; are the dot's velocity or rate of movement. 
-       <br /> 
-       <br /> The constructor initializes the dot's variables, handle_input() handles events, move() moves the dot, and show() shows it on the screen. 
+        这是我们对原点类的声明。<br> 
+       <br> “x”和“y”是圆点的坐标，而“xVel”和“yVel”是圆点的运动速率。<br> 
+       <br> 构造函数将负责初始化圆点的相关变量，<code>handle_input()</code>处理相关事件，<code>move()</code>让原点运动，而<code>show()</code>函数会将它显示到屏幕上。
       </div> 
       <pre class="tutCode prettyprint linenums:24 lang-cpp">Dot::Dot()
 {
-    //Initialize the offsets
+    //初始化坐标
     x = 0;
     y = 0;
     
-    //Initialize the velocity
+    //初始化速率
     xVel = 0;
     yVel = 0;
 }
 </pre> 
       <div class="tutText">
-        As you see all the constructor does is put the dot to the upper left corner and makes sure the dot is still when a Dot object is made. 
-      </div> 
+        如你所见，这段构建函数将圆点放在左上角，同时让新生成的圆点固定不动。</div> 
       <pre class="tutCode prettyprint linenums:34 lang-cpp">void Dot::handle_input()
 {
-    //If a key was pressed
+    //当一个键被按下
     if( event.type == SDL_KEYDOWN )
     {
-        //Adjust the velocity
+        //调整速度
         switch( event.key.keysym.sym )
         {
             case SDLK_UP: yVel -= DOT_HEIGHT / 2; break;
@@ -131,30 +125,23 @@ class Dot
     }
 </pre> 
       <div class="tutText">
-        Here's our event handler for the dot. 
-       <br /> 
-       <br /> Now you may be thinking that there's no need for all this. That all you need to do is x++/-- or y++/-- when there's a keydown event. 
-       <br /> 
-       <br /> The problem with that is the dot will only move when there's a keydown event. That means you'll have to press the key, release the key, then press it again so it will continue moving. 
-       <br /> 
-       <br /> So what we do instead is set the dot's velocity. The dot has two velocities, the rate it moves along the X axis and the rate it moves along the Y axis. When the right arrow is pressed, we increase the X velocity by half the dot's width (which is 10) so it increases its X offset by 10 every frame. When the left arrow is pressed, we decrease the X velocity by 10 so it decreases its X offset by 10 every frame. The same principle is applied to the Y offset. 
-       <br /> 
-       <br /> Remember that the Y axis doesn't work like this: 
-       <br /> 
+        这是圆点的事件处理函数。<br> 
+       <br> 现在你可能会想完全没必要这么做，你会觉得在键盘被按下时，使用x++/x--或y++/y—也够用。<br> 
+       <br> 但如果你这么做的话，他们只会在你按键时才会运动。这意味着，如果你想让圆点持续运动，你得把按键按下松开松开按下如此反复不止才行。<br> 
+       <br> 所以我们用设置圆点的速度变量来取代那套麻烦的流程。这个圆点会有两个速度向量，分别标明它沿X轴的运动速度与沿Y轴的速度。当键盘上的“右箭头”键被按下时 我们将它向左的速度增加圆点宽度的一半（也就是10）这样圆点的X坐标每帧会增加10。针对Y坐标方法也是一样。<br> 
+       <br> 谨记我们的坐标轴不是这样的：<br> 
        <div class="tutImg"> 
-        <img src="cartesian.jpg" /> 
+        <img src="cartesian.jpg"> 
        </div> 
-       <br /> It works like this: 
-       <br /> 
+       <br> 而是这样的：<br> 
        <div class="tutImg"> 
-        <img src="sdlcoord.jpg" /> 
+        <img src="sdlcoord.jpg"> 
        </div> 
-       <br /> So increasing the Y offset causes the dot to go down, and decreasing it causes it to go up. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:48 lang-cpp">    //If a key was released
+       <br> 所以当Y坐标增加时，圆点会下降，而在减少时圆点会上升。</div> 
+      <pre class="tutCode prettyprint linenums:48 lang-cpp">    //当一个键盘按键被松开
     else if( event.type == SDL_KEYUP )
     {
-        //Adjust the velocity
+        //调整速度
         switch( event.key.keysym.sym )
         {
             case SDLK_UP: yVel += DOT_HEIGHT / 2; break;
@@ -166,91 +153,83 @@ class Dot
 }
 </pre> 
       <div class="tutText">
-        Now we also have to handle when a key is released. When a key is released, a SDL_KEYUP event will happen. 
-       <br /> 
-       <br /> Now when you release a key, you basically undo the change in velocity when you pressed it. When you pressed right, you increased the x velocity by 10 so when you release right you decrease it by 10. 
-      </div> 
+        我们还要处理一个键被松开时的事件。当一个键被松开时，SDL_KEYUP事件就会发生。<br> 
+       <br> 现在，当你松开一个键时，刚才按键时对速度的修改就会被撤销。誓如说，当你按下右箭头键时，你将圆点在X轴方向上的速度增加了10，那么当你松开这个键时，速度会减少10。</div> 
       <pre class="tutCode prettyprint linenums:61 lang-cpp">void Dot::move()
 {
-    //Move the dot left or right
+    //将圆点左右移动
     x += xVel;
     
-    //If the dot went too far to the left or right
+    //当圆点往左右任意一侧走得太远时
     if( ( x &lt; 0 ) || ( x + DOT_WIDTH &gt; SCREEN_WIDTH ) )
     {
-        //move back
+        //把它拽回来
         x -= xVel;    
     }
     
-    //Move the dot up or down
+    //将圆点上下移动
     y += yVel;
     
-    //If the dot went too far up or down
+    //当圆点往上下任意一侧走得太远时
     if( ( y &lt; 0 ) || ( y + DOT_HEIGHT &gt; SCREEN_HEIGHT ) )
     {
-        //move back
+        //拽回来
         y -= yVel;    
     }
 }
 </pre> 
       <div class="tutText">
-        Now it's time to move the dot. 
-       <br /> 
-       <br /> First we move the dot by adding its velocity to its offset, then we check if the dot went off the screen. If it did we undo the movement by subtracting its velocity from its offset. We do this so the dot doesn't go off the screen. 
-       <br /> 
-       <br /> I'll admit this is a pretty sloppy way to do this because you might get something like this: 
-       <br /> 
+        这便是移动圆点的代码了。<br> 
+       <br> 首先，我们将圆点的坐标加上它的速度，这样圆点就会移动，然后，我们检查圆点有没有跑到屏幕外面去。如果出去了，我们就再减去速度值，来撤销移动，这样它就跑不出去了。<br> 
+       <br> 我承认这种做法并不高明，因为你可能会看到这样的现象：<br> 
        <div class="tutImg"> 
-        <img src="oops.jpg" /> 
-       </div> where the dot seems to get stuck if you set the velocity to something that's not divisible by the screen's dimensions. That's because the dot isn't moving to the wall, it's only moving to its position before it went off the screen. 
-       <br /> 
-       <br /> A better way is to set the dot's offset to the screen's dimension minus the dot's dimension when you go off the screen, but I can't spoon feed you everything. That and I'm too lazy to go back and change the code. 
-      </div> 
+        <img src="oops.jpg"> 
+       </div> 出现这种情况的原因是你的速度的值累加后无法被窗口的宽度（或高度）整除，所以原点不会“靠”到墙上，而只是移动到它要超出边界前的最后位置。<br> 
+       <br> 一个好方法是，当圆点跑到屏幕外时，将圆点归位到屏幕尺寸减去圆点尺寸的位置。但是呢，这段代码你们就自己捉摸吧，我才不会告诉你我已经懒到不愿回头改代码的地步了呢！</div> 
       <pre class="tutCode prettyprint linenums:83 lang-cpp">void Dot::show()
 {
-    //Show the dot
+    //显示圆点
     apply_surface( x, y, dot, screen );
 }
 </pre> 
       <div class="tutText">
-        Here in the show() function we blit the dot surface on the screen. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:88 lang-cpp">    //While the user hasn't quit
+        这是圆点的<code>show()</code>函数，它将把圆点图层显示到屏幕上。</div> 
+      <pre class="tutCode prettyprint linenums:88 lang-cpp">    //当用户还未退出
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计时器
         fps.start();
         
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the dot
+            //处理圆点的事件
             myDot.handle_input();
             
-            //If the user has Xed out the window
+            //当用户关闭窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the dot
+        //移动圆点
         myDot.move();
         
-        //Fill the screen white
+        //填充白色背景
         SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
         
-        //Show the dot on the screen
+        //将圆点显示在屏幕上
         myDot.show();
         
-        //Update the screen
+        //更新窗口
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //限制帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -258,21 +237,11 @@ class Dot
     }
 </pre> 
       <div class="tutText">
-        Now we have our main loop. 
-       <br /> 
-       <br /> First we check for events then handle the key events for the dot then check for a user quit. Then we move the dot, clear the screen by filling it white and then we blit the dot on the screen. After that we update the screen, then the frame rate is capped. 
-       <br /> 
-       <br /> Now that you're doing things that are real time, you're going to need to know how to properly structure your code flow. In 
-       <a class="tutLink" href="../../articles/article04/index.php">article 4</a> I cover how to make a proper game loop. I recommend you take a look at it. 
-      </div> 
+        这里就是主循环了。<br> 
+       <br> 首先我们检查是否有时间发生，先处理关于圆点的，再处理用户退出时间。接下来我们移动圆点，将屏幕用白色背景填充后再将圆点显示到屏幕上。最后我们更新窗口，并限制帧率。<br> 
+       <br> 现在，事件处理什么的都变成即时进行的了，你需要搞明白怎样怎样才是好的代码流程。我在 <a target="_blank" class="tutLink" href="http://lazyfoo.net/articles/article04/index.php">文章 4</a> 中提供了一个标准大游戏流程，我建议你们看一看。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson16">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson15/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson17/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson16">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
@@ -282,7 +251,7 @@ class Dot
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p id="foot-sign"> 翻译：<a href="../../about.html">西瓜</a>&nbsp; 编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -305,6 +274,5 @@ class Dot
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
