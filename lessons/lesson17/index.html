@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第17课 - 碰撞检测 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第17课 - 碰撞检测 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,97 +45,87 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第17课 - 碰撞检测</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第17课 - 碰撞检测</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年8月3日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson17/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson16/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson18/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Collision Detection</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 6/21/11</h6> Here's one of the most important concepts of gaming. 
-       <br /> 
-       <br /> We have a square and wall. We want to make sure that the square doesn't go through the wall. In order for that to happen we have to check if the square and wall have collided. 
-       <br /> 
-       <br /> This tutorial covers a basic way to check collision between two objects. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The wall
+        这节课要说的是游戏编程中的一个重要概念。<br> 
+       <br> 这里，我们有一个方块和一堵墙，我们希望能确保方块不能穿墙而过。为了能做到这一点，我们要检查方块和墙是否发生了碰撞。<br> 
+       <br>&nbsp; 在这里我们会讲一种简单的方法来检测两个物体之间的碰撞。</div> 
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//墙
 SDL_Rect wall;
 </pre> 
       <div class="tutText">
-        Here we have the wall that the square is going to interact with. Nothing much to explain here. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:3 lang-cpp">//The square
+        这是我们要拿来给方块撞的墙，没什么好多解释的了吧？</div> 
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">//方块
 class Square
 {
     private:
-    //The collision box of the square
+    //方块的碰撞检测矩形
     SDL_Rect box;
     
-    //The velocity of the square
+    //方块的速度
     int xVel, yVel;
     
     public:
-    //Initializes the variables
+    //初始化方块
     Square();
     
-    //Takes key presses and adjusts the square's velocity
+    //按键时调整方块速度的函数
     void handle_input();
     
-    //Moves the square
+    //移动方块
     void move();
     
-    //Shows the square on the screen
+    //在屏幕上显示方块
     void show();
 };
 </pre> 
       <div class="tutText">
-        Now here's the square class we're going to use. As you'll probably notice it's almost identical to the Dot class from the motion tutorial. 
-       <br /> 
-       <br /> The only real difference in the variables is the fact that the square's X and Y coordinates are held inside of a SDL_Rect which also happens to hold the dimensions of the square. Otherwise it's pretty much the same. 
-      </div> 
+        这便是我们要拿来撞墙的方块类了。你多半已经注意到，这和我们先前在运动一课中使用的圆点类颇为类似。<br> 
+       <br> 唯一显著的区别是，方块的X，Y坐标都被储存在一个SDL_Rect结构体中，这样方块的大小也能储存其中。除此之外，别的都一样。</div> 
       <pre class="tutCode prettyprint linenums:26 lang-cpp">bool check_collision( SDL_Rect A, SDL_Rect B )
 {
-    //The sides of the rectangles
+    //矩形的各边
     int leftA, leftB;
     int rightA, rightB;
     int topA, topB;
     int bottomA, bottomB;
 
-    //Calculate the sides of rect A
+    //计算矩形A的各边
     leftA = A.x;
     rightA = A.x + A.w;
     topA = A.y;
     bottomA = A.y + A.h;
         
-    //Calculate the sides of rect B
+    //计算矩形B的各边
     leftB = B.x;
     rightB = B.x + B.w;
     topB = B.y;
     bottomB = B.y + B.h;
 </pre> 
       <div class="tutText">
-        Here we have the actual function that checks for a collision. 
-       <br /> 
-       <br /> First thing the function does is take in the SDL_Rects and calculate their sides. 
+        现在我们开始写碰撞检测的函数代码了。<br> 
+       <br> 首先我们载入<code>SDL_Rect</code>并计算它们各边的位置。
       </div> 
-      <pre class="tutCode prettyprint linenums:45 lang-cpp">    //If any of the sides from A are outside of B
+      <pre class="tutCode prettyprint linenums:45 lang-cpp">    //如果矩形A的任意一条边都在矩形B外
     if( bottomA &lt;= topB )
     {
         return false;
@@ -155,129 +146,116 @@ class Square
         return false;
     }
     
-    //If none of the sides from A are outside B
+    //如果没有一条边在矩形B外
     return true;
 }
 </pre> 
       <div class="tutText">
-        Now it's time for collision. 
-       <br /> 
-       <br /> The basic principle of rectangular collision is that we check whether the sides from one rectangle are outside the sides of the other rectangle. 
-       <br /> 
-       <br /> Think about it, it's impossible for two rectangles to collide if their sides have to be outside each other, just look: 
-       <br /> 
+        在此我们检测碰撞。<br> 
+       <br> 矩形碰撞检测的基本原理是，检查一个矩形的四条边是否都在另一个矩形的外侧。<br> 
+       <br> 好好想想便会发现，如果矩形的四条边都在另一个矩形的外侧的话，它们之间就不可能发生碰撞，就像这样。<br> 
        <div class="tutImg"> 
-        <img src="nocollision.jpg" /> 
-       </div> Every single time all the sides from B are outside of A. 
-       <br /> 
-       <br /> Now notice when there is a collision: 
-       <br /> 
+        <img src="nocollision.jpg"> 
+       </div> 不管是哪种情况，B的每条边都在A外面。<br> 
+       <br> 接下来，我们要考虑另一种情况：<br> 
        <div class="tutImg"> 
-        <img src="collision.jpg" /> 
-       </div> At least one side from B is inside A. 
-       <br /> 
-       <br /> So we go through and make sure none of the sides from B are inside A. If there's no collision we return false, if there is we return true. 
-       <br /> 
-       <br /> Notice that I use greater than or equal to and less than or equal to. This means in order for a collision to happen the rectangles have to overlap. If you use greater than and less than, the rectangles in this picture: 
-       <br /> 
+        <img src="collision.jpg"> 
+       </div> 矩形B至少有一条边再矩形A中的情况。<br> 
+       <br> 这样我们能确定矩形B中没有一条边再矩形A内，如果没有碰撞发生我们返回false，如果有则返回true。<br> 
+       <br> 注意我使用的是大于等于和小于等于。也就是说只有当两个矩形重合的时候才会被判定碰撞。如果你使用的是大于和小于，那么图中的两个矩形：<br> 
        <div class="tutImg"> 
-        <img src="nocollision.jpg" /> 
-       </div> would count as collisions because they're next to each other. 
-       <br /> 
-       <br /> Use which ever method best suits your needs. 
-      </div> 
+        <img src="nocollision.jpg"> 
+       </div> 即便只是靠在一起也会被判定为碰撞。<br> 
+       <br> 究竟该使用哪种模式要视实际情况而定。</div> 
       <pre class="tutCode prettyprint linenums:69 lang-cpp">Square::Square()
 {
-    //Initialize the offsets
+    //初始化坐标
     box.x = 0;
     box.y = 0;
     
-    //Set the square's dimensions
+    //设置矩形的大小
     box.w = SQUARE_WIDTH;
     box.h = SQUARE_HEIGHT;
     
-    //Initialize the velocity
+    //初始化速度
     xVel = 0;
     yVel = 0;
 }
 </pre> 
       <div class="tutText">
-        In the square's constructor we initialize the square's offsets, dimensions, and velocity like before. 
-      </div> 
+        在方块的构造函数中我们对方块的坐标，大小，和速度像以前一样进行了初始化。</div> 
       <pre class="tutCode prettyprint linenums:83 lang-cpp">void Square::move()
 {
-    //Move the square left or right
+    //将方块左右移动
     box.x += xVel;
        
-    //If the square went too far to the left or right or has collided with the wall
+    //当方块移出屏幕或是与墙发生了碰撞
     if( ( box.x &lt; 0 ) || ( box.x + SQUARE_WIDTH &gt; SCREEN_WIDTH ) || ( check_collision( box, wall ) ) )
     {
-        //Move back
+        //退回去
         box.x -= xVel;
     }
     
-    //Move the square up or down
+    //将方块上下移动
     box.y += yVel;
     
-    //If the square went too far up or down or has collided with the wall
+    //当方块移出屏幕或是与墙发生了碰撞
     if( ( box.y &lt; 0 ) || ( box.y + SQUARE_HEIGHT &gt; SCREEN_HEIGHT ) || ( check_collision( box, wall ) ) )
     {
-        //Move back
+        //退回去
         box.y -= yVel;
     }   
 }
 </pre> 
       <div class="tutText">
-        Now in the move() function we move the square, then check whether the square went outside the screen and whether the square overlaps the wall. If the square does go out of bounds we move it back. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:105 lang-cpp">    //Set the wall
+        这便是我们用来移动方块的<code>move()</code>函数。每次移动都要检测方块是否移出窗口或是撞上了墙，如果方块走到了不该走的地方，我们便要撤销刚才的移动。</div> 
+      <pre class="tutCode prettyprint linenums:105 lang-cpp">    //设置墙壁
     wall.x = 300;
     wall.y = 40;
     wall.w = 40;
     wall.h = 400;
 </pre> 
-      <div class="tutText">
-        In our main function after we initialize and load everything, we set the attributes of the wall. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:110 lang-cpp">    //While the user hasn't quit
+      <div class="tutText">在我们的主函数中，在初始化并加载了所有的东西后，我们便要设置墙体的参数。<br>
+        </div> 
+      <pre class="tutCode prettyprint linenums:110 lang-cpp">    //当用户还未退出
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计时器
         fps.start();
         
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the square
+            //处理方块的事件
             mySquare.handle_input();
             
-            //If the user has Xed out the window
+            //当用户关闭窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the square
+        //移动方块
         mySquare.move();
         
-        //Fill the screen white
+        //填充白色背景
         SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
         
-        //Show the wall
+        //显示墙体
         SDL_FillRect( screen, &amp;wall, SDL_MapRGB( screen-&gt;format, 0x77, 0x77, 0x77 ) );
             
-        //Show the square on the screen
+        //将方块显示在屏幕上
         mySquare.show();
         
-        //Update the screen
+        //更新窗口
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //限制帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -285,26 +263,22 @@ class Square
     }
 </pre> 
       <div class="tutText">
-        Then we have our main loop. We simply handle events, move the square, fill the background, fill the region of the wall, and show the square, then update the screen and cap the frame rate. 
-      </div> 
+        这就是我们的主循环了。我们依次移动方块，填充背景，显示墙体，显示方块，最后更新屏幕并限制帧率。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson17">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson16/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson18/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson17">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson18/">下一课：逐像素的碰撞检测</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译：<a href="../../about.html">西瓜</a>&nbsp; 编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -327,6 +301,5 @@ class Square
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
