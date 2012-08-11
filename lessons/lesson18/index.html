@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8" /> 
-  <title>第18课 - 逐像素的碰撞检测 &middot; SDL中文教程</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
-  <meta name="description" content="" /> 
-  <meta name="author" content="" /> 
+<head>
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type"> 
+  <meta charset="utf-8"> 
+  <title>第18课 - 逐像素的碰撞检测 · SDL中文教程</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="description" content=""> 
+  <meta name="author" content=""> 
   <!-- Le styles --> 
-  <link href="../../assets/css/bootstrap.css" rel="stylesheet" /> 
-  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet" /> 
-  <link href="../../assets/css/docs.css" rel="stylesheet" /> 
-  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet" /> 
+  <link href="../../assets/css/bootstrap.css" rel="stylesheet"> 
+  <link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="../../assets/css/docs.css" rel="stylesheet"> 
+  <link href="../../assets/js/google-code-prettify/prettify.css" rel="stylesheet"> 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --> 
   <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]--> 
   <!-- Le fav and touch icons --> 
-  <link rel="shortcut icon" href="../../assets/ico/favicon.ico" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png" /> 
-  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png" /> 
+  <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> 
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/ico/apple-touch-icon-144-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/ico/apple-touch-icon-114-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/ico/apple-touch-icon-72-precomposed.png"> 
+  <link rel="apple-touch-icon-precomposed" href="../../assets/ico/apple-touch-icon-57-precomposed.png"> 
  </head> 
  <body data-spy="scroll" data-target=".subnav" data-offset="50">
    ﻿ 
@@ -44,167 +45,149 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第18课 - 逐像素的碰撞检测</h1> 
-     <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <h1 id="content_title" align="center">第18课 - 逐像素的碰撞检测</h1> 
+     <br> 
+     <p align="center"> <span class="label label-info">更新时间：2012年8月12日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson18/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson17/index.html" id="prev_link">上一课</a></li> 
       <li><a class="btn" href="../lesson19/index.html" id="next_link">下一课</a></li> 
      </ul> 
-     <hr /> 
+     <hr> 
     </div> 
    </div> 
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
+      
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Per Pixel Collision</h1> 
+        
        <div class="tutImg"> 
-        <img src="preview.jpg" /> 
+        <img src="preview.jpg"> 
        </div> 
-       <h6>Last Updated 12/31/10</h6> You've already learned how to check collision with rectangles. Of course not everything in video games is a rectangle and there's often a loss of accuracy when dealing with non rectangular shapes. Here you'll learn to get collision accuracy down to the pixel. 
+        你已经学习了怎样进行矩形之间的碰撞检测。当然游戏中的物件不可能都是矩形，而且用矩形碰撞检测的方法在处理非矩形物体的碰撞时精度会很成问题。这节课我们将学习逐像素的碰撞检测。</div> 
+      <div class="tutText">其实说到底屏幕上所有的东西都是由一个个小矩形构成的，即便是这样一个圆：<br> 
+       <div class="tutImg"> 
+        <img src="normal.jpg"> 
+       </div> 
+       <br> 看不出来吗？让我们放大再看一下：<br> 
+       <div class="tutImg"> 
+        <img src="big.jpg"> 
+       </div> 
+       <br> 还看不出来？那现在如何？<br> 
+       <div class="tutImg"> 
+        <img src="highlight.jpg"> 
+       </div> 
+       <br> 由于计算机中所有的图形都是由像素构成的，而像素说白了都是一个个正方形，也就是矩形的一种。这样一来，无论你拿什么形状来碰撞检测，其实就是在检验两组矩形是否碰撞。
       </div> 
-      <div class="tutText">
-        Everything is made out of rectangles, even this circle: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="normal.jpg" /> 
-       </div> 
-       <br /> Don't see it? Let's magnify it: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="big.jpg" /> 
-       </div> 
-       <br /> Still don't see it? How about now: 
-       <br /> 
-       <div class="tutImg"> 
-        <img src="highlight.jpg" /> 
-       </div> 
-       <br /> Every image on a computer is made out of pixels, and pixels are squares which happen to be rectangles. So when you're checking collision between any shapes, you check if the two groups of rectangles have collided. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
-#include &quot;SDL/SDL_image.h&quot;
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 #include &lt;string&gt;
 #include &lt;vector&gt;
 </pre> 
       <div class="tutText">
-        In this program we include the vector library along with our other standard ones. Vectors are kind of like arrays that are easier to manage. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:5 lang-cpp">//The dot
+        在这个程序中我们在加载以往我们已司空见惯的库的同时，还加载了vector向量库。向量其实就是数组，不过更好控制。</div> 
+      <pre class="tutCode prettyprint linenums:5 lang-cpp">//定义圆点
 class Dot
 {
     private:
-    //The offsets of the dot
+    //圆点的坐标
     int x, y;
     
-    //The collision boxes of the dot
+    //用于碰撞检测的矩形数组
     std::vector&lt;SDL_Rect&gt; box;
     
-    //The velocity of the dot
+    //圆点的速度
     int xVel, yVel;
     
-    //Moves the collision boxes relative to the dot's offset
+    //根据圆点的坐标移动构成圆点的矩形
     void shift_boxes();
     
     public:
-    //Initializes the variables
+    //初始化坐标
     Dot( int X, int Y );
     
-    //Takes key presses and adjusts the dot's velocity
+    //接受键盘事件，调整圆点速度
     void handle_input();
     
-    //Moves the dot
-    void move( std::vector&lt;SDL_Rect&gt; ▭s );
+    //移动圆点
+    void move( std::vector&lt;SDL_Rect&gt; &amp;recs );
     
-    //Shows the dot on the screen
+    //屏幕上显示圆点
     void show();
     
-    //Gets the collision boxes
-    std::vector&lt;SDL_Rect&gt; ≥t_rects();
+    //获取碰撞盒
+    std::vector&lt;SDL_Rect&gt; &amp; get_rects();
 };
 </pre> 
       <div class="tutText">
-        Here we have a revised version of the dot class. 
-       <br /> 
-       <br /> We have the offsets and velocities from before, and now we have a vector of SDL_Rects to hold the dot's collision boxes. 
-       <br /> 
-       <br /> In terms of functions, we now have shift_boxes() which moves the boxes in relation to the offset. I'll explain what that means later. 
-       <br /> 
-       <br /> There's also the constructor which sets the dot at the offsets in the arguments and we have our event handler, move() and show() functions from before. We also have get_rects() which gets the dot's collision boxes. 
-      </div> 
+        首先我们要将圆点类修改一下。<br> 
+       <br> 我们还是和以前一样设置坐标和速度变量，只是我们现在用向量来储存一连串的SDL_Rects，它们将起到碰撞盒的作用。<br> 
+       <br> 现在，我们要使用<code>shift_boxes()</code>来根据圆点坐标移动那些碰撞盒。待会儿我便会解释这是为何。<br> 
+       <br> 除此之外，我们还是和以前一样声明了用于初始化圆点坐标的构造函数（圆点的坐标将由参数表明），还有事件处理函数，和以前一样的<code>move()</code>、<code>show()</code>函数。我们添加了<code>get_rects()</code>来获取碰撞盒的信息。</div> 
       <pre class="tutCode prettyprint linenums:37 lang-cpp">bool check_collision( std::vector&lt;SDL_Rect&gt; &amp;A, std::vector&lt;SDL_Rect&gt; &amp;B )
 {
-    //The sides of the rectangles
+    //矩形边界
     int leftA, leftB;
     int rightA, rightB;
     int topA, topB;
     int bottomA, bottomB;
 
-    //Go through the A boxes
+    //枚举向量A中的矩形
     for( int Abox = 0; Abox &lt; A.size(); Abox++ )
     {
-        //Calculate the sides of rect A
+        //计算矩形A的各边
         leftA = A[ Abox ].x;
         rightA = A[ Abox ].x + A[ Abox ].w;
         topA = A[ Abox ].y;
         bottomA = A[ Abox ].y + A[ Abox ].h;
         
-        //Go through the B boxes    
+        //计算矩形B的各边  
         for( int Bbox = 0; Bbox &lt; B.size(); Bbox++ )
         {
-            //Calculate the sides of rect B
+            //矩形B的各边
             leftB = B[ Bbox ].x;
             rightB = B[ Bbox ].x + B[ Bbox ].w;
             topB = B[ Bbox ].y;
             bottomB = B[ Bbox ].y + B[ Bbox ].h;
             
-            //If no sides from A are outside of B
+            //如果矩形A的任意一条边在矩形B内
             if( ( ( bottomA &lt;= topB ) || ( topA &gt;= bottomB ) || ( rightA &lt;= leftB ) || ( leftA &gt;= rightB ) ) == false )
             {
-                //A collision is detected
+                //检测到碰撞
                 return true;
             }
         }
     }
     
-    //If neither set of collision boxes touched
+    //如果没有任何一组碰撞盒检测到碰撞
     return false;
 }
 </pre> 
       <div class="tutText">
-        Here we have our collision detection function. 
-       <br /> 
-       <br /> In takes in two vectors of SDL_rects, then checks collision between the two sets of rectangles. 
-       <br /> 
-       <br /> This function gets a rectangle from vector A, then checks if it collides with any rectangles from vector B, then gets another rectangle from vector A, then checks if it collides with any rectangles from vector B and so on until either a collision is found or all the rectangles have been checked. 
-       <br /> 
-       <br /> So when the function is checking for collision it would operate like this: 
-       <br /> 
+        这是我们新的碰撞检测函数。<br> 
+       <br> 利用两个储存<code>SDL_rect</code>的向量，我们检验了两组矩形之间的碰撞。<br> 
+       <br> 这个函数从向量A提取一个矩形，并同向量B中的矩形依次进行碰撞检测，然后不断地从向量A中提取一个矩形，重复之前的检测，直到检测到碰撞或所有矩形都经过检测为<br> 
+       <br>这个函数检测碰撞的方法就像这样：<br> 
        <div class="tutImg"> 
-        <img src="scan.gif" /> 
+        <img src="scan.gif"> 
        </div> 
-       <br /> Like from last time, the function returns true if there's a collision and false if there is no collision. 
-      </div> 
+       <br> 像上次一样，这个函数会在发现碰撞时返回true，反之则返回false。</div> 
       <pre class="tutCode prettyprint linenums:75 lang-cpp">Dot::Dot( int X, int Y )
 {
-    //Initialize the offsets
+    //初始化坐标
     x = X;
     y = Y;
     
-    //Initialize the velocity
+    //初始化速度
     xVel = 0;
     yVel = 0;
     
-    //Create the necessary SDL_Rects
+    //创建必要的SDL_Rects
     box.resize( 11 );
     
-    //Initialize the collision boxes' width and height
+    //初始化碰撞盒的大小
     box[ 0 ].w = 6;
     box[ 0 ].h = 1;
     
@@ -238,63 +221,54 @@ class Dot
     box[ 10 ].w = 6;
     box[ 10 ].h = 1;
     
-    //Move the collision boxes to their proper spot
+    //将碰撞盒移动到他们应在的位置
     shift_boxes();
 }
 </pre> 
       <div class="tutText">
-        Now here's the dot's constructor. 
-       <br /> 
-       <br /> It sets the dot's offsets to the arguments given, and initializes the velocity of the dot. 
-       <br /> 
-       <br /> Then we create 11 collision boxes in the vector and set them like this: 
-       <br /> 
+        这是圆点的构造函数。<br> 
+       <br> 利用输入的参数来初始化圆点的坐标，并将圆点的速度归零。<br> 
+       <br> 然后，我们创建11个碰撞盒，就像这样：<br> 
        <div class="tutImg"> 
-        <img src="highlight.jpg" /> 
+        <img src="highlight.jpg"> 
        </div> 
-       <br /> At the end we set the boxes relative to the dot's offset. 
-      </div> 
+       <br> 最后，我们再根据圆点的坐标来调整碰撞盒的位置。</div> 
       <pre class="tutCode prettyprint linenums:125 lang-cpp">void Dot::shift_boxes()
 {
-    //The row offset
+    //行坐标
     int r = 0;
     
-    //Go through the dot's collision boxes
+    //枚举圆点的碰撞盒
     for( int set = 0; set &lt; box.size(); set++ )
     {
-        //Center the collision box
+        //将碰撞盒居中
         box[ set ].x = x + ( DOT_WIDTH - box[ set ].w ) / 2;
         
-        //Set the collision box at its row offset
+        //调整碰撞盒的纵坐标使之与行坐标相符
         box[ set ].y = y + r;
         
-        //Move the row offset down the height of the collision box
+        //在行坐标中加上碰撞盒的高度
         r += box[ set ].h;    
     }
 }
 </pre> 
       <div class="tutText">
-        You may be asking yourself what I mean by &quot;Setting the boxes relative to the dot's offset&quot;. 
-       <br /> 
-       <br /> Say if you move the dot 100 pixels over, but when it goes over the other dot it doesn't detect the collision. 
-       <br /> 
-       <br /> The reason for this is that when you move the dot, you have to move collision boxes along with it and that's what this function does. 
-       <br /> 
-       <br /> Don't worry how I did it, it was just a fancy way of doing: 
-       <br /> box[ 0 ].x = x + 7; 
-       <br /> box[ 0 ].y = y; 
-       <br /> 
-       <br /> box[ 1 ].x = x + 5; 
-       <br /> box[ 1 ].y = y + 1; 
-       <br /> 
-       <br /> and so on. 
-      </div> 
+        你可能会问，什么叫“根据圆点的坐标来调整碰撞盒的位置”？<br> 
+       <br> 假设一种情形，当你将圆点移动了100像素，但当它撞上另一个圆点时可能没有侦测到任何碰撞。<br> 
+       <br>一种可能的原因是，当你移动圆点时，你没有把碰撞盒跟着它一起移动。而这正是我们这个函数所要做的。<br> 
+       <br> 不用纠结于这段复杂的代码了，其实这就是以下代码的改良形式：<br> box[ 0 ].x = x + 7; 
+       <br> box[ 0 ].y = y; 
+       <br> 
+       <br> box[ 1 ].x = x + 5; 
+       <br> box[ 1 ].y = y + 1; 
+       <br> 
+       <br> 如此类推。</div> 
       <pre class="tutCode prettyprint linenums:143 lang-cpp">void Dot::handle_input()
 {
-    //If a key was pressed
+    //当一个键被按下
     if( event.type == SDL_KEYDOWN )
     {
-        //Adjust the velocity
+        //调整速度
         switch( event.key.keysym.sym )
         {
             case SDLK_UP: yVel -= 1; break;
@@ -303,10 +277,10 @@ class Dot
             case SDLK_RIGHT: xVel += 1; break;    
         }
     }
-    //If a key was released
+    //当一个键被松开
     else if( event.type == SDL_KEYUP )
     {
-        //Adjust the velocity
+        //调整速度
         switch( event.key.keysym.sym )
         {
             case SDLK_UP: yVel += 1; break;
@@ -318,107 +292,101 @@ class Dot
 }
 </pre> 
       <div class="tutText">
-        Here's the dot's event handler. As you can see the dot's velocity is only one pixel per frame so if you notice it's going slow just know its intentional. If you can only move one pixel at a time you can better see the per pixel collision. 
-      </div> 
+        这是原点的事件处理函数。如你所见，圆点的速度只有每帧一像素。所以当你发现这圆点跑的慢的时候不要担心，要相信程序。设置这种龟速的目的是为了让你更好的看清逐像素的碰撞检测。</div> 
       <pre class="tutCode prettyprint linenums:170 lang-cpp">void Dot::move( std::vector&lt;SDL_Rect&gt; ▭s )
 {
-    //Move the dot left or right
+    //将圆点左右移动
     x += xVel;
     
-    //Move the collision boxes
+    //拖动碰撞盒
     shift_boxes();
     
-    //If the dot went too far to the left or right or has collided with the other dot
+    //当方块移出屏幕或是发生了碰撞
     if( ( x &lt; 0 ) || ( x + DOT_WIDTH &gt; SCREEN_WIDTH ) || ( check_collision( box, rects ) ) )
     {
-        //Move back
+        //移回去
         x -= xVel;
         shift_boxes();    
     }
     
-    //Move the dot up or down
+    //上下移动
     y += yVel;
     
-    //Move the collision boxes
+    //拖动碰撞盒
     shift_boxes();
     
-    //If the dot went too far up or down or has collided with the other dot
+    //当方块移出屏幕或是发生了碰撞
     if( ( y &lt; 0 ) || ( y + DOT_HEIGHT &gt; SCREEN_HEIGHT ) || ( check_collision( box, rects ) ) )
     {
-        //Move back
+        //移回去
         y -= yVel;
         shift_boxes();
     }   
 }
 </pre> 
       <div class="tutText">
-        Here's the dot's move function that we separated from the show function. 
-       <br /> 
-       <br /> Its pretty much the same story as before. We move the dot, and if the dot went off the screen or over the vector of rectangles, move back. There is one key difference however. 
-       <br /> 
-       <br /> Whenever we move the dot, we call shift_boxes() to move the collision boxes along with the dot. The collision boxes will do no good if they do not go along with the dot. 
-      </div> 
+        这便是圆点的移动函数了，我们将它与show函数区分开来。<br> 
+       <br> 这段代码和先前的没啥大差别，我们移动圆点，并在移出屏幕或碰到其他碰撞盒时将圆点移回去，只有一个重要的地方和以前不同。<br> 
+       <br> 无论何时，只要当我们移动圆点，我们就会调用shift_box()函数来移动碰撞盒，使之紧靠圆点，要不然碰撞盒将发挥不了任何作用。</div> 
       <pre class="tutCode prettyprint linenums:200 lang-cpp">void Dot::show()
 {
-    //Show the dot
+    //显示圆点
     apply_surface( x, y, dot, screen );
 }
 </pre> 
       <div class="tutText">
-        Here's our show function that applies the dot to the screen. 
+        我们利用这个函数使圆点显示到屏幕上。 
       </div> 
-      <pre class="tutCode prettyprint linenums:205 lang-cpp">std::vector&lt;SDL_Rect&gt; &uml;::get_rects()
+      <pre class="tutCode prettyprint linenums:205 lang-cpp">std::vector&lt;SDL_Rect&gt; ¨::get_rects()
 {
-    //Retrieve the collision boxes
+    //返回碰撞盒
     return box;    
 }
 </pre> 
       <div class="tutText">
-        Here's the function that gets the dot's collision boxes. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:210 lang-cpp">    //Make the dots
+        这是用来获取碰撞盒的函数</div> 
+      <pre class="tutCode prettyprint linenums:210 lang-cpp">    //创建圆点
     Dot myDot( 0, 0 ), otherDot( 20, 20 );
 </pre> 
       <div class="tutText">
-        In our main function we generate two Dot objects, &quot;myDot&quot; which is the dot we're moving and &quot;otherDot&quot; which is the dot that's sitting still. 
-      </div> 
-      <pre class="tutCode prettyprint linenums:212 lang-cpp">    //While the user hasn't quit
+        在我们的主函数中我们创建两个圆点对象。“myDot”是我们将要移动的圆点，“otherDot”是站定了不动，等着被我们撞的圆点。</div> 
+      <pre class="tutCode prettyprint linenums:212 lang-cpp">    //当用户还未退出
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计时器
         fps.start();
         
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the dot
+            //处理圆点的事件
             myDot.handle_input();
             
-            //If the user has Xed out the window
+            //当用户关闭窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the dot
+        //移动圆点
         myDot.move( otherDot.get_rects() );
 		
-        //Fill the screen white
+        //填充白色背景
         SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
             
-        //Show the dots on the screen
+        //将圆点显示到屏幕上
         otherDot.show();
         myDot.show();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //限制帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -426,50 +394,38 @@ class Dot
     }
 </pre> 
       <div class="tutText">
-        Here's the main loop. We handle events, move the dot, fill the screen white, show the dots, update the screen, and cap the frame rate. Now you can check collision with whatever you want. 
-      </div> 
+        主循环就是这个样子。我们处理事件，移动圆点，填充白色背景，显示圆点，更新屏幕，最后限制帧率。现在你可以对任意形状检测碰撞了。</div> 
       <div class="tutText">
-        There is one note I want to make about per pixel collision. Even though you can check for collision down the the pixel, 99% of the time you don't have to. 
-       <br /> 
-       <br /> The perfect example of this is super street fighter 2 turbo. 
-       <br /> If you have the GBA version, when you activate the akuma glitch you can see the corners of the collision boxes: 
-       <br /> 
+        有一个要提醒大家的是，尽管你可以逐像素地检测，但99%的情况下你都用不着如此。 
+       <br> 
+       <br> 这里有个绝好的例子，超级街头霸王2。<br> 如果你用的是GBA版本，当你放出akuma glitch时你将能看到碰撞盒的四个角：<br> 
        <div class="tutImg"> 
-        <img src="sf1.jpg" /> 
-        <img src="sf2.jpg" /> 
+        <img src="sf1.jpg"> 
+        <img src="sf2.jpg"> 
        </div> 
        <div class="tutImg"> 
-        <img src="sf3.jpg" /> 
-        <img src="sf4.jpg" /> 
+        <img src="sf3.jpg"> 
+        <img src="sf4.jpg"> 
        </div> 
-       <br /> As you can see the collision detection is not down to the pixel. 
-       <br /> 
-       <br /> When it comes to collision detection, down to the pixel accuracy isn't always needed. In many cases it's a waste of CPU power to check collision down to the pixel. There is such thing as accurate enough. It's up to you to decide how much accuracy you need. 
-       <br /> 
-       <br /> The multiple collision box method should cover any type of overlap you can think of. For those of you that need even more advanced collision detection such as objects going at high velocities that don't overlap neatly, look up the &quot;sweep tests&quot; if you're comfortable with vector math. 
-      </div> 
+       <br> 你同样会发现，这里的碰撞检测也没有精确到像素级。<br> 
+       <br> 当你进行碰撞检测的时候，往往用不到像素级的精度。在许多情况下，这样做除了占用CPU外就一无是处。对于你来说，精度只要够用就行，至于具体使用哪种方法，那完全得由你来决定。<br> 
+       <br> 多碰撞盒的检测方式应该能解决大多数碰撞情况。如果速度很快但不会靠在一块儿的物体，那么在你熟悉线性代数的情况下可以考虑一下“扫描测试”。<br><br></div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson18">here</a>. 
-       <br /> 
-       <br /> Visual Studio users might encounter a problem compiling the source. There's 2 ways to fix it: 
-       <br /> 1) Change &quot;Runtime Library&quot; from &quot;Multithreaded DLL&quot; to &quot;Multithreaded Debug DLL&quot;. 
-       <br /> 2) Compile in release mode. When you switch from Debug to Release make sure to put &quot;SDL.lib SDLmain.lib&quot; and all the other libraries you used in the additional dependencies field again. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson17/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson19/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson18">此处下载</a>。<br> 
+       <br> Visual Studio的用户可能会在编译本课代码时遇到问题。这里提供两个解决方法：<br> 1) 把“Runtime Library”由“Multithreaded DLL”改成“Multithreaded Debug DLL”。<br> 2) 在Release模式下编译，同时在由Debug模式转变成Release模式的同时，确保将“SDL.lib”、“SDLmain.lib”等库文件放到additional dependencies field中。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+    <p align="center">
+       <a class="btn btn-primary" href="../lesson19/">下一课：圆形碰撞检测</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译：<a href="../../about.html">西瓜</a>&nbsp; 编辑：<a href="../../about.html">tjumyk</a>.<br> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
@@ -492,6 +448,5 @@ class Dot
   <script src="../../assets/js/bootstrap-collapse.js"></script> 
   <script src="../../assets/js/bootstrap-carousel.js"></script> 
   <script src="../../assets/js/bootstrap-typeahead.js"></script> 
-  <script src="../../assets/js/application.js"></script>  
- </body>
-</html>
+  <script src="../../assets/js/application.js"></script>
+</body></html>
