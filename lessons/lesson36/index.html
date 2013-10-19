@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第36课 - 在SDL中使用OpenGL</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2013年10月17日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson36/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson35/index.html" id="prev_link">上一课</a></li> 
@@ -63,225 +63,225 @@
      </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Using SDL with OpenGL 2.1</h1> 
+       <h1 class="tutHead">在SDL中使用OpenGL 2.1</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 12/31/10</h6> There's a point where SDL's rendering just isn't enough. When you need more power, speed, and flexibility, it's time to move onto OpenGL. This lesson will get you started with some OpenGL/SDL basics. 
+       <h6>Last Updated 12/31/10</h6> 总有些时候，SDL的渲染会满足不了我们的需求。当你需要更强大、更快速、更灵活的图像渲染时，就是OpenGL登场的时间了。这一课会介绍在SDL中使用OpenGL的基础方法。
       </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
 #include &quot;SDL/SDL_opengl.h&quot;
 </pre> 
       <div class="tutText">
-        First we need to remember to include the SDL OpenGL header so we can use OpenGL's rendering. 
+        首先，我们得记得包含SDL的OpenGL的头文件（指的是"SDL/SDL_opengl.h"文件——译者注），以便我们可以在SDL中使用OpenGL渲染。
       </div> 
-      <pre class="tutCode prettyprint linenums:3 lang-cpp">//The square
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">//方形（square）的类
 class Square
 {
     private:
-    //The offsets
+    //偏移量（offset）
     int x, y;
     
-    //The velocity of the square
+    //方形的速度（velocity）
     int xVel, yVel;
     
     public:
-    //Initializes
+    //初始化
     Square();
     
-    //Handles key presses
+    //处理键盘按键消息
     void handle_input();
     
-    //Moves the square
+    //移动方块
     void move();
     
-    //Shows the square on the screen
+    //在屏幕上显示方块
     void show();
 };
 </pre> 
       <div class="tutText">
-        Here's the square we're going to move around on the screen. Nothing has changed from the overall structure of the class. 
+        这是一个方块的类，我们将在屏幕上通过按键移动这个方块。Nothing has changed from the overall structure of the class. 
        <br /> 
-       <br /> When using SDL with OpenGL the event handling, audio, time, and threading all stay the same. Only the rendering changes. 
+       <br /> 在SDL中使用OpenGL进行渲染的时候，消息处理、音频、时间以及线程处理都与平常是一样的，被更换掉的只有渲染的部分而已。
       </div> 
       <pre class="tutCode prettyprint linenums:26 lang-cpp">bool init()
 {
-    //Initialize SDL
+    //初始化SDL
     if( SDL_Init( SDL_INIT_EVERYTHING ) &lt; 0 )
     {
         return false;    
     }
     
-    //Create Window
+    //创建窗口
     if( SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_OPENGL ) == NULL )
     {
         return false;
     }
     
-    //Initialize OpenGL
+    //初始化OpenGL
     if( init_GL() == false )
     {
         return false;    
     }
     
-    //Set caption
+    //设置窗口标题
     SDL_WM_SetCaption( &quot;OpenGL Test&quot;, NULL );
     
     return true;    
 }
 </pre> 
       <div class="tutText">
-        Here is our init() function. 
+        这就是我们的init()函数。 
        <br /> 
-       <br /> First we initialize SDL as we always do. Then we create our OpenGL window. When we want to use OpenGL we pass the SDL_OPENGL flag to SDL_SetVideoMode() instead of SDL_SWSURFACE. Now the window will use OpenGL's hardware accelerated rendering instead of SDL's software rendering. This also means we can't use SDL to blit to the screen. 
+       <br /> 首先，就像往常一样我们初始化了SDL，然后我们创建了一个OpenGL的窗口。如果我们需要在SDL中使用OpenGL的话，我们就需要在调用SDL_SetVideoMode()这个函数时，用SDL_OPENGL作为参数替换掉SDL_SWSURFACE。现在，窗口就会使用OpenGL的硬件来加速渲染，而不是使用SDL的软件渲染了。不过这也意味着，我们不能再使用SDL的blit功能对screen的内容进行更改了。
        <br /> 
-       <br /> Then we call our init_GL() function (which I will show you in a second) to initialize OpenGL and lastly we set the window caption. 
+       <br /> 然后，我们调用init_GL()函数（这个函数的实现接下来马上就会详细介绍）来初始化OpenGL。最后，我们设置了窗口的标题。
       </div> 
       <pre class="tutCode prettyprint linenums:51 lang-cpp">bool init_GL()
 {
-    //Set clear color
+    //设置用于清屏的颜色
     glClearColor( 0, 0, 0, 0 );
 </pre> 
       <div class="tutText">
-        Here is the top of our OpenGL initialiation function. The first thing we do is set the clear color. 
+        这是我们用于初始化OpenGL的函数的头几行，我们最最首先要做的事情就是设置了用于清屏的颜色。
        <br /> 
-       <br /> When we clear the screen, we want it to be black. So we set the clear color to be black (R0, G0, B0, A0) with glClearColor(). 
+       <br /> 我们希望使用黑色进行清屏，所以我们设置了清屏色为黑色（红0，绿0，蓝0，Alpha值0），并且将数据作为参数调用glClearColor()函数。 
       </div> 
-      <pre class="tutCode prettyprint linenums:55 lang-cpp">    //Set projection
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">    //设置投影（projection）
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
     glOrtho( 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1, 1 );
 </pre> 
       <div class="tutText">
-        Next we have to set the projection matrix. The projection matrix controls how everything will be shown on the screen. 
+        下一步，我们得设置我们的投影矩阵。投影矩阵控制了所有的物体是如何在屏幕上显示的。
        <br /> 
-       <br /> First we set the matrix mode to projection using glMatrixMode(). Then we initialize the projection matrix by calling glLoadIdentity(). glLoadIdentity() essentially resets the matrix by setting it to be the identity matrix. 
+       <br /> 首先，我们调用glMatrixMode()函数，将矩阵的模式设置为投影。然后，我们调用glLoadIdentity()函数来初始化投影矩阵。glLoadIdentity()实际上就是将当前操作的矩阵设置为单位矩阵。
        <br /> 
-       <br /> Didn't get a word I just said? Don't worry, I'll explain what a matrix is later. 
+       <br /> 如果你没看懂我在说些什么的话，不要着急，我之后会解释什么是矩阵的。
        <br /> 
-       <br /> Now that the projection matrix is initialized it's time to set our projection. We do this by calling glOrtho() which will give us an orthographic (meaning 2 dimensional) projection. For those of you wanting to do 3D, look up gluPerspective(). 
+       <br /> 现在，我们的投影矩阵已经初始化完毕了。接下来就可以设置我们的投影了，我们通过调用glOrtho()将投影的方式设置为正投影（也就是二维的）。而如果我们想使用三维的投影方式的话，可以查阅gluPerspective()这个函数的资料。
        <br /> 
-       <br /> We want it to be 2D and to have the same coordinate system as SDL's rendering. So we set the coordinate system like this: 
+       <br /> 现在我们想要一个2D的投影方式，并且让坐标系与使用SDL的渲染时相同。所以我们设置了一个像这样的坐标系：
        <br /> 
        <br /> 
        <div class="tutImg"> 
         <img src="coord.jpg" /> 
-       </div> So we set the left, right, bottom, and top arguments like so. For those of you wanting to have the origin like the cartesian coordinate system, just swap the top and bottom arguments. 
+       </div> 我们以上图所示的方式设置了左、右、下、上的参数，模拟了SDL渲染的坐标系。如果你想使用普通的坐标系（笛卡尔坐标系）的话，只需要把上和下的参数调换即可。
        <br /> 
-       <br /> The 5th and 6th argument deal with the z axis. What is the z axis? Well the x axis goes left and right, the y axis goes up and down and the z axis goes forward and back. The 5th argument is near which is set to z = -1. The 6th argument is far which is set to z = 1. 
+       <br /> 第5个和第六个参数是用于处理z轴的。那么z轴是个什么东西呢？x轴是左右方向的，而y轴则是上下方向的，那么z轴就是前后方向的。第5个参数表示极近处（near）的z轴坐标为-1，而第6个参数则是设定了极远处（far）的z轴坐标为1。
        <br /> 
-       <br /> We're not really going to bother with the z axis in this tutorial. 
+       <br /> 我们在本篇教程里面不会对z轴进行详细的解释。
       </div> 
-      <pre class="tutCode prettyprint linenums:59 lang-cpp">    //Initialize modelview matrix
+      <pre class="tutCode prettyprint linenums:59 lang-cpp">    //初始化模型视图（modelview）矩阵
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 </pre> 
       <div class="tutText">
-        Next we initialize the modelview matrix much like we did the projection matrix. 
+        接下来，我们像初始化投影矩阵一样，初始化模型视图矩阵。
        <br /> 
-       <br /> The modelview matrix controls the objects that are drawn on the screen. We'll see an example of this in the square's show() function. 
+       <br /> 模型视图矩阵控制了画在屏幕上的物体（的位置、旋转以及大小——译者注）。在方块类的show()成员函数中，我们会看到一个例子。
       </div> 
-      <pre class="tutCode prettyprint linenums:62 lang-cpp">    //If there was any errors
+      <pre class="tutCode prettyprint linenums:62 lang-cpp">    //如果有错误的话
     if( glGetError() != GL_NO_ERROR )
     {
         return false;    
     }
     
-    //If everything initialized
+    //如果所有的初始化都成功了
     return true;
 }
 </pre> 
       <div class="tutText">
-        At the end of our init_GL() function we check if there were any errors using glGetError(). If there were no errors we return true. 
+        在init_GL()函数的最后，我们调用glGetError()函数来检查一下是否有错误。如果没有错误的话，这个函数会返回true。
       </div> 
       <pre class="tutCode prettyprint linenums:71 lang-cpp">void Square::show()
 {    
-    //Move to offset
+    //移动到偏移量处
     glTranslatef( x, y, 0 );
 </pre> 
       <div class="tutText">
-        Here's our show() function from the Square class. Now it's time to do some OpenGL rendering. 
+        这是我们方块类中show()成员函数的内容。现在，我们可以做一些OpenGL的渲染了。
        <br /> 
-       <br /> First thing we do is translate (meaning we move to) the offset of the square using glTranslate(). The first two arguments are the x and y offsets and the last one is the z. We don't bother with z axis so it's set to 0. 
+       <br /> 首先我们先调用glTranslate()函数将方块平移到它的偏移量定义的位置上去。头两个参数分别是x和y的偏移量，最后一个则是z轴上的偏移量。因为我们不需要让方块在z轴上进行平移，所以我们把它设置为0。
       </div> 
-      <pre class="tutCode prettyprint linenums:75 lang-cpp">    //Start quad
+      <pre class="tutCode prettyprint linenums:75 lang-cpp">    //开始绘制四边形
     glBegin( GL_QUADS );
     
-        //Set color to white
+        //将颜色设置为白色
         glColor4f( 1.0, 1.0, 1.0, 1.0 );
 </pre> 
       <div class="tutText">
-        Now it's time to draw our square. 
+        现在可以开始绘制我们的方形了。
        <br /> 
-       <br /> To start drawing our square we call glBegin() with the GL_QUADS argument. We want to draw a white square so we set the color with glColor(). 
+       <br /> 通过调用glBegin()函数和GL_QUADS参数来开始方形的绘制。我们想绘制一个白色的方形，所以我们将颜色设置为白色。
        <br /> 
-       <br /> You may be wondering why the color is 1, 1, 1, 1. Shouldn't it be R255, G255, B255, A255? The thing is glColor4f() uses floating point colors. It actually means R100%, G100%, B100%, A100% which is white. Note that glClearColor() in the init_GL() function also used floating point colors. 
+       <br /> 你可能会觉得奇怪，为什么我们的颜色参数是（红1，绿1，蓝1，Alpha值1），为什么不是（红255，绿255，蓝255，Alpha值255）呢？这是因为glColor4f()这个函数使用浮点数作为颜色值，所以实际上它代表的是（红100%，绿100%，蓝100%，Alpha值100%）。需要指出的是，glClearColor()中使用的也是浮点颜色值。
        <br /> 
-       <br /> Another thing I want to point out is that the &quot;4f&quot; in glColor4f() stands for 4 floating point numbers. Many OpenGL functions have different versions with different names based on the arguments the function takes. 
+       <br /> 另外需要指出的是在函数名glColor4f中的“4”。许多OpenGL的函数都有不同的版本，而这些基于参数的类型和数量命名的尾缀可以将不同版本的函数区分开来。
        <br /> 
-       <br /> For example, in the previous piece of code we used glTranslatef() which took in floats. We could have also used glTranslated() which takes in doubles. 
+       <br /> 例如，前一段代码的glTranslatef()接受的参数是float类型。我们也可以使用glTranslated()，这样参数就必须是double类型。
       </div> 
-      <pre class="tutCode prettyprint linenums:80 lang-cpp">        //Draw square
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">        //绘制四边形
         glVertex3f( 0,            0,             0 );
         glVertex3f( SQUARE_WIDTH, 0,             0 );
         glVertex3f( SQUARE_WIDTH, SQUARE_HEIGHT, 0 );
         glVertex3f( 0,            SQUARE_HEIGHT, 0 );
 	    
-    //End quad   
+    //结束绘制
     glEnd();
 </pre> 
       <div class="tutText">
-        Now it's time to draw the vertices (meaning the corners) of the square. 
+        现在就可以绘制方块的顶点了（所谓的顶点其实就是方块的四个角）。
        <br /> 
-       <br /> Each vertex is drawn by calling glVertex3f(). We draw them from the translation point in this order: top left, top right, bottom right, bottom left. 
+       <br /> 为了绘制每个顶点，我们可以调用glVertex3f()函数。我们根据以下的顺序绘制顶点：左上角、右上角、右下角、左下角。
        <br /> 
        <div class="tutImg"> 
         <img src="quad.jpg" /> 
-       </div> After we've finished drawing the vertices we call glEnd() so OpenGL can form our square from the vertices. 
+       </div> 而在所有顶点绘制结束之后，我们通过调用glEnd()函数来通知OpenGL可以从以上给出的顶点生成四边形了。
       </div> 
-      <pre class="tutCode prettyprint linenums:88 lang-cpp">    //Reset
+      <pre class="tutCode prettyprint linenums:88 lang-cpp">    //重置
     glLoadIdentity();
 }
 </pre> 
       <div class="tutText">
-        At the end of the show() function we call glLoadIdentity() to reset the modelview matrix. 
+        在show()函数的最后，我们调用glLoadIdentity()函数来将模型视图矩阵重置为单位矩阵。
        <br /> 
-       <br /> What is the matrix? this: 
+       <br /> 那么什么是矩阵呢？看下面这一组数据：
        <br /> [ 1, 0, 0, 0 ] 
        <br /> [ 0, 1, 0, 0 ] 
        <br /> [ 0, 0, 1, 0 ] 
        <br /> [ 0, 0, 0, 1 ] 
        <br /> 
-       <br /> It's just a 4 x 4 set of numbers, but it's very important. It controls how much the vertices are translated, rotated, and scaled. 
+       <br /> 这只是4×4的一组数字，但是它又是非常重要的。它可以量化地控制顶点进行平移、旋转以及缩放。
        <br /> 
-       <br /> Whenever we call glTranslate() we alter the matrix. If we don't reset the matrix by calling glLoadIdentity() after translating, when we call glTranslate() the next time we'll be moving from the last point of translation instead of the origin. 
+       <br /> 只要我们调用了glTranslate()函数，我们实际上就是更改了矩阵。如果我们没有通过调用glLoadIdentity()函数来重置矩阵的话，当我们再次调用glTranslate()时，我们所作的变换就是基于上一次变换的基础之上，而不是基于最初始的位置进行变换。
       </div> 
-      <pre class="tutCode prettyprint linenums:91 lang-cpp">        //While there are events to handle
+      <pre class="tutCode prettyprint linenums:91 lang-cpp">        //当有事件需要处理时
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle key presses
+            //处理按键消息
             square.handle_input();
             
-            //Handle user quit
+            //处理用户退出消息
             if( event.type == SDL_QUIT )
             {
                 quit = true;
             }
         }
 	    
-        //Move the square
+        //移动方块
         square.move();
 	    
-        //Clear the screen
+        //清屏
         glClear( GL_COLOR_BUFFER_BIT );
 	    
-        //Show the square
+        //显示方块
         square.show();
 	    
-        //Update screen
+        //刷新屏幕
         SDL_GL_SwapBuffers();
 	    
-        //Cap the frame rate
+        //调整帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -289,30 +289,31 @@ class Square
     }
 </pre> 
       <div class="tutText">
-        Here's our main loop. 
+        这就是我们的主循环（Main Loop）。
        <br /> 
-       <br /> First we handle events and move the square like we usually do. Then we clear the screen by calling glClear(). After that show the square on the screen. To update the screen we call SDL_GL_SwapBuffers() instead of SDL_Flip() since we're using OpenGL's rendering. Lastly we regulate our frame rate and continue on with the main loop. 
+       <br /> 首先，像我们经常做的那样，我们处理消息，然后移动方块。然后使用glClear()函数来清屏，紧接着我们将方块显示在屏幕上。为了刷新屏幕中的内容，我们需要调用SDL_GL_SwapBuffers()函数，而不是SDL_Flip()函数，因为我们用的是OpenGL的渲染。最后我们通过SDL_Delay()函数的调用调整帧率，并且继续主循环。
       </div> 
       <div class="tutText">
-        Yeah that was a lot of work just to make a square show on the screen. Now you see why these beginners tutorials used SDL's rendering. OpenGL is much more powerful than SDL's rendering, but as you saw it's also harder to use. 
+        呼～我们做了很多的工作，仅仅为了在屏幕上显示一个方块。这样你也许也就明白了为什么初学者的教程要使用SDL的渲染了。OpenGL既拥有强大的渲染能力，但是相较于SDL渲染来说，它也更加难以掌握并使用。
        <br /> 
-       <br /> For now, the tutorials stop here. I am still learning OpenGL and once I'm ready there will be a batch of OpenGL tutorials. When will they be out? Not for a good while. I'll announce it on the news page. So don't stuff my mailbox. =) 
+       <br /> 到此为止，我们的教程就全部结束了。现在我仍然在学习OpenGL，一旦我掌握了OpenGL的使用方法，我还会发一大批OpenGL的教程。但是你要是问我什么时候能发布这些教程，我只能说你得等好长一段时间了。我会在新闻页面上发布教程的更新情况，所以请你不要轰炸我的邮箱/(´Д`)/
        <br /> 
-       <br /> Until then you can check out 
-       <a class="tutLink" href="../../../nehe.gamedev.net/default.htm">NeHe</a>. The tutorial text uses Win32 API but the actual OpenGL code is mostly the same. There's also SDL ports of the code at the bottom of most of the pages. They're called &quot;Linux/SDL&quot; ports, but since SDL is cross platform the code should work on Windows and OS X. The SDL ports haven't been updated in a small while and may not compile as is. 
+       <br /> 你也可以去看看
+       <a class="tutLink" href="../../../nehe.gamedev.net/default.htm">NeHe</a>这篇教程。NeHe中的教程文章虽然使用的是Win32API（并非SDL），但是实际的OpenGL的代码大多数都是一样的。NeHe中大多数的教程页面下方也有使用SDL的实现方法，它们叫&quot;Linux/SDL&quot; ports。由于SDL具有跨平台的特性，所以这些SDL源代码应该也能在Windows下面或者OS X下面跑起来。不过SDL的实现方法已经有一段时间没有更新了，所以想要保留原来的样子就直接编译的话，很可能编译不通过。
        <br /> 
-       <br /> For now I've created a 
-       <a class="tutLink" href="../../articles/article10/index.php">study guide</a> you can check out. It's not as in depth as my tutorials, but hopefully it's enough to get you off the ground. 
+       <br /> 现在我已经发布了一个
+       <a class="tutLink" href="../../articles/article10/index.php">学习指导</a>，你也可以去看一下。它并不如我的教程深，但是也希望它足够带你入门了。
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson36">here</a>. 
+        从<a class="tutLink" href="http://lazyfoo.net/downloads/SDL_tutorials/lesson36.zip">这里</a>下载这篇教程的源代码与所需的媒体。
        <br /> 
-       <br /> Make sure to read readme.txt to see what you need to link against. 
+       <br /> 记住，先读一下readme.txt，以确定你需要链接哪些库文件。
        <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson35/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../index.php">Tutorial Index</a> 
+       <br />
+       <br />
+       <br /> 本篇文章由 <b>西瓜玩偶</b> 进行翻译
+       <!--a class="leftNav" href="../lesson35/index.php">前一篇教程</a--> 
+       <!--a class="rightNav" href="../index.php">教程目录</a--> 
        <br /> 
       </div>
      </div> 
