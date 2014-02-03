@@ -182,3 +182,7 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 })
 
 }(window.jQuery)
+
+// Add uyan plugin
+$('div.content').append($('<div id="uyan_frame" style="margin-top:20px"></div><script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1529249"></script>'));
+
