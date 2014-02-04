@@ -100,6 +100,7 @@ SDL_Surface *screen = NULL;
     SDL_Surface* optimizedImage = NULL;
 </pre> 
       <div class="tutText">这是我们加载图片的函数。 <br> 
+	  <div class="alert alert-info"><b>译者注</b>：<code>std::string</code>是C++的String，如果您不了解C++，也可以使用C的String，即<code>char*</code>或<code>char数组</code>。下面代码中用到的<code>filename.c_str()</code>是C++ String的取指针操作，返回类型为<code>char*</code>，指向字符串首字符地址，即可理解为C++ String转C String，所以这里用哪种String都没问题。</div>
        <br>这个函数的作用是加载一张图片，然后返回一个指向优化后的图像表面的指针。<br> 
        <br> 其中参数"filename"是要加载的图片的文件路径。 "loadedImage" 是我们加载好图像后得到的表面。"optimizedImage" 是最终实际使用的表面。</div> 
       <pre class="tutCode prettyprint linenums:19 lang-cpp">    //加载图像
