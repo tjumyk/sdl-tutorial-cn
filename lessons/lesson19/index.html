@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第19课 - 圆形碰撞检测</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月12日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson19/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson18/index.html" id="prev_link">上一课</a></li> 
@@ -57,17 +57,12 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Circular Collision Detection</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 12/28/09</h6> Besides rectangles, the most common shape you'll have to deal with is a circle. In the last tutorial we had to use 11 collision boxes for a circle. This tutorial will teach you a more efficient way to handle circles and collision detection. 
+		除了矩形外，你必须处理的最常见的形状就是圆形。在上一课中，我们必须在一个圆上使用11个碰撞盒子。本课将教给你一种更有效的处理圆形及碰撞检测的方法。
       </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
 #include &quot;SDL/SDL_image.h&quot;
@@ -76,9 +71,9 @@
 #include &lt;cmath&gt;
 </pre> 
       <div class="tutText">
-        This tutorial is going to require the distance formula so we include a header for math. 
+        本节课将要使用距离公式，所以我们包含了math头文件。
       </div> 
-      <pre class="tutCode prettyprint linenums:6 lang-cpp">//A circle stucture
+      <pre class="tutCode prettyprint linenums:6 lang-cpp">//表示一个圆形的结构体
 struct Circle
 {
     int x, y;
@@ -86,86 +81,92 @@ struct Circle
 };
 </pre> 
       <div class="tutText">
-        We have to create our own circle structure for this program. &quot;x&quot; and &quot;y&quot; are the offsets of the center of the circle. &quot;r&quot; is the radius. 
+        在这个程序中，我们需要创建我们的Circle结构体。&quot;x&quot; 和 &quot;y&quot;是圆心的坐标。&quot;r&quot;是半径。
       </div> 
-      <pre class="tutCode prettyprint linenums:12 lang-cpp">//The dot
+      <pre class="tutCode prettyprint linenums:12 lang-cpp">//点
 class Dot
 {
     private:
-    //The area of the dot
+    //点的区域
     Circle c;
     
-    //The velocity of the dot
+    //点的速度
     int xVel, yVel;
     
     public:
-    //Initializes the variables
+    //初始化变量
     Dot();
     
-    //Takes key presses and adjusts the dot's velocity
+    //处理按键并调整点的速度
     void handle_input();
     
-    //Moves the dot
-    void move( std::vector&lt;SDL_Rect&gt; ▭s, Circle ˆle );
+    //移动点的位置
+    void move( std::vector&lt;SDL_Rect&gt; &amp;rects, Circle &amp;circle );
     
-    //Shows the dot on the screen
+    //在屏幕上显示点
     void show();
 };
 </pre> 
       <div class="tutText">
-        Here's yet another revision of the Dot class. 
+        这里是另一个版本的Dot类。
        <br /> 
-       <br /> Everything is pretty much the same except for two differences. This time we have a Circle structure instead of a vector of SDL_Rects. Also, in the move() function we check collision with a vector of SDL_Rects and a Circle. 
+       <br /> 
+	   所有内容和之前的一样，除了两处不同。这次我们使用Circle结构体替代了SDL_Rect的向量。并且，在move()函数中我们检测了SDL_Rect的vector与Circle之间的碰撞。
+	   <br /> 
+	   <br /> 
+	   <div class="alert alert-info"><b>译者注</b>：关于C++标准库中的向量vector，上一课中编者已作简单说明<a href="../lesson18/index.html#hint-vector">(<b>点此回看</b>)</a>。这里重申一下，vector相当于数组。<br></div>
       </div> 
       <pre class="tutCode prettyprint linenums:35 lang-cpp">double distance( int x1, int y1, int x2, int y2 )
 {
-    //Return the distance between the two points
+    //返回两点间的距离
     return sqrt( pow( x2 - x1, 2 ) + pow( y2 - y1, 2 ) );
 }
 </pre> 
       <div class="tutText">
-        This function we made gives us the distance between given 2 points. This is pretty much the only real math used in this program. 
+		我们写的这个函数告诉我们给定两点间的距离。这是此程序中用到的唯一的真正的数学。
        <br /> 
-       <br /> For those of you using visual studio you may need to type cast those integers to doubles. 
+       <br /> 
+	   对于使用visual studio的小伙伴们来说，他们也许需要将那些整数转换成double类型。
       </div> 
       <pre class="tutCode prettyprint linenums:40 lang-cpp">bool check_collision( Circle &amp;A, Circle &amp;B )
 {
-    //If the distance between the centers of the circles is less than the sum of their radii
+    //如果两圆圆心间的距离小于两圆半径的和
     if( distance( A.x, A.y, B.x, B.y ) &lt; ( A.r + B.r ) )
     {
-        //The circles have collided
+        //两圆已经碰到了一起
         return true;
     }
     
-    //If not
+    //如果不是
     return false;    
 }
 </pre> 
       <div class="tutText">
-        Checking collision between two circles is pretty easy. All you have to do is check whether or not the distance between the centers of the circles is less than the sum of their radii. 
+       检测两圆之间的碰撞是非常简单的。你只需要检查一下两圆圆心的距离是否小于它们的半径之和。
        <br /> 
-       <br /> If it is less, a collision has happened, otherwise there's no collision. 
+       <br /> 
+	   如果是小于的话，碰撞发生，否则没有碰撞。
       </div> 
       <pre class="tutCode prettyprint linenums:52 lang-cpp">bool check_collision( Circle &amp;A, std::vector&lt;SDL_Rect&gt; &amp;B )
 {
-    //Closest point on collision box
+    //碰撞盒子上距离圆心最近的点的坐标
     int cX, cY;
 
-    //Go through the B boxes
+    //遍历所有盒子
     for( int Bbox = 0; Bbox &lt; B.size(); Bbox++ )
     {
 </pre> 
       <div class="tutText">
-        This function checks collision between a circle and a vector of rectangles. Checking for collision between a circle and a rectangle gets a bit tricky. To check if there's a collision between a circle and a collision box, you must find the point on the collision box closest to the center of the circle. 
+      这个函数检测圆与矩形向量之间的碰撞。检测一个圆与一个矩形之间的碰撞有点复杂。为了检测一个圆与一个碰撞盒子的碰撞，你必须找到碰撞盒子上距离圆心最近的点。
       </div> 
-      <pre class="tutCode prettyprint linenums:60 lang-cpp">        //Find closest x offset
+      <pre class="tutCode prettyprint linenums:60 lang-cpp">        //寻找最近的x坐标
         if( A.x &lt; B[ Bbox ].x )
         {
             cX = B[ Bbox ].x;
         }
 </pre> 
       <div class="tutText">
-        If the center of the circle is to the left of the box, then the x offset of the closest point is equal to the x offset of the collision box. 
+		如果圆心在盒子的左侧，那么最近点的x坐标等于碰撞盒子的x坐标。
        <br /> 
        <div class="tutImg"> 
         <img src="less.jpg" /> 
@@ -177,7 +178,7 @@ class Dot
         }
 </pre> 
       <div class="tutText">
-        If the center of the circle is to the right of the box, then the x offset of the closest point is equal to the x offset of the right side of the collision box. 
+		如果圆心在盒子的右侧，那么最近点的x坐标等于碰撞盒子的右侧边的x坐标。
        <br /> 
        <div class="tutImg"> 
         <img src="greater.jpg" /> 
@@ -189,13 +190,13 @@ class Dot
         }
 </pre> 
       <div class="tutText">
-        If the x offset of the center of the circle is not to the left or the right of the collision box, then the x offset is inside the collision box. 
+		如果圆心坐标既不在碰撞盒子的左侧，又不在盒子右侧，那么圆心的x坐标就在盒子的内部。
        <br /> 
        <div class="tutImg"> 
         <img src="equal.jpg" /> 
        </div> 
       </div> 
-      <pre class="tutCode prettyprint linenums:73 lang-cpp">        //Find closest y offset
+      <pre class="tutCode prettyprint linenums:73 lang-cpp">        //寻找最近的y坐标
         if( A.y &lt; B[ Bbox ].y )
         {
             cY = B[ Bbox ].y;
@@ -210,24 +211,24 @@ class Dot
         }
 </pre> 
       <div class="tutText">
-        Then we do the same as above to find the closest y offset. 
+		我们采用和上面一样的方法寻找最近的y坐标。
       </div> 
-      <pre class="tutCode prettyprint linenums:86 lang-cpp">        //If the closest point is inside the circle
+      <pre class="tutCode prettyprint linenums:86 lang-cpp">        //如果最近点在圆的内部
         if( distance( A.x, A.y, cX, cY ) &lt; A.r )
         {
-            //This box and the circle have collided
+            //这个盒子和圆已经发生碰撞
             return true;
         }
     }
 
-    //If the shapes have not collided
+    //如果没有与这些形状碰撞
     return false;
 }
 </pre> 
       <div class="tutText">
-        If the point on the collision box closest to the circle is inside the circle, then the circle and the collision box are overlapped. Here we keep going through all the collision boxes until we find a collision or all of the boxes have been checked and there is no collision. 
+		如果碰撞盒子上距离圆心最近的点在圆的内部，那么圆和盒子发生重叠。这里我们一直遍历所有的碰撞盒子直到发现一个碰撞，或者所有的盒子都被检查过并且未发生任何碰撞。
       </div> 
-      <pre class="tutCode prettyprint linenums:97 lang-cpp">    //Make the shapes
+      <pre class="tutCode prettyprint linenums:97 lang-cpp">    //构建形状
     std::vector&lt;SDL_Rect&gt; box( 1 );
     Circle otherDot;
     
@@ -243,49 +244,50 @@ class Dot
 </pre> 
       <div class="tutText">
         In the main() function we create the 2 shapes the Dot is going to interact with. 
+		在<code>main()</code>函数中，我们创建了2个将与点交互的形状。
       </div> 
-      <pre class="tutCode prettyprint linenums:110 lang-cpp">    //While the user hasn't quit
+      <pre class="tutCode prettyprint linenums:110 lang-cpp">    //当用户还未推出
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计时器
         fps.start();
         
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the dot
+            //为点处理事件
             myDot.handle_input();
             
-            //If the user has Xed out the window
+            //如果用户叉掉了窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the dot
+        //移动点
         myDot.move( box, otherDot );
 		
-        //Fill the screen white
+        //用白色填充屏幕
         SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
         
-        //Show the box
+        //显示盒子
         SDL_FillRect( screen, &amp;box[ 0 ], SDL_MapRGB( screen-&gt;format, 0x00, 0x00, 0x00 ) );
         
-        //Show the other dot
+        //显示其他的点
         apply_surface( otherDot.x - otherDot.r, otherDot.y - otherDot.r, dot, screen );
         
-        //Show our dot
+        //显示我们的点
         myDot.show();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //捕获帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -293,22 +295,22 @@ class Dot
     }
 </pre> 
       <div class="tutText">
-        Here's the main loop, pretty much everything is the same story as before. I would like to point one thing out. 
+		这里是main循环，和前面的基本相同。但我想指出一点。
        <br /> 
-       <br /> When we show the other dot, we don't blit the image at its offset. The offset is the center of the circle, so we have to blit the dot image at the upper-left corner. We do this by subtracting the radius from the offset. 
+       <br /> 
+	   当我们显示其他点时，我们并不将图片blit到点的坐标。因为那个坐标是圆心的坐标，所以我们必须将点的图像blit到左上角的位置。我们可以通过将坐标减去半径来完成这件事。
       </div> 
+	  <br/>
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson19">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson18/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson20/index.php">Next Tutorial</a> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson19">此处下载</a>。
        <br /> 
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson20/index.html">下一课：动画</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
