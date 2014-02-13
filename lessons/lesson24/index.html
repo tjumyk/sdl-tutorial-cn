@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第24课 - 保存游戏</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月14日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson24/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson23/index.html" id="prev_link">上一课</a></li> 
@@ -57,19 +57,15 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Game Saves</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Ever wanted to know how to save data from your game? Whether saving settings or progress in a game you need to know file input/output. This program will save the background type and the dot's offsets. So when we start the program up again the dot and background will be the same as when we closed the program. 
+	   你是否曾想知道怎样保存你的游戏中的数据?无论是存储游戏中的设置还是进度,你都需要了解文件的输入和输出。这个程序将会保存背景类型和点的坐标。所以当我们重新启动程序时，点和背景将会和程序关闭时保持一致。
        <br /> 
-       <br /> Here's yet another incarnation of the motion tutorial to show you how to get input and output from a file to save/load game data. 
+       <br />
+	   这是另一个运动教程的例子,能向你展示如何通过文件的输入或输出来加载或保存游戏数据。
       </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
 #include &quot;SDL/SDL_image.h&quot;
@@ -77,281 +73,283 @@
 #include &lt;fstream&gt;
 </pre> 
       <div class="tutText">
-        You need to include the fstream header to read/write a file. It's a standard library and not part of SDL. 
+        你需要包含fstream头文件来进行文件读写。它是一个标准库，并不是SDL的一部分。
       </div> 
-      <pre class="tutCode prettyprint linenums:5 lang-cpp">//The dot
+      <pre class="tutCode prettyprint linenums:5 lang-cpp">//点
 class Dot
 {
     private:
-    //The X and Y offsets of the dot
+    //点的X/Y坐标
     int x, y;
     
-    //The velocity of the dot
+    //点的速度
     int xVel, yVel;
     
     public:
-    //Initializes the variables
+    //初始化变量
     Dot();
     
-    //Takes key presses and adjusts the dot's velocity
+    //处理按键并调整点的速度
     void handle_input();
     
-    //Moves the dot
+    //移动点
     void move();
     
-    //Shows the dot on the screen
+    //在屏幕上显示点
     void show();
     
-    //Set the dot's x/y offsets
+    //设置点的x/y坐标
     void set_x( int X );
     void set_y( int Y );
     
-    //Get the dot's x/y offsets
+    //获得点的x/y坐标
     int get_x();
     int get_y();
 };
 </pre> 
       <div class="tutText">
-        Here's the Dot class yet again. The only real change here is that we added functions to get/set the x and y offsets. 
+		这又是Dot类。这里仅有的一个真正的变化是我们增加了x/y坐标的get/set函数。
       </div> 
       <pre class="tutCode prettyprint linenums:36 lang-cpp">bool load_files( Dot &amp;thisDot, Uint32 &amp;bg )
 {    
-    //Load the dot image
+    //加载点的图像
     dot = load_image( &quot;dot.png&quot; );
     
-    //If there was a problem in loading the dot
+    //如果加载点时出现问题
     if( dot == NULL )
     {
         return false;    
     }
     
-    //Open a file for reading
+    //打开一个文件以供读取
     std::ifstream load( &quot;game_save&quot; );
 </pre> 
       <div class="tutText">
-        In the load_files() function after we load our image we create an ifstream object. 
+        在<code>load_files()</code>函数中，我们加载完图像后创建了一个ifstream对象。
        <br /> 
-       <br /> ifstream allows you to get 
-       <b>i</b>nput from a 
-       <b>f</b>ile stream. When you pass a file name to the constructor, it opens the file for reading. 
+       <br /> ifstream(即&nbsp;<b>i</b>nput <b>f</b>ile <b>stream</b>，输入文件流)让你能够从一个文件流中获得输入。当你将一个文件名传入构造函数时，它将打开那个文件以供读取。
       </div> 
-      <pre class="tutCode prettyprint linenums:49 lang-cpp">    //If the file loaded
+      <pre class="tutCode prettyprint linenums:49 lang-cpp">    //如果文件加载完成
     if( load != NULL )
     {
-        //The offset
+        //坐标
         int offset;
         
-        //The level name
+        //关卡名
         std::string level;
         
-        //Set the x offset
+        //设置x坐标
         load &gt;&gt; offset;
         thisDot.set_x( offset );
         
-        //Set the y offset
+        //设置y坐标
         load &gt;&gt; offset;
         thisDot.set_y( offset );
 </pre> 
       <div class="tutText">
-        When there's a problem in loading the file, the ifstream object will be NULL. 
+        如果加载文件时出现问题，ifstream对象将会为NULL。
        <br /> 
-       <br /> Here we check if the file loaded fine. If it loaded fine, we declare &quot;offset&quot; to retrieve the offsets and &quot;level&quot; which we'll use to determine how to set the background. 
        <br /> 
-       <br /> Then we get first integer from the file and set the x offset of the dot. Then we get another integer and use it to set the y offset. As you can see, we get integers with ifstreams the same way we would with cin. That's because they're both istreams (input streams). 
+		这里我们检查文件是否加载成功。如果加载成功，我们声明&quot;offset&quot;来提取坐标，并声明&quot;level&quot;来决定如何设置背景。
        <br /> 
-       <br /> The contents of the &quot;game_save&quot; file will be something like this: 
+       <br /> 然后,我们首先从文件获得第一个整数并设为点的x坐标。然后，我们获取第二个整数并将其设为y坐标。正如你看到的那样，我们我们采用与cin相同的方式从ifstream中获取整数。那是因为它们都是istream(即&nbsp;<b>i</b>nput <b>stream</b>，输入流)。
+       <br /> 
+       <br /> 文件&quot;game_save&quot;的内容将是类似于这样的内容:
        <br /> 
        <b>0 0<br /> White Level</b> 
        <br /> 
-       <br /> Seeing as the file and what we enter in console apps are just characters it makes sense to treat them almost the same. 
+       <br /> 
+	   我们可以看到，既然文件中的和我们在控制台应用中输入的都是字符，那么我们有理由将它们视为几乎一样。
        <br /> 
       </div> 
-      <pre class="tutCode prettyprint linenums:65 lang-cpp">        //If the x offset is invalid
+      <pre class="tutCode prettyprint linenums:65 lang-cpp">        //如果x坐标不合法
         if( ( thisDot.get_x() &lt; 0 ) || ( thisDot.get_x() &gt; SCREEN_WIDTH - DOT_WIDTH ) )
         {
             return false;
         }
         
-        //If the y offset is invalid
+        //如果y坐标不合法
         if( ( thisDot.get_y() &lt; 0 ) || ( thisDot.get_y() &gt; SCREEN_HEIGHT - DOT_HEIGHT ) )
         {
             return false;
         }
 </pre> 
       <div class="tutText">
-        We also have to check if the offsets from the file are valid considering the user can easily alter the file. 
+		考虑到用户可以轻易地修改文件，我们也必须检查从文件中获得的坐标是否合法。
       </div> 
-      <pre class="tutCode prettyprint linenums:76 lang-cpp">        //Skip past the end of the line
+      <pre class="tutCode prettyprint linenums:76 lang-cpp">        //跳过行末
         load.ignore();
         
-        //Get the next line
+        //获得下一行
         getline( load, level );
         
-        //If an error occurred while trying to load data
+        //如果在尝试加载数据时发生了错误
         if( load.fail() == true )
         {
             return false;    
         }
 </pre> 
       <div class="tutText">
-        Then we skip past the next character (which is a '\n') with the ignore() function. Then we get the next line and store it with the getline() function. getline() is a different from using &gt;&gt; in that it gets everything up until the end of the line. 
+		然后我们使用<code>ignore()</code>函数跳过了下一个字符('\n')。接着我们通过<code>getline()</code>函数获得并存储下一行内容。<code>getline()</code>函数与使用<code>&gt;&gt;</code>不同，它会获取直到行末前的所有内容。
        <br /> 
-       <br /> For you guys still using Visual C++ 6.0 you'll have to std::getline(). 
        <br /> 
-       <br /> Then we check if there was a problem in reading from the file. The fail() function will return true when there's a problem. 
+	   对于使用Visual C++ 6.0的小伙伴们来说，你们必须使用<code>std::getline()</code>。
+       <br /> 
+       <br /> 
+	   随后，我们检查从文件读取是否存在问题。如果存在问题，函数<code>fail()</code>会返回true。
       </div> 
-      <pre class="tutCode prettyprint linenums:87 lang-cpp">        //If the level was white
+      <pre class="tutCode prettyprint linenums:87 lang-cpp">        //如果关卡是白色的
         if( level == &quot;White Level&quot; )
         {
-            //Set the background color
+            //设置背景色
             bg = SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF );
         }
-        //If the level was red
+        //如果关卡是红色的
         else if( level == &quot;Red Level&quot; )
         {
-            //Set the background color
+            //设置背景色
             bg = SDL_MapRGB( screen-&gt;format, 0xFF, 0x00, 0x00 );
         }
-        //If the level was green
+        //如果关卡是绿色的
         else if( level == &quot;Green Level&quot; )
         {
-            //Set the background color
+            //设置背景色
             bg = SDL_MapRGB( screen-&gt;format, 0x00, 0xFF, 0x00 );
         }
-        //If the level was blue
+        //如果关卡是蓝色的
         else if( level == &quot;Blue Level&quot; )
         {
-            //Set the background color
+            //设置背景色
             bg = SDL_MapRGB( screen-&gt;format, 0x00, 0x00, 0xFF );
         }
 </pre> 
       <div class="tutText">
-        Now that we have our level string, we set the background color accordingly. 
+		既然我们有了关卡字符串，我们就依照这个设置背景色。
       </div> 
-      <pre class="tutCode prettyprint linenums:111 lang-cpp">        //Close the file
+      <pre class="tutCode prettyprint linenums:111 lang-cpp">        //关闭文件
         load.close();
     }
 
-    //If everything loaded fine
+    //如果所有内容加载正常
     return true;
 }
 </pre> 
       <div class="tutText">
-        After we're done reading from the file we close it. 
+        我们完成读取文件后，我们将文件关闭。
       </div> 
       <pre class="tutCode prettyprint linenums:118 lang-cpp">void clean_up( Dot &amp;thisDot, Uint32 &amp;bg )
 {
-    //Free the surface
+    //释放表面
     SDL_FreeSurface( dot );
     
-    //Open a file for writing
+    //打开一个文件以供写入
     std::ofstream save( &quot;game_save&quot; );
     
-    //Write offsets to the file
+    //将坐标写入文件
     save &lt;&lt; thisDot.get_x();
     save &lt;&lt; &quot; &quot;;
     save &lt;&lt; thisDot.get_y();
     save &lt;&lt; &quot;\n&quot;;
 </pre> 
       <div class="tutText">
-        In the clean_up() function, we create a ofstream to write to a file. ofstream allows you to 
-       <b>o</b>utput to a 
-       <b>f</b>ile stream. 
+       在<code>clean_up()</code>函数中，我们创建了一个ofstream来写入文件。ofstream(即&nbsp;<b>o</b>utput <b>f</b>ile <b>stream</b>，输出文件流)让你能够输出到文件流中。 
        <br /> 
-       <br /> Since ifstream was similar to cin, it makes sense that ofstream is similar to cout. 
+       <br /> 
+	   既然ifstream与cin类似，那么显然ofstream与cout类似。
        <br /> 
        <br /> In this piece of code we write the dot's offsets to a file. 
+	   在这部分代码中，我们将点的坐标写入了一个文件。
       </div> 
-      <pre class="tutCode prettyprint linenums:131 lang-cpp">    //The RGB values from the background
+      <pre class="tutCode prettyprint linenums:131 lang-cpp">    //背景的RGB值
     Uint8 r, g, b;
     
-    //Get RGB values from the background color
+    //从背景色中获取RGB值
     SDL_GetRGB( bg, screen-&gt;format, &amp;r, &amp;g, &amp;b );
 </pre> 
       <div class="tutText">
-        Then we get the individual R, G and B values from the background using SDL_GetRGB(). 
+		然后我们用<code>SDL_GetRGB()</code>函数从背景中获取单独的R、G、B值。
       </div> 
-      <pre class="tutCode prettyprint linenums:136 lang-cpp">    //If the background was white
+      <pre class="tutCode prettyprint linenums:136 lang-cpp">    //如果背景是白色
     if( ( r == 0xFF ) &amp;&amp; ( g == 0xFF ) &amp;&amp; ( b == 0xFF ) )
     {
-        //Write level type to the file
+        //将关卡类型写入文件
         save &lt;&lt; &quot;White Level&quot;;
     }
-    //If the background was red
+    //如果背景是红色
     else if( r == 0xFF )
     {
-        //Write level type to the file
+        //将关卡类型写入文件
         save &lt;&lt; &quot;Red Level&quot;;
     }
-    //If the background was green
+    //如果背景是绿色
     else if( g == 0xFF )
     {
-        //Write level type to the file
+        //将关卡类型写入文件
         save &lt;&lt; &quot;Green Level&quot;;
     }
-    //If the background was blue
+    //如果背景是蓝色
     else if( b == 0xFF )
     {
-        //Write level type to the file
+        //将关卡类型写入文件
         save &lt;&lt; &quot;Blue Level&quot;;
     }
 </pre> 
       <div class="tutText">
-        After that, we write the level type. 
+        之后，我们写入关卡类型。
       </div> 
-      <pre class="tutCode prettyprint linenums:160 lang-cpp">    //Close the file
+      <pre class="tutCode prettyprint linenums:160 lang-cpp">    //关闭文件
     save.close();
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
 }
 </pre> 
       <div class="tutText">
-        Lastly, we close the file. 
+        最后，我们关闭文件。
       </div> 
-      <pre class="tutCode prettyprint linenums:166 lang-cpp">    //Quit flag
+      <pre class="tutCode prettyprint linenums:166 lang-cpp">    //退出标志
     bool quit = false;
     
-    //Initialize
+    //初始化
     if( init() == false )
     {
         return 1;
     }
     
-    //The dot
+    //点
     Dot myDot;
 
-    //The background color
+    //背景色
     Uint32 background = SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF );
         
-    //The frame rate regulator
+    //帧率校准器
     Timer fps;
     
-    //Load the files
+    //加载文件
     if( load_files( myDot, background ) == false )
     {
         return 1;
     }
 </pre> 
       <div class="tutText">
-        Here you see how we use our load_files() function. 
+        这里你可以看到我们使用了<code>load_files()</code>函数。
       </div> 
-      <pre class="tutCode prettyprint linenums:189 lang-cpp">    //While the user hasn't quit
+      <pre class="tutCode prettyprint linenums:189 lang-cpp">    //当用户还未推出
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计数器
         fps.start();
         
-        //While there's events to handle
+        //当有事件要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the dot
+            //为小点处理事件
             myDot.handle_input();
             
-            //If the user has pressed at key
+            //如果用户按下了按键
             if( event.type == SDL_KEYDOWN )
             {
-                //Change background according to key press
+                //根据按键更改背景
                 switch( event.key.keysym.sym )
                 {
                     case SDLK_1: background = SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ); break;
@@ -361,30 +359,30 @@ class Dot
                 }
             }
             
-            //If the user has Xed out the window
+            //如果用户叉掉了窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the dot
+        //移动点
         myDot.move();
         
-        //Fill the background
-        SDL_FillRect( screen, ≻reen-&gt;clip_rect, background );
+        //填充背景
+        SDL_FillRect( screen, screen-&gt;clip_rect, background );
         
-        //Show the dot on the screen
+        //在屏幕上显示点
         myDot.show();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //捕获帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -392,27 +390,25 @@ class Dot
     }
 </pre> 
       <div class="tutText">
-        Here's the main loop. To change the background, you press 1,2,3 or 4. When you start the program up again the dot and the background will be the same as you left it. 
+        这里是主循环。要改变背景，你可以按下<kbd class="light">1</kbd>,<kbd class="light">2</kbd>,<kbd class="light">3</kbd>或<kbd class="light">4</kbd>。当你再次启动程序时，点和背景将会和你退出程序时的一样。
       </div> 
-      <pre class="tutCode prettyprint linenums:243 lang-cpp">    //Clean up and save
+      <pre class="tutCode prettyprint linenums:243 lang-cpp">    //清理并保存
     clean_up( myDot, background );
 }
 </pre> 
       <div class="tutText">
-        Lastly, we call our clean_up() function to clean and save the data. 
+        最终，我们调用<code>clean_up()</code>函数来清理并保存数据。
       </div> 
+	  </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson24">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson23/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson25/index.php">Next Tutorial</a> 
-       <br /> 
-      </div>
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson24">此处下载</a>。 
+       <br />
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson25/index.html">下一课：控制杆</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
