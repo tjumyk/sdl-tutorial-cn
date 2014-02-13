@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第23课 - 获得字符串输入</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月13日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson23/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson22/index.html" id="prev_link">上一课</a></li> 
@@ -57,262 +57,278 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Getting String Input</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Here we need to get the player's name after they got a high score. Back in your early days, you used cin to get string input. Since SDL has no built in ways of getting the user's name, we'll make our own function to handle keypresses to get string input. 
+	   这里我们需要在玩家获得高分时得到他们的姓名。再你过去的日子里，你使用cin来得到字符串输入。由于SDL没有内置的方法来获取用户的名字，我们将自己创建一个函数来处理按键来得到字符串输入。
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The key press interpreter
+	  <br/>
+	  <div class="alert alert-info"><b>译者注</b>：cin是C++标准输入，scanf 则是C的标准输入。二者用法不同，功能类似。<br/></div>
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//按键解释器
 class StringInput
 {
     private:
-    //The storage string
+    //存储字符串
     std::string str;
     
-    //The text surface
+    //文本表面
     SDL_Surface *text;
     
     public:
-    //Initializes variables
+    //初始化变量
     StringInput();
     
-    //Does clean up
+    //完成清理
     ~StringInput();
     
-    //Handles input
+    //处理输入
     void handle_input();
     
-    //Shows the message on screen
+    //在屏幕上显示信息
     void show_centered();    
 };
 </pre> 
       <div class="tutText">
-        Here's is our class used to manage string input. 
+		这是我们用于管理字符串输入的类。
        <br /> 
-       <br /> In terms of variables we have a string for the actual string data and a surface to render the text to. 
        <br /> 
-       <br /> Then we have our constructors and destructors, the function handle_input() to deal with user input, and show_centered() to make the string appear on the screen. 
+	   说到其中的变量，我们有一个string用来存储真正的字符串数据，还有一个surface用于渲染文本。
+       <br /> 
+       <br /> 
+	   然后我们有构造函数和析构函数，还有<code>handle_input()</code>函数来处理用户输入，以及<code>show_centered()</code>函数来将字符串显示在屏幕上。
+	   <br />
+	   <br />
+	   <div class="alert alert-info"><b>译者注</b>：std::string是C++标准库中的字符串，在第二课中已作简单说明。(<a href="../lesson02/index.html#hint-string"><b>点此回看</b></a>)<br/></div>
+	   
       </div> 
       <pre class="tutCode prettyprint linenums:24 lang-cpp">StringInput::StringInput()
 {
-    //Initialize the string
+    //初始化字符串
     str = &quot;&quot;;
     
-    //Initialize the surface
+    //初始化表面
     text = NULL;
     
-    //Enable Unicode
+    //启用Unicode
     SDL_EnableUNICODE( SDL_ENABLE );    
 }
 
 StringInput::~StringInput()
 {
-    //Free text surface
+    //释放文本表面
     SDL_FreeSurface( text );
     
-    //Disable Unicode
+    //禁用Unicode
     SDL_EnableUNICODE( SDL_DISABLE );  
 }
 </pre> 
       <div class="tutText">
-        In the constructor along with a variable initialization, we enable unicode with SDL_EnableUNICODE(). This will make getting string input much easier as you'll see later. 
+		在构造函数中，紧接在变量初始化的后面，我们使用<code>SDL_EnableUNICODE()</code>函数启用了Unicode。就像你将在后面看到的那样，这能让获取字符串输入变得简单很多。
        <br /> 
-       <br /> In the destructor we free our text surface and disable unicode. While enabling unicode makes string input easier, it does add a bit of overhead. It should be turned off when you're not using it. 
+       <br /> 
+	   在析构函数中，我们释放了我们的文本表面并禁用了Unicode。尽管启用Unicode使得字符串输入容易很多，它增加了点系统负载。当你不再使用这个类时，你应该禁用Unicode。
       </div> 
       <pre class="tutCode prettyprint linenums:44 lang-cpp">void StringInput::handle_input()
 {
-    //If a key was pressed
+    //如果一个按键被按下
     if( event.type == SDL_KEYDOWN )
     {
-        //Keep a copy of the current version of the string
+        //复制当前版本的字符串
         std::string temp = str;
         
-        //If the string less than maximum size
+        //如果字符串小于最大长度
         if( str.length() &lt;= 16 )
         {
 </pre> 
       <div class="tutText">
-        Now it's time to handle the user's input. 
+		现在是时候处理用户输入了。
        <br /> 
-       <br /> When the user presses a key, we first store a copy of the current string. I'll tell you why later. 
        <br /> 
-       <br /> Then we check that the string isn't at maximum length. Here I set it as 16, but you can set it to be whatever you want. 
+	   当用户按下一个键时，我们首先存储一份当前版本的字符串。我将在后面告诉你为什么要这么做。
+       <br /> 
+       <br /> 
+	   然后我们检查一下字符串是否超过最大长度。这里我将最大长度设置为16，但你可你将它设为你想要的任意值。
       </div> 
-      <pre class="tutCode prettyprint linenums:55 lang-cpp">            //If the key is a space
+      <pre class="tutCode prettyprint linenums:55 lang-cpp">            //如果按键是一个空格
             if( event.key.keysym.unicode == (Uint16)' ' )
             {
-                //Append the character
+                //在字符串末尾添加这个字符
                 str += (char)event.key.keysym.unicode;    
             }
 </pre> 
       <div class="tutText">
-        The basic concept of string input is when the user presses 'A' add on a 'A', when the user presses 'B' add on a 'B', etc, etc. 
+		字符串输入的基本概念是当用户按下<kbd class='light'>A</kbd>，加上字符'A'；当用户按下<kbd class='light'>B</kbd>，加上字符'B'……
        <br /> 
-       <br /> Because the SDLKey definitions don't match up with their ASCII/Unicode values, we enable unicode so the &quot;unicode&quot; member of the Keysym structure matches the unicode value of character pressed. Enabling unicode also automatically handles shift and caps lock when you want capital letters and symbols. 
        <br /> 
-       <br /> If you don't know what unicode is, it's just an extension of ASCII. Instead of being 8bit, it's 16bit so it can hold all the international characters. 
+	   由于<code>SDLKey</code>的定义并不与其对应的ASCII/Unicode值匹配，我们启用了Unicode，来使<code>Keysym</code>结构体中的<code>unicode</code>成员与按键字符的Unicode值匹配。启用Unicode也会在你需要输入大写字符或符号时，自动处理<kbd class="light">Shift</kbd>和<kbd class="light">CapsLock</kbd>。
        <br /> 
-       <br /> Here if the key pressed has the unicode value of the space character, we append it the string. Since a standard string only uses 8bit ASCII characters, we have to convert it to a char when appending it. 
+       <br /> 
+	   如果你不知道Unicode是什么，它实际上就是ASCII的一种扩展。它的单个字符长度不是8bit，而是16bit，从而能保存所有的国际字符。
+       <br /> 
+       <br /> 
+	   这里如果被按下的键的Unicode值是空格字符，我们将它添加到字符串中。由于标准字符串仅仅使用8bit ASCII字符，我们在添加字符时必须将其转换。
       </div> 
-      <pre class="tutCode prettyprint linenums:61 lang-cpp">            //If the key is a number
+      <pre class="tutCode prettyprint linenums:61 lang-cpp">            //如果按键是数字
             else if( ( event.key.keysym.unicode &gt;= (Uint16)'0' ) &amp;&amp; ( event.key.keysym.unicode &lt;= (Uint16)'9' ) )
             {
-                //Append the character
+                //添加字符
                 str += (char)event.key.keysym.unicode;
             }
-            //If the key is a uppercase letter
+            //如果按键是一个大写字母
             else if( ( event.key.keysym.unicode &gt;= (Uint16)'A' ) &amp;&amp; ( event.key.keysym.unicode &lt;= (Uint16)'Z' ) )
             {
-                //Append the character
+                //添加字符
                 str += (char)event.key.keysym.unicode;
             }
-            //If the key is a lowercase letter
+            //如果按键是一个小写字符
             else if( ( event.key.keysym.unicode &gt;= (Uint16)'a' ) &amp;&amp; ( event.key.keysym.unicode &lt;= (Uint16)'z' ) )
             {
-                //Append the character
+                //添加字符
                 str += (char)event.key.keysym.unicode;
             }
         }
 </pre> 
       <div class="tutText">
-        In this program we only want spaces (ASCII/Unicode 32), numbers (48-57), uppercase (65-90), and lowercase (97-122) letters to appear. So here we limit the numbers allowed to be appended to the string. 
+		在这个程序里，我们仅需要显示空格(ASCII/Unicode 32), 数字 (48-57), 大写字母 (65-90), 和小写字母 (97-122)。所以这里我们限制了允许添加到字符串的字符范围。
       </div> 
-      <pre class="tutCode prettyprint linenums:80 lang-cpp">        //If backspace was pressed and the string isn't blank
+      <pre class="tutCode prettyprint linenums:80 lang-cpp">        //如果退格键被按下并且字符串不为空
         if( ( event.key.keysym.sym == SDLK_BACKSPACE ) &amp;&amp; ( str.length() != 0 ) )
         {
-            //Remove a character from the end
+            //从末尾移除一个字符
             str.erase( str.length() - 1 );
         }
 </pre> 
       <div class="tutText">
-        Here we deal with when the user presses backspace. 
+		这里我们处理了用户按下退格键<kbd class="light">Backspace</kbd>的情况。
        <br /> 
-       <br /> We simply check if the string is empty, and if it's not we lop off the last character of the string. 
+       <br /> 
+	   我们检查一下字符串是否为空，如果不为空，我们去掉了字符串的最后一个字符。
       </div> 
-      <pre class="tutCode prettyprint linenums:86 lang-cpp">        //If the string was changed
+      <pre class="tutCode prettyprint linenums:86 lang-cpp">        //如果字符串发生更改
         if( str != temp )
         {
-            //Free the old surface
+            //释放旧的文本表面
             SDL_FreeSurface( text );
         
-            //Render a new text surface
+            //渲染一个新的文本表面
             text = TTF_RenderText_Solid( font, str.c_str(), textColor );
         }
     }
 }
 </pre> 
       <div class="tutText">
-        Lastly, we check if string was altered by comparing it to the copy we made earlier. 
+		最后，我们检查当前字符串是否与我们之前拷贝的字符串相比发生了改变。
        <br /> 
-       <br /> If the string has changed, we free the old text surface, and render a new one. 
+       <br /> 
+	   如果字符串改变了，我们释放旧的文本表面，并渲染一个新的。
       </div> 
       <pre class="tutCode prettyprint linenums:97 lang-cpp">void StringInput::show_centered()  
 {
-    //If the surface isn't blank
+    //如果表面不是空的
     if( text != NULL )
     {
-        //Show the name
+        //显示姓名
         apply_surface( ( SCREEN_WIDTH - text-&gt;w ) / 2, ( SCREEN_HEIGHT - text-&gt;h ) / 2, text, screen );
     }
 }
 </pre> 
       <div class="tutText">
-        In our show_centered() function we apply the text surface centered on the screen. 
+		在我们的<code>show_centered()</code>函数中，我们将文本表面居中显示在屏幕上。
        <br /> 
-       <br /> In this program we check if the name surface is NULL because when you try to render a surface from a blank string ( that-&gt; &quot;&quot; ), SDL_ttf returns NULL. Which makes sense because it was given nothing to render. 
+       <br /> 
+	   在这个程序中，我们要检查文本表面是否为NULL，因为当你尝试用一个空字符串(也就是"")渲染一个表面时，SDL_ttf会返回NULL。这是合理的，因为没有任何东西需要渲染。
        <br /> 
       </div> 
       <pre class="tutCode prettyprint linenums:106 lang-cpp">int main( int argc, char* args[] )
 {
-    //Quit flag
+    //退出标识
     bool quit = false;
     
-    //Keep track if whether or not the user has entered their name
+    //跟踪用户是否输入了名字
     bool nameEntered = false;
     
-    //Initialize
+    //初始化
     if( init() == false )
     {
         return 1;
     }
     
-    //The gets the user's name
+    //获取用户姓名
     StringInput name;
     
-    //Load the files
+    //加载文件
     if( load_files() == false )
     {
         return 1;
     }
     
-    //Set the message
+    //设置信息
     message = TTF_RenderText_Solid( font, &quot;New High Score! Enter Name:&quot;, textColor );
 </pre> 
       <div class="tutText">
-        At the top of our main() function we have two new variables. &quot;nameEntered&quot; is a flag that tells whether or not the user has entered their name which we obviously initialize to false. &quot;name&quot; is, of course, an object of the class we made used to get the user's name. 
+		在<code>main()</code>函数的顶部，我们有两个新的变量。&quot;nameEntered&quot;是一个标识，指示用户是否输入了他们的名字，显然我们将它初始化为false；&quot;name&quot;当然就是我们所创建的获取用户姓名的类的对象了。
        <br /> 
-       <br /> We have our typical initialization and loading but we also render the message surface before we go into the main loop. 
+       <br /> 
+	   我们有特殊的初始化和加载操作，但我们也需要在进入主循环前渲染信息表面。
       </div> 
-      <pre class="tutCode prettyprint linenums:131 lang-cpp">    //While the user hasn't quit
+      <pre class="tutCode prettyprint linenums:131 lang-cpp">    //当用户还未退出
     while( quit == false )
     {
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //If the user hasn't entered their name yet
+            //如果用户还未输入其姓名
             if( nameEntered == false )
             {
-                //Get user input
+                //获取用户输入
                 name.handle_input();
                 
-                //If the enter key was pressed
+                //如果回车键被按下
                 if( ( event.type == SDL_KEYDOWN ) &amp;&amp; ( event.key.keysym.sym == SDLK_RETURN ) )
                 {
-                    //Change the flag
+                    //改变标识的值
                     nameEntered = true;
                         
-                    //Free the old message surface
+                    //释放旧的信息表面
                     SDL_FreeSurface( message );
                         
-                    //Change the message
+                    //改变信息
                     message = TTF_RenderText_Solid( font, &quot;Rank: 1st&quot;, textColor );
                 }
             }
             
-            //If the user has Xed out the window
+            //如果用户叉掉了窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
 </pre> 
       <div class="tutText">
-        Here's the event handling part of our main loop. 
+		这是主循环中事件处理的部分。
        <br /> 
-       <br /> First we check if the user is still entering their name. If they are we call handle_input() on our StringInput object and let it do its thing. 
        <br /> 
-       <br /> When the user presses enter, it means the user has finished so we set the &quot;nameEntered&quot; flag to true. Then we free the old message surface and render a new one. 
+	   首先我们检查用户是否仍在输入姓名。如果是的，我们调用StringInput对象的<code>handle_input()</code>，让它做它应该做的事。
+       <br /> 
+       <br /> 
+	   当用户按下回车键<kbd class="light">Enter</kbd>，这意味着用户完成了输入，所以我们将&quot;nameEntered&quot;标识设为true。然后，我们释放旧的信息表面，并渲染一个新的。
        <br /> 
        <br /> and of course we also check if the user wants to X out. 
+	   当然，我们也检查用户是否叉掉了窗口。
       </div> 
-      <pre class="tutCode prettyprint linenums:164 lang-cpp">        //Apply the background
+      <pre class="tutCode prettyprint linenums:164 lang-cpp">        //应用背景
         apply_surface( 0, 0, background, screen );
 
-        //Show the message
+        //显示信息
         apply_surface( ( SCREEN_WIDTH - message-&gt;w ) / 2, ( ( SCREEN_HEIGHT / 2 ) - message-&gt;h ) / 2, message, screen );
         
-        //Show the name on the screen
+        //在屏幕上显示姓名
         name.show_centered();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
@@ -320,25 +336,28 @@ StringInput::~StringInput()
     }
 </pre> 
       <div class="tutText">
-        Now here's the rendering part of our main loop. 
+		现在，这是主循环的渲染部分。
        <br /> 
-       <br /> Nothing really new here, we just apply the background, then message surface and show our text input. 
        <br /> 
-       <br /> In this tutorial we only handled string input, but getting integers isn't much harder. The 
-       <a class="tutLink" href="../../../www.cppreference.com/stdstring/index.html">string header</a> has the function atoi() that gets an integer from a string. There's other functions that'll do floating point numbers. Look 'em up. 
+	   这里没有什么新的东西，我们只是应用了背景和信息表面，并显示了我们输入的文本。
+       <br /> 
+       <br /> 
+	   在本课中，我们只是处理了字符串输入，但整数输入也并不比这个难多少。C标准函数库中有一个<code>atoi()</code>函数，用于从字符串获得整数。其中也有其他处理浮点数的函数。
+	   (<a class="tutLink" target="_blank" href="http://www.cppreference.com/stdstring/index.html"><i class="icon-globe"></i>查看详细</a>)
+	   <br />
+	   <br />
+	   <div class="alert alert-info"><b>译者注</b>：要使用C标准函数库，C语言需要包含头文件<code>stdlib.h</code>，C++则需要包含与之等价的<code>cstdlib</code>。</div>
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson23">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson22/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson24/index.php">Next Tutorial</a> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson23">此处下载</a>。
        <br /> 
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson24/index.html">下一课：保存游戏</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
