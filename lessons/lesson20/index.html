@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第20课 - 动画</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月13日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson20/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson19/index.html" id="prev_link">上一课</a></li> 
@@ -57,74 +57,75 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Animation</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Up until this point we've pretty much have just been working with still images. This tutorial makes a stick figure walk across the screen to teach the basics of animating sprites. 
+	   直到现在，我们已经仅仅是在和静态图像打交道。本课教程将通过实现一个在屏幕上行走的火柴人，来教你精灵动画的基本技术。
       </div> 
+	  <br/>
       <div class="tutText">
-        The basic concept of animation is to take a series of images like the ones in this sprite sheet: 
+		动画的基本概念是先拿来一连串的图像，就像下面这张精灵图中的火柴人。
        <br /> 
        <div class="tutImg"> 
         <img src="foosprites.jpg" /> 
        </div> 
-       <br /> Then show one right after the other to create the illusion of movement: 
+       <br /> 
+	   然后从左往右逐个展示，来创造运动的幻觉。
        <br /> 
        <div class="tutImg"> 
         <img src="foowalk.gif" /> 
        </div> 
-       <br /> So when you're animating in SDL, you're showing a sequence of SDL_Surfaces. 
+       <br />
+	   所以当你在SDL中使用动画时，实际上你就是在展示一系列的<code>SDL_Surface</code>.
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The stick figure
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//火柴人
 class Foo
 {
     private:
-    //The offset
+    //坐标
     int offSet;
     
-    //Its rate of movement
+    //移动速度
     int velocity;
     
-    //Its current frame
+    //当前帧
     int frame;
     
-    //Its animation status
+    //动画状态
     int status;
 
     public:
-    //Initializes the variables
+    //初始化变量
     Foo();
     
-    //Handles input
+    //处理输入
     void handle_events();
     
-    //Moves the stick figure
+    //移动火柴人
     void move();    
     
-    //Shows the stick figure
+    //显示火柴人
     void show();    
 };
 
 </pre> 
       <div class="tutText">
-        Here's the class of the stick figure that we're going to move across the screen. 
+		这是我们将要在屏幕上移动的火柴人的类。
        <br /> 
-       <br /> First we have the &quot;offSet&quot; and &quot;velocity&quot; variables. Since we're only moving the stick figure right or left, we only keep track of the x offset and velocity. 
        <br /> 
-       <br /> Then we have the &quot;frame&quot; and &quot;status&quot; variables. &quot;frame&quot; keeps track of which frame in the animation to show. &quot;status&quot; keeps track of which animation to show, either the animation of the Foo walking left or the animation of Foo walking right. 
+	   首先，我们有&quot;offSet&quot; 和 &quot;velocity&quot;变量。因为我们仅仅将火柴人向左或向右移动，所以我们仅仅跟踪x方向的坐标和速度。
        <br /> 
-       <br /> Then of course we have the constructor, the event handler, and the functions that move and show the stick figure. 
+       <br /> 
+	   然后，我们有&quot;frame&quot; 和 &quot;status&quot;变量。&quot;frame&quot; 指示动画中显示的是哪一帧。&quot;status&quot;指示了显示哪个动画，即Foo向左走的动画或Foo向右走的动画。
+       <br /> 
+       <br />
+	   接着，我们当然有构造器、事件处理函数和移动及显示火柴人的函数。
       </div> 
       <pre class="tutCode prettyprint linenums:30 lang-cpp">void set_clips()
 {
-    //Clip the sprites
+    //剪切子图
     clipsRight[ 0 ].x = 0;
     clipsRight[ 0 ].y = 0;
     clipsRight[ 0 ].w = FOO_WIDTH;
@@ -167,32 +168,34 @@ class Foo
 }
 </pre> 
       <div class="tutText">
-        Here's the function that sets the clips for the individual sprites in the sprite sheet. 
+		这个函数设置了精灵图中每个单独子图的剪切范围。
        <br /> 
-       <br /> We have two sets of sprites, the sprites clipped by clipsRight which are frames of the animation of Foo walking right and the sprites clipped by clipsLeft which are frames of the animation of Foo walking left. 
+       <br /> 
+	   我们有两组子图，其中clipsRight剪切的子图是Foo向右走动画的帧，clipsLeft剪切的子图是Foo向左走动画的帧。
       </div> 
       <pre class="tutCode prettyprint linenums:73 lang-cpp">Foo::Foo()
 {
-    //Initialize movement variables
+    //初始化移动参数
     offSet = 0;
     velocity = 0;
     
-    //Initialize animation variables
+    //初始化动画参数
     frame = 0;
     status = FOO_RIGHT;
 }
 </pre> 
       <div class="tutText">
-        In the constructor for the Foo class, first we initialize the offset and velocity. 
+        在Foo类的构造器中，我们首先初始化坐标和速度。
        <br /> 
-       <br /> Then we set the animation to be frame 0, and we set the status to FOO_RIGHT so that the default animation is that of the stick figure walking right. 
+       <br /> 
+	   然后我们设置动画在帧0的状态，并且我们将status设置为<code>FOO_RIGHT</code>，这样默认的动画就是火柴人向右走的动画。
       </div> 
       <pre class="tutCode prettyprint linenums:83 lang-cpp">void Foo::move()
 {
-    //Move
+    //移动
     offSet += velocity;
     
-    //Keep the stick figure in bounds
+    //确保火柴人在屏幕范围内
     if( ( offSet &lt; 0 ) || ( offSet + FOO_WIDTH &gt; SCREEN_WIDTH ) )
     {
         offSet -= velocity;    
@@ -200,55 +203,58 @@ class Foo
 }
 </pre> 
       <div class="tutText">
-        Now in move(), we first move the stick figure and keep it in bounds like always. 
+		现在在move()函数中，我们首先采用一贯的做法移动火柴人并确保它在屏幕内。
       </div> 
       <pre class="tutCode prettyprint linenums:94 lang-cpp">void Foo::show()
 {
-    //If Foo is moving left
+    //如果Foo向左走
     if( velocity &lt; 0 )
     {
-        //Set the animation to left
+        //设置动画为向左走的动画
         status = FOO_LEFT;
         
-        //Move to the next frame in the animation
+        //动画进入下一帧
         frame++;
     }
-    //If Foo is moving right
+    //如果Foo向右走
     else if( velocity &gt; 0 )
     {
-        //Set the animation to right
+        //设置动画为向右走的动画
         status = FOO_RIGHT;
         
-        //Move to the next frame in the animation
+        //动画进入下一帧
         frame++;
     }
-    //If Foo standing
+    //如果Foo站着不动
     else
     {
-        //Restart the animation
+        //重新启动动画
         frame = 0;    
     }
 </pre> 
       <div class="tutText">
-        After the stick figure is moved, it's time to do the actual animation. First we check which way it's moving. 
+		火柴人移动后，是时候实现真正的动画了。首先我们检查它移动的方向。
        <br /> 
-       <br /> If it's moving left, we set the status to FOO_LEFT, then increment the frame counter so the next sprite in the animation is shown. 
        <br /> 
-       <br /> If it's moving right, we set the status to FOO_RIGHT, then increment the frame counter so the next sprite in the animation is shown. 
+	   如果它向左走，我们将status设为<code>FOO_LEFT</code>，然后增加帧计数器的值，这样动画中的下一个子图将被显示出来。
        <br /> 
-       <br /> If the figure is still, we set the frame to 0 to restart the animation. This is so the stick figure doesn't look like it's in mid-step when it's standing still. 
+       <br /> 
+	   如果它向右走，我们将status设为<code>FOO_RIGHT</code>，然后增加帧计数器的值，这样动画中的下一个子图将被显示出来。
+       <br /> 
+       <br /> 
+	   如果火柴人是静止的，我们将frame设为0来重新启动动画。这样火柴人在静止站立时就不会看上去像迈了一半的步子了。
        <br /> 
       </div> 
-      <pre class="tutCode prettyprint linenums:120 lang-cpp">    //Loop the animation
+      <pre class="tutCode prettyprint linenums:120 lang-cpp">    //动画循环
     if( frame &gt;= 4 )
     {
         frame = 0;
     }
 </pre> 
-      <div class="tutText">
-        After that we check if the frame counter already went past the fourth frame, since there's only 4 frames in the animation. If the frame counter has gone too far, we restart the animation so it will keep looping while the stick figure is moving. 
+      <div class="tutText">        
+		之后，我们检查帧计数器是否已经达到第四帧，由于动画中仅有4帧，如果帧计数器超过这个数，我们就重启动画以使火柴人在移动时保持动画的循环。
       </div> 
-      <pre class="tutCode prettyprint linenums:125 lang-cpp">    //Show the stick figure
+      <pre class="tutCode prettyprint linenums:125 lang-cpp">    //显示火柴人
     if( status == FOO_RIGHT )
     {
         apply_surface( offSet, SCREEN_HEIGHT - FOO_HEIGHT, foo, screen, &amp;clipsRight[ frame ] );
@@ -260,58 +266,59 @@ class Foo
 }
 </pre> 
       <div class="tutText">
-        Lastly, we show the proper sprite on the screen. 
+		最后，我们在屏幕上显示正确的子图。
        <br /> 
-       <br /> If the stick figure is moving right we apply the proper sprite from the walking right animation, if the stick figure is moving left we apply the proper sprite from the walking left animation. 
+       <br /> 
+	   如果火柴人在向右走，我们从向右走的动画中应用正确的子图；如果火柴人在向左走，我们从向左走的动画中应用正确的子图。
       </div> 
-      <pre class="tutCode prettyprint linenums:135 lang-cpp">    //Set the sprite sheet clips
+      <pre class="tutCode prettyprint linenums:135 lang-cpp">    //设置精灵图的剪切
     set_clips();
 
-    //The frame rate regulator
+    //帧率校准器
     Timer fps;
     
-    //Make the stick figure
+    //创建火柴人
     Foo walk;
 </pre> 
       <div class="tutText">
-        In our main function after the initialization and file loading, we set the clips for the sprite sheet, then declare a FPS timer, then declare the stick figure object. 
+        在我们的main函数中，初始化和文件加载完毕后，我们设置精灵图的剪切，然后声明一个FPS计时器，接着声明一个火柴人对象。
       </div> 
-      <pre class="tutCode prettyprint linenums:143 lang-cpp">    //While the user hasn't quit
+      <pre class="tutCode prettyprint linenums:143 lang-cpp">    //当用户还没退出
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计时器
         fps.start();
     
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the stick figure
+            //处理火柴人的事件
             walk.handle_events();
             
-            //If the user has Xed out the window
+            //如果用户还没有叉掉窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the stick figure
+        //移动火柴人
         walk.move();
         
-        //Fill the screen white
-        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+        //用白色填充屏幕
+        SDL_FillRect( screen, screen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
         
-        //Show the stick figure on the screen
+        //在屏幕上显示火柴人
         walk.show();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //捕获帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -319,22 +326,23 @@ class Foo
     }
 </pre> 
       <div class="tutText">
-        Here we have the main loop. It's pretty much the same story as before with our Dot class from previous lessons. 
+		这里我们有main循环。它和前面课程中和Dot类一起使用的main循环基本一致。
        <br /> 
-       <br /> So as you can see for an animation engine, all you have to do is keep track of which animation you're using and which frame you're blitting. 
+       <br /> 
+	   因此，就像你看到的那样，对于一个动画引擎，你需要做的仅仅是跟踪你要使用的是哪个动画以及你要blit哪一帧。
+	   <br /> 
+	   <br /> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson20">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson19/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson21/index.php">Next Tutorial</a> 
-       <br /> 
+		本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson20">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+   
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson21/index.html">下一课：滚动</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
