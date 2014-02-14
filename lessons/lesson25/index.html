@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第25课 - 控制杆</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月14日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson25/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson24/index.html" id="prev_link">上一课</a></li> 
@@ -57,132 +57,129 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Joysticks</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 12/28/09</h6> Here we'll learn to use get input from a joystick/gamepad. This program is basically the motion tutorial, only this time a joystick will move around the dot instead of the keyboard. 
+		这里我们将学习从控制杆/游戏手柄获取输入。这个程序的基础是运动那一课，只是这次控制杆将取代键盘来移动点。
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The joystick that will be used
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//将要使用到的控制杆
 SDL_Joystick *stick = NULL;
 </pre> 
       <div class="tutText">
-        Joysticks have their own data type in SDL which is SDL_Joystick. 
+		控制杆在SDL中有自己的数据类型，即SDL_Joystick。
        <br /> 
-       <br /> In this program we declare our joystick as a global variable. 
+       <br /> 
+	   在这个程序中，我们把控制杆声明为全局变量。
       </div> 
-      <pre class="tutCode prettyprint linenums:3 lang-cpp">//The dot
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">//点
 class Dot
 {
     private:
-    //The offsets of the dot
+    //点的坐标
     int x, y;
     
-    //The velocity of the dot
+    //点的速度
     int xVel, yVel;
     
     public:
-    //Initializes
+    //初始化
     Dot();
     
-    //Handles joystick
+    //处理控制杆
     void handle_input();
     
-    //Moves the dot
+    //移动点
     void move();
     
-    //Shows the dot
+    //显示点
     void show();
 };
 </pre> 
       <div class="tutText">
-        As you can see, the Dot class has pretty much stayed the same. The only thing that has changed is how we handle the input. 
+		就像你看到的那样，Dot类和以前的基本保持一样。唯一的改变是我们处理输入的方式。
       </div> 
       <pre class="tutCode prettyprint linenums:26 lang-cpp">bool init()
 {
-    //Initialize all SDL subsystems
+    //初始化所有SDL的子系统
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
         return false;    
     }
     
-    //Set up the screen
+    //设置屏幕
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
     
-    //If there was an error in setting up the screen
+    //如果设置屏幕时出现错误
     if( screen == NULL )
     {
         return false;    
     }
     
-    //Check if there's any joysticks
+    //检查是否有控制杆
     if( SDL_NumJoysticks() &lt; 1 )
     {
         return false;    
     }
     
-    //Open the joystick
+    //打开控制杆
     stick = SDL_JoystickOpen( 0 );
     
-    //If there's a problem opening the joystick
+    //如果打开控制杆出现问题
     if( stick == NULL )
     {
         return false;
     }
     
-    //Set the window caption
+    //设置窗口标题
     SDL_WM_SetCaption( &quot;Move the Dot&quot;, NULL );
     
-    //If everything initialized fine
+    //如果所有初始化都成功
     return true;
 }
 </pre> 
       <div class="tutText">
-        A key difference between using keys for input and using joysticks is that joysticks have to be initialized. 
+		使用键盘和控制杆作为输入的一个关键区别是控制杆必须要执行初始化。
        <br /> 
-       <br /> In the initialization function we use SDL_NumJoysticks() to check how many joysticks are plugged in. If at least 1 joystick is plugged in, we open the first joystick available using SDL_JoystickOpen(). The first available joystick is joystick 0 since in programming we always start counting at 0. When there's problem in opening the joystick, SDL_JoystickOpen() returns NULL. 
+       <br /> 
+	   在初始化函数中我们使用<code>SDL_NumJoysticks()</code>来检查插入了多少个控制杆。如果至少一个控制杆被插入，我们就用函数<code>SDL_JoystickOpen()</code>打开第一个可用的控制杆。第一个可用的控制杆是控制杆0，，因为在编程中我们总是从0开始计数。当打开控制杆出现问题，<code>SDL_JoystickOpen()</code>会返回NULL。
       </div> 
       <pre class="tutCode prettyprint linenums:64 lang-cpp">void clean_up()
 {
-    //Free the surface
+    //释放表面
     SDL_FreeSurface( dot );
     
-    //Close the joystick
+    //关闭控制杆
     SDL_JoystickClose( stick );
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
 }
 </pre> 
       <div class="tutText">
-        In the clean up function, we have to call SDL_JoystickClose() to close the joystick that was opened. 
+		在清理函数中，我们必须调用<code>SDL_JoystickClose()</code>来关闭被打开的控制杆。
       </div> 
       <pre class="tutCode prettyprint linenums:75 lang-cpp">void Dot::handle_input()
 {
-    //If a axis was changed
+    //如果一个轴上发生变化
     if( event.type == SDL_JOYAXISMOTION )
     {
-        //If joystick 0 has moved
+        //如果控制杆0发生变化
         if( event.jaxis.which == 0 )
         {
-            //If the X axis changed
+            //如果X轴变化
             if( event.jaxis.axis == 0 )
             {
-                //If the X axis is neutral
+                //如果X轴处在中间位置
                 if( ( event.jaxis.value &gt; -8000 ) &amp;&amp; ( event.jaxis.value &lt; 8000 ) )
                 {
                     xVel = 0;
                 }
-                //If not
+                //如果不是
                 else
                 {
-                    //Adjust the velocity
+                    //调整速度
                     if( event.jaxis.value &lt; 0 )
                     {
                         xVel = -DOT_WIDTH / 2;
@@ -194,31 +191,36 @@ class Dot
                 }    
             }
 </pre> 
-      <div class="tutText">
-        When a joystick moves, a SDL_JOYAXISMOTION occurs. 
+      <div class="tutText"> 
+		当控制杆移动时,一个SDL_JOYAXISMOTION事件会发生。
        <br /> 
-       <br /> First we check if the joystick that has moved is joystick 0. It's kind of pointless in this program since the only initialized joystick is joystick 0, but in real games you'll need to check multiple joysticks. 
        <br /> 
-       <br /> Then we check which axis it has moved on. On most modern joysticks, the X axis is 0, and the Y axis is 1. 
+	   首先我们检查移动的控制杆是控制杆0,。在这个程序中,这是无关紧要的,因为被初始化的控制杆只有控制杆0，但是在实际游戏中，你可能将需要检查多个控制杆。
        <br /> 
-       <br /> After that we check if the joystick X value is between -8000, and 8000. If it is, it's neutral and the dot stays still. 
        <br /> 
-       <br /> You may be thinking &quot;how the hell is such a large range considered neutral?&quot;. The thing is a joystick's axis have a range of -32768 to 32767. You could have the joystick at 0 and if you sneezed on it, it would be at like 200. 
+	   然后我们检查它移动的是哪个轴。在大多数现代控制杆上，X轴是0，Y轴是1。
        <br /> 
-       <br /> If the joystick is not in the neutral range, we set the X velocity accordingly. 
+       <br /> 
+	   接着我们检查X轴的值是否在-8000到8000范围内。如果是的，X轴是处于中间位置的，点将保持静止。
+       <br /> 
+       <br /> 
+	   你可能在想&quot;为神马如此大的一个范围被认为是处于中间位置？&quot;原因是控制杆的轴的范围是-32768到32767。你可以将控制杆放在0的位置，然后你朝它打一个喷嚏,它可能就会变成200 。
+       <br /> 
+       <br />
+	   如果控制杆不在中间位置范围内，我们就设置相应的X方向的速度。
       </div> 
-      <pre class="tutCode prettyprint linenums:105 lang-cpp">            //If the Y axis changed
+      <pre class="tutCode prettyprint linenums:105 lang-cpp">            //如果Y轴发生变化
             else if( event.jaxis.axis == 1 )
             {
-                //If the Y axis is neutral
+                //如果Y轴在中间位置
                 if( ( event.jaxis.value &gt; -8000 ) &amp;&amp; ( event.jaxis.value &lt; 8000 ) )
                 {
                     yVel = 0;
                 }
-                //If not
+                //如果不是
                 else
                 {
-                    //Adjust the velocity
+                    //调整速度
                     if( event.jaxis.value &lt; 0 )
                     {
                         yVel = -DOT_HEIGHT / 2;
@@ -234,22 +236,22 @@ class Dot
 }
 </pre> 
       <div class="tutText">
-        Then pretty much the same thing is done to the Y axis. 
+		然后Y轴的处理和之前的一样。
        <br /> 
-       <br /> Handling SDL_JoyAxisEvent is the hardest event to handle when dealing with joysticks. Handling other events like SDL_JoyBallEvent, SDL_JoyHatEvent, and SDL_JoyButtonEvent should be easy to figure out with a quick look at the SDL API documentation. 
+       <br /> 
+	   处理控制杆时，SDL_JoyAxisEvent是最难处理的事件。处理其他的事件，比如SDL_JoyBallEvent, SDL_JoyHatEvent, 和 SDL_JoyButtonEvent，应该是容易想出来的，只要你快速浏览一下SDL的API文档。
+	   <br /> 
+       <br /> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson25">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson24/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson26/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson25">此处下载</a>。  
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson26/index.html">下一课：可缩放窗口和窗口事件</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
