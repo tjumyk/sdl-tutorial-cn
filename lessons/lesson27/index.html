@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第27课 - Alpha混合</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月14日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson27/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson26/index.html" id="prev_link">上一课</a></li> 
@@ -57,116 +57,115 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Alpha Blending</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 12/28/09</h6> Alpha blending allows you to have have surfaces with different levels of transparency. In this tutorial we blit two surfaces with the front one being able to fade in/out by changing its alpha value. 
+	   Alpha混合让你能够使表面具有不同级别的透明度。在本课中我们将blit两个表面，其中前面的一个表面能够通过改变它的alpha值使其淡入/淡出。
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The frame rate
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//帧率
 const int FRAMES_PER_SECOND = 20;
 </pre> 
       <div class="tutText">
-        SDL's alpha transparency is notoriously slow. That's because it's not hardware accelerated. Stick whatever graphics card in your system it won't make much of a difference. 
+		SDL的alpha透明度是众所周知的慢。因为这是没有硬件加速的。无论你的系统插入了什么显卡，这都不会有太大区别。
        <br /> 
-       <br /> I just wanted to point out that if you notice SDL being really slow in this demo, it may be because the frame rate is capped at 20 fps. 
        <br /> 
-       <br /> If you want hardware accelerated graphics, consider moving on to OpenGL. It works very well with SDL. 
+	   我只是想指出，如果你发现SDL在这个演示程序中真的很慢，有可能是因为帧率被限制在20fps。
+       <br /> 
+       <br /> 
+	   如果你想要硬件加速的图像,可以考虑OpenGL。它可以和SDL一起很好地工作。
       </div> 
-      <pre class="tutCode prettyprint linenums:3 lang-cpp">    //Quit flag
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">    //退出标识
     bool quit = false;
     
-    //The front surface alpha value
+    //前表面的alpha值
     int alpha = SDL_ALPHA_OPAQUE;
     
-    //The frame rate regulator
+    //帧率校准器
     Timer fps;
     
-    //Initialize
+    //初始化
     if( init() == false )
     {
         return 1;
     }
     
-    //Load the files
+    //加载文件
     if( load_files() == false )
     {
         return 1;    
     }
 </pre> 
       <div class="tutText">
-        Near the top of our main function we declare &quot;alpha&quot; to hold the alpha value of our front surface. 
+		在main函数的顶部附近我们声明&quot;alpha&quot;来保存我们的前表面的alpha值。
       </div> 
-      <pre class="tutCode prettyprint linenums:23 lang-cpp">        //Get the keystates
+      <pre class="tutCode prettyprint linenums:23 lang-cpp">        //获取按键状态
         Uint8 *keystates = SDL_GetKeyState( NULL );
     
-        //If up is pressed
+        //如果向上方向键被按下
         if( keystates[ SDLK_UP ] )
         {
-            //If alpha is not at maximum
+            //如果alpha没有达到最大值
             if( alpha &lt; SDL_ALPHA_OPAQUE )
             {
-                //Increase alpha
+                //增大alpha
                 alpha += 5;
             }
         }
     
-        //If down is pressed
+        //如果向下方向键被按下
         if( keystates[ SDLK_DOWN ] )
         {
-            //If alpha is not at minimum
+            //如果alpha没有达到最小值
             if( alpha &gt; SDL_ALPHA_TRANSPARENT )
             {
-                //Decrease alpha
+                //减小alpha
                 alpha -= 5;
             }
         }
 </pre> 
       <div class="tutText">
-        Here's where we play with our alpha value. 
+		这里是我们调节alpha的地方。
        <br /> 
-       <br /> Alpha goes from 0 to 255 like Red, Green, or Blue. Alpha at 0 is completely transparent and equal to SDL_ALPHA_TRANSPARENT. Alpha at 255 is completely opaque and equal to SDL_ALPHA_OPAQUE. 
        <br /> 
-       <br /> In this piece of code we get the key states, then increase alpha when up is pressed and decrease alpha when down is pressed. 
+	   Alpha的值和红、绿、蓝一样从0到255。Alpha为0意味着完全透明，并且等于SDL_ALPHA_TRANSPARENT。Alpha为255意味着完全不透明，并且等于SDL_ALPHA_OPAQUE。
+       <br /> 
+       <br /> 
+	   在这段代码里,我们获取了按键状态,然后在<kbd class="light">↑</kbd>按下时增加alpha，在<kbd class="light">↓</kbd>按下时减小alpha。
       </div> 
-      <pre class="tutCode prettyprint linenums:47 lang-cpp">        //Set surface alpha
+      <pre class="tutCode prettyprint linenums:47 lang-cpp">        //设置表面的alpha
         SDL_SetAlpha( front, SDL_SRCALPHA, alpha );
         
-        //Apply the back
+        //应用后表面
         apply_surface( 0, 0, back, screen );
         
-        //Apply the front
+        //应用前表面
         apply_surface( 0, 0, front, screen );
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
 </pre> 
       <div class="tutText">
-        Here we apply the alpha value to the front surface using SDL_SetAlpha(). Now when the front surface us blitted, it will have the transparency we set. 
+		这里我们使用<code>SDL_SetAlpha()</code>函数来设置前表面的alpha值。现在当前表面被blit时，它将会有我们设置的透明度。
        <br /> 
-       <br /> Then we blit back surface, then the front surface with the alpha value we gave it and finally we update the screen. 
+       <br /> 
+	   然后我们blit后表面，接着blit带有我们设定的alpha值的前表面，最后我们更新屏幕。
+	   <br /> 
+       <br /> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson27">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson26/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson28/index.php">Next Tutorial</a> 
-       <br /> 
+       本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson27">此处下载</a>。  
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson28/index.html">下一课：粒子引擎</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
