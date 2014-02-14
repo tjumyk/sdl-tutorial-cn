@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第28课 - 粒子引擎</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月14日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson28/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson27/index.html" id="prev_link">上一课</a></li> 
@@ -57,43 +57,38 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Particle Engines</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Particle engines are ways to create effects like fire, smoke, or in this case a trail of sparks. Here we're going to make a very simple particle engine to surround the dot in sparks. 
+	   粒子引擎可以用来创建一些效果，比如火焰，烟雾，或者在本课中的火花轨迹。这里我们将建立一个非常简单的粒子引擎，使火花环绕着小点。
       </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">class Particle
 {
     private:
-    //Offsets
+    //坐标
     int x, y;
     
-    //Current frame of animation
+    //当前动画的帧
     int frame;
     
-    //Type of particle
+    //粒子的类型
     SDL_Surface *type;
     
     public:
-    //Constructor
+    //构造函数
     Particle( int X, int Y );
     
-    //Shows the particle
+    //显示粒子
     void show();
 
-    //Checks if particle is dead
+    //检查粒子是否死亡
     bool is_dead();
 };
 </pre> 
       <div class="tutText">
-        Particles are just little animations. We want to surround the dot with a bunch of little flashing sparks that look like this: 
+		粒子仅仅都是微型的动画。我们需要在点的周围加上一组微小的闪光的火花，看上去就像这样：
        <br /> 
        <div class="tutImg"> 
         <img src="red.gif" /> 
@@ -109,88 +104,91 @@
         <img src="blue.gif" /> 
         <img src="red.gif" /> 
         <img src="green.gif" /> 
-       </div> So we'll create a particle class and give the dot a bunch of particles. 
+       </div> 
+	   所以我们将创建一个粒子类并给点加上一组粒子。
        <br /> 
-       <br /> These spark particles are real simple. They have offsets, a frame of animation and a surface. 
        <br /> 
-       <br /> In terms of functions they have a constructor, a function to show the spark and a function to check if the spark is still active. 
+	   这些火花粒子真的很简单。它们有坐标，动画中的一帧以及一个表面。
+       <br /> 
+       <br /> 
+	   在函数方面，它们有个构造函数，一个显示火花的函数，以及一个检查火花是否仍然存活的函数。
       </div> 
-      <pre class="tutCode prettyprint linenums:23 lang-cpp">//The dot
+      <pre class="tutCode prettyprint linenums:23 lang-cpp">//点
 class Dot
 {
     private:
-    //The offsets
+    //坐标
     int x, y;
     
-    //The velocity of the dot
+    //点的速度
     int xVel, yVel;
     
-    //The particles
+    //粒子
     Particle *particles[ TOTAL_PARTICLES ];
     
     public:
-    //Initializes
+    //初始化
     Dot();
     
-    //Cleans up particles
+    //清理粒子
     ~Dot();
     
-    //Handles keypresses
+    //处理按键
     void handle_input();
     
-    //Moves the dot
+    //移动点
     void move();
     
-    //Shows the particles
+    //显示粒子
     void show_particles();
     
-    //Shows the dot
+    //显示点
     void show();
 };
 </pre> 
       <div class="tutText">
-        Here we have our good friend the dot class revised to include the particles. 
+		这里我们有老朋友Dot类，经过修改，它能包含那些粒子。
       </div> 
       <pre class="tutCode prettyprint linenums:55 lang-cpp">bool init()
 {
-    //Initialize all SDL subsystems
+    //初始化所有SDL子系统
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
         return false;    
     }
     
-    //Set up the screen
+    //设置屏幕
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
     
-    //If there was an error in setting up the screen
+    //如果设置屏幕时出错
     if( screen == NULL )
     {
         return false;    
     }
     
-    //Set the window caption
+    //设置窗口标题
     SDL_WM_SetCaption( &quot;Particle Test&quot;, NULL );
     
-    //Seed random
+    //设置随机数种子
     srand( SDL_GetTicks() );
     
-    //If everything initialized fine
+    //如果所有初始化成功
     return true;
 }
 </pre> 
       <div class="tutText">
-        Because we're going to need random numbers for our particle engine, we seed random with the current time (which is a common way to do it) in our initialization function. 
+		因为我们将需要随机数，将其用于我们的粒子引擎，所以我们在初始化函数中用当前时间（这是一种常见做法）来设定随机数种子。
       </div> 
       <pre class="tutCode prettyprint linenums:81 lang-cpp">Particle::Particle( int X, int Y )
 {
-    //Set offsets
+    //设置坐标
     x = X - 5 + ( rand() % 25 );
     y = Y - 5 + ( rand() % 25 );
     
-    //Initialize animation
+    //初始化动画
     frame = rand() % 5;
     
-    //Set type
+    //设置类型
     switch( rand() % 3 )
     {
         case 0: type = red; break;
@@ -200,33 +198,37 @@ class Dot
 }
 </pre> 
       <div class="tutText">
-        Here's the constructor for our particle class. 
+		这是我们的粒子类的构造函数。
        <br /> 
-       <br /> The &quot;X&quot; and &quot;Y&quot; arguments are going to be the offsets of the dot. We take the arguments and put the particle in a random place around the dot. 
+       <br />
+	   参数&quot;X&quot; and &quot;Y&quot;将会是点的坐标。我们获取这个参数并将粒子放在点的附近的一个随机位置。
        <br /> 
-       <br /> Then we initialize the animation a random number from 0 to 4. This is because we want the particles to animate asynchronously. 
        <br /> 
-       <br /> Then we set the surface type to be the red, green, or blue particle surface. This is also done at random. 
+	   然后我们将动画的帧初始化为0到4之间的一个随机数。这是因为我们想让每个粒子的动画异步进行。
+       <br /> 
+       <br /> 
+	   然后我们设置表面类型为红、绿或蓝粒子表面。这也是随机地指定的。
       </div> 
       <pre class="tutCode prettyprint linenums:98 lang-cpp">void Particle::show()
 {
-    //Show image
+    //显示图像
     apply_surface( x, y, type, screen );
     
-    //Show shimmer
+    //显示微光
     if( frame % 2 == 0 )
     {
         apply_surface( x, y, shimmer, screen );    
     }
     
-    //Animate
+    //运行动画
     frame++;
 }
 </pre> 
-      <div class="tutText">
-        Here is the show() function for our sparks. 
+      <div class="tutText"> 
+		这是我们的火花的<code>show()</code>函数。
        <br /> 
-       <br /> All we do is show our surface then if the frame is divisible by 2 we show the shimmer surface on top of red, green or blue surface. The shimmer surface is just semitransparent white surface. The result will have the particles doing a flashing animation. 
+       <br /> 
+	   我们所做的是：先显示我们的表面，然后如果帧数可以被2整除，就在红、绿或蓝表面的上面显示微光表面。微光表面只是一个半透明的白色表面。这样会使得粒子呈现闪烁的动画。
       </div> 
       <pre class="tutCode prettyprint linenums:112 lang-cpp">bool Particle::is_dead()
 {
@@ -239,21 +241,22 @@ class Dot
 }
 </pre> 
       <div class="tutText">
-        Here we have a function to check if a particle is dead or not. 
+		这里我们有一个函数用于检查粒子是否死亡。
        <br /> 
-       <br /> A particle is considered dead after it animates for 10 frames. 
+       <br /> 
+	   一个粒子在它的动画经过10帧后被认定为死亡。
       </div> 
       <pre class="tutCode prettyprint linenums:121 lang-cpp">Dot::Dot()
 {
-    //Initialize the offsets
+    //初始化坐标
     x = 0;
     y = 0;
     
-    //Initialize the velocity
+    //初始化速度
     xVel = 0;
     yVel = 0;
     
-    //Initialize particles
+    //初始化粒子
     for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
     {
         particles[ p ] = new Particle( x, y );
@@ -262,7 +265,7 @@ class Dot
 
 Dot::~Dot()
 {
-    //Delete particles
+    //删除粒子
     for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
     {
         delete particles[ p ];
@@ -270,26 +273,26 @@ Dot::~Dot()
 }
 </pre> 
       <div class="tutText">
-        Here are the dot's constructor and destructor. The only changes to the dot class made here is that we generate particles in the constructor and get rid of them in the destructor. 
+		这里是Dot类的构造函数和析构函数。这里Dot类唯一的变化时我们在构造函数内生成了粒子并在析构函数中去除了它们。
       </div> 
       <pre class="tutCode prettyprint linenums:146 lang-cpp">void Dot::show()
 {
-    //Show the dot
+    //显示点
     apply_surface( x, y, dot, screen );
     
-    //Show the particles
+    //显示粒子
     show_particles();
 }
 </pre> 
       <div class="tutText">
-        Here you can see we altered the dot's show() function to show the particles. 
+		这里你可以看到我们修改了点的<code>show()</code>函数来显示粒子。
       </div> 
       <pre class="tutCode prettyprint linenums:154 lang-cpp">void Dot::show_particles()
 {
-    //Go through particles
+    //遍历粒子
     for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
     {
-        //Delete and replace dead particles
+        //删除并替换死亡的粒子
         if( particles[ p ]-&gt;is_dead() == true )
         {
             delete particles[ p ];
@@ -298,7 +301,7 @@ Dot::~Dot()
         }
     }
     
-    //Show particles
+    //显示粒子
     for( int p = 0; p &lt; TOTAL_PARTICLES; p++ )
     {
         particles[ p ]-&gt;show();
@@ -306,27 +309,28 @@ Dot::~Dot()
 }
 </pre> 
       <div class="tutText">
-        When we show the particles we first go through them and remove and replace any dead particles. 
-       <br /> 
-       <br /> After any dead particles are replaced we show the particles on top of the dot. 
+		当我们显示粒子时，我们首先遍历它们，删除并替换死亡的粒子。
+       <br /> <br /> 
+	   所有死亡的粒子都被替换后，我们在点的上面显示粒子。
+	   <br /> <br /> 
       </div> 
       <div class="tutText">
-        This is a pretty minimalistic example of a particle engine but the basics are there. You can make more advanced and better looking particles by making more detailed animations, adding properties like velocity, acceleration, and rotation, or even have the particles interact with each other. 
+		这是一个有关粒子引擎的十分具有极简抽象派风格的例子，但其中包含了粒子引擎的最基本的技术。你可以通过创建更多细致的动画，添加速度、加速度、旋转等属性，或者使粒子之间可以互相交互，来构建更加高级并且更加漂亮的粒子。
        <br /> 
-       <br /> Experiment and see what effects you can create. 
+       <br /> 
+	   动手实验吧，看看你可以创造什么样的效果。
+	   <br /> 
+       <br /> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson28">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson27/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson29/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson28">此处下载</a>。
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+    <a class="btn btn-primary" href="../lesson29/index.html">下一课：平铺</a>
+   </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
