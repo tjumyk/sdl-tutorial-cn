@@ -79,7 +79,7 @@
         <img src="highlight.jpg"> 
        </div> 
        <br> 由于计算机中所有的图形都是由像素构成的，而像素说白了都是一个个正方形，也就是矩形的一种。这样一来，无论你拿什么形状来碰撞检测，其实就是在检验两组矩形是否碰撞。
-      </div> <a name="hint-vector"></a>
+      </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">#include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include &lt;string&gt;
@@ -87,7 +87,7 @@
 </pre> 
       <div class="tutText">
         在这个程序中我们在加载以往我们已司空见惯的库的同时，还加载了vector向量库。向量相当于数组，不过更好控制。</div> 
-		<br/>
+		<br/><a class="anchor" name="hint-vector"></a>
 		<div class="alert alert-info"><b>编者注</b>：vector来源于C++标准模板库，简单点说，它是一种容器，可存放任意类型的数据，类似于普通的数组，但这种“数组”的长度是可以动态变化的，并且带有很多函数。比如<code>size()</code>返回当前数组长度，<code>resize(N)</code>重新设置数组长度为N。<a href="http://www.cplusplus.com/reference/vector/vector/" target="_blank">(<i class="icon-globe"></i><b>英文详细参考</b>)</a><br></div>
       <pre class="tutCode prettyprint linenums:5 lang-cpp">//定义圆点
 class Dot

@@ -897,3 +897,12 @@ body{
 html {
 	-webkit-font-smoothing: antialiased;
 }
+
+/* special anchor for text with navbar */
+@media (min-width: 980px){
+	a.anchor{
+		position: relative;
+		top: -40px;
+		display: block;
+	}
+}
