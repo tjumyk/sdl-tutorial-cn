@@ -186,3 +186,26 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 // Add uyan plugin
 $('div.content').append($('<div id="uyan_frame" style="margin-top:20px"></div><script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1529249"></script>'));
 
+// Ready for trying new version
+$('ul.nav').append($('<li><a class="try_new" href="#tryNewModal" data-toggle="modal">尝试新版</a></li>'));
+$('body').append($(
+'<div id="tryNewModal" class="modal hide fade" tabindex="-1">\
+  <div class="modal-header">\
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\
+    <h3 id="myModalLabel">尝鲜提示</h3>\
+  </div>\
+  <div class="modal-body">\
+    <p>即将进入尝鲜模式，该模式下将临时启用<code>PJAX</code>技术来加载页面，全程无刷新异步加载，大幅减少加载时间。</p>\
+	<p style="text-align:center;font-size:30px;margin:14px">PJAX = PushState + AJAX</p>\
+	<p>但请冷静！由于代码还<b>未稳定</b>，可能存在各种潜在问题。尤其在各种<b>浏览器的兼容</b>方面，作者表示十分伤脑筋。如果遇到问题，敬请谅解并请告知作者！</p>\
+	<p>尝鲜模式在您<b>刷新本站任意页面后自动取消</b>，您可以按顶部导航栏的“尝试新版”按钮再次进入。</p>\
+  </div>\
+  <div class="modal-footer">\
+    <button class="btn" data-dismiss="modal">取消</button>\
+    <button class="btn btn-primary try_new_confirm">确定尝鲜</button>\
+  </div>\
+</div>'));
+$('.try_new_confirm').on('click',function(e){
+	e.preventDefault();
+	window.location.href = "/sdl-tutorial-cn/jump.html?"+window.location.href;
+});
