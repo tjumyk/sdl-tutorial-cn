@@ -265,6 +265,11 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 				return;
 			if(link.match(/^(https:)/)) // outer link
 				return;
+			if(link.match(/^(mailto:)/)) // outer link
+				return;
+			if(link.match(/^(ftp:)/)) // outer link
+				return;
+				
 			if(link.match(/^#/)){ // inner anchor
 				var href = $(this).attr('href');
 				var anchor = href.substring(1);
