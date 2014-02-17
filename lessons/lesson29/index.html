@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第29课 - 平铺</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月17日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson29/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson28/index.html" id="prev_link">上一课</a></li> 
@@ -57,34 +57,37 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Tiling</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Tiling is a common method to create flexible level engines. Here you'll learn to load a tile map to place the tiles and how to interact with and show tiles. 
+       平铺是一种常用的创建灵活的关卡引擎的方法。这里你将学习如何加载一张平铺地图来放置每一块贴图以及如何与之交互并显示它们。<br/>
+	   <br/>
+	   <div class="alert alert-info"><b>译者注</b>：“Tiling”有不同翻译方式，有“平铺”，“铺瓷砖”，“瓷砖式覆盖”,“拼贴”等等，这里简单地翻译为“平铺”。“Tile”可翻译为“瓷砖”、“贴图”等，这里翻译为“贴图”。</div>
       </div> 
       <div class="tutText">
-        Here we're going to use the 12 tiles from this sprite sheet: 
+		这里我们将使用这张精灵图中的12块贴图：
        <br /> 
        <div class="tutImg"> 
         <img src="tiles.jpg" /> 
-       </div> (tiles are 50% actual size) 
+       </div> 
+	   (这里的贴图为50%实际大小)
        <br /> 
-       <br /> To create this level: 
+       <br /> 要创建这个关卡：
        <br /> 
        <div class="tutImg"> 
         <img src="level.jpg" /> 
-       </div> (level is also 50% actual size) 
+       </div> 
+	   (关卡也是50%实际大小)
        <br /> 
-       <br /> Notice that one benefit of using tiles is that we save RAM. Instead of using a 1280 x 960 image, we only use a 320 x 240 image. This saves 4 1/2 megabytes of RAM. 
+       <br /> 
+	   注意，使用平铺的一个好处是我们节省了RAM(内存)占用。我们仅仅使用了一张320*240的图片，而不是一张1280*960的图片。这节约了 4 1/2 MB的RAM。
+	   <br/>
+	   <br/>
+	   <div class="alert alert-warning"><b>译者注</b>：这 4 1/2 是怎么回事？怎么算的？不解...</div>
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//Tile constants
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//贴图常量
 const int TILE_WIDTH = 80;
 const int TILE_HEIGHT = 80;
 const int TOTAL_TILES = 192;
@@ -105,110 +108,117 @@ const int TILE_LEFT = 10;
 const int TILE_TOPLEFT = 11;
 </pre> 
       <div class="tutText">
-        Here's two sets of global constants having to do with the tiles. 
+		这里是两组与贴图相关的全局常量。
        <br /> 
-       <br /> The first set constants are things like the tile dimensions, how many tiles we're going to use, and how many kinds of tiles we have. 
        <br /> 
-       <br /> The second set is symbolic constants for all the different tiles we have. The first 3 tiles types (red, green, and blue) are floor tiles the dot can move over. All the others are wall type tiles. 
+	   第一组常量是：贴图尺寸，我们将要使用的贴图的数量，以及我们有多少种贴图。
+       <br /> 
+       <br /> 
+	   第二组是不同贴图的符号常量。其中前三个贴图类型(红、绿、蓝)是地板贴图，点可以从它们上面经过。其余所有贴图为墙壁类贴图。
       </div> 
-      <pre class="tutCode prettyprint linenums:20 lang-cpp">//The tile
+      <pre class="tutCode prettyprint linenums:20 lang-cpp">//贴图
 class Tile
 {
     private:
-    //The attributes of the tile
+    //贴图的属性
     SDL_Rect box;
     
-    //The tile type
+    //贴图类型
     int type;
     
     public:
-    //Initializes the variables
+    //初始化变量
     Tile( int x, int y, int tileType );
     
-    //Shows the tile
+    //显示贴图
     void show();
     
-    //Get the tile type
+    //获取贴图类型
     int get_type();
     
-    //Get the collision box
+    //获取碰撞盒子
     SDL_Rect get_box();
 };
 </pre> 
       <div class="tutText">
-        Here's the break down of the tile class. 
+		这是Tile类的分解。
        <br /> 
-       <br /> &quot;box&quot; is the offsets and dimensions of the tile and it also functions as a collision box. &quot;type&quot; is the obviously what type of tile the tile is. 
        <br /> 
-       <br /> Then we have the constructor which sets the tile's offsets, and type. Then the show() function shows the tile on the screen. Lastly we have get_type() and get_box() which simply retrieve the tile's type and collision box. 
+	   &quot;box&quot;是贴图的坐标和尺寸，它也当做碰撞盒子用。&quot;type&quot;显然就是贴图的类型了。
+       <br /> 
+       <br /> 
+	   然后，我们有构造函数来设置贴图的坐标和类型。接着，<code>show()</code>函数在屏幕上显示贴图。最后，我们有<code>get_type()</code>和<code>get_box()</code>来获取贴图的类型和碰撞盒子。
       </div> 
-      <pre class="tutCode prettyprint linenums:43 lang-cpp">//The dot
+      <pre class="tutCode prettyprint linenums:43 lang-cpp">//点
 class Dot
 {
     private:
-    //The dot's collision box
+    //点的碰撞盒子
     SDL_Rect box;
     
-    //The velocity of the dot
+    //点的速度
     int xVel, yVel;
     
     public:
-    //Initializes the variables
+    //初始化变量
     Dot();
     
-    //Takes key presses and adjusts the dot's velocity
+    //处理按键并调整点的速度
     void handle_input();
     
-    //Moves the dot
+    //移动点
     void move( Tile *tiles[] );
     
-    //Shows the dot on the screen
+    //在屏幕上显示点
     void show();
     
-    //Sets the camera over the dot
+    //设置摄像机到点上
     void set_camera();
 };
 </pre> 
       <div class="tutText">
-        Here's our friend the dot class. It's essentially the same thing as it was in the scrolling tutorial, only now the move() function takes in tiles so it can interact with them. 
+		这是我们的老朋友Dot类。它原本和“滚动”一课里的是一样的，只是现在<code>move()</code>函数接受贴图作为参数，以便与之交互。
       </div> 
       <pre class="tutCode prettyprint linenums:69 lang-cpp">Tile::Tile( int x, int y, int tileType )
 {
-    //Get the offsets
+    //获取坐标
     box.x = x;
     box.y = y;
     
-    //Set the collision box
+    //设置碰撞盒子
     box.w = TILE_WIDTH;
     box.h = TILE_HEIGHT;
     
-    //Get the tile type
+    //获取贴图类型
     type = tileType;
 }
 </pre> 
       <div class="tutText">
-        Here's the Tile constructor. Nothing much to explain here, it just sets the tile at the given offsets, sets the dimensions, and gets the tile type. 
+		这是Tile类的构造函数。没有什么需要解释的，它只是按照给定的坐标设置贴图，设置大小，并获取贴图类型。
       </div> 
       <pre class="tutCode prettyprint linenums:82 lang-cpp">void Tile::show()
 {
-    //If the tile is on screen
+    //如果贴图在屏幕上
     if( check_collision( camera, box ) == true )
     {
-        //Show the tile
+        //显示贴图
         apply_surface( box.x - camera.x, box.y - camera.y, tileSheet, screen, &amp;clips[ type ] );    
     }
 }    
 </pre> 
       <div class="tutText">
-        Now it's time to show the tile on the screen. 
+		现在是时候在屏幕上显示贴图了。
        <br /> 
-       <br /> First we check if the tile is on the screen. So if the red rectangle is the camera: 
+       <br /> 
+	   首先我们检查贴图是否在屏幕内。也就是说，如果红色方框是摄像机：
        <br /> 
        <div class="tutImg"> 
         <img src="shown.jpg" /> 
-       </div> Only the lighted tiles will get shown. It makes sense since why would you apply a surface if it won't be seen? 
+       </div> 
+	   仅有亮着的贴图会被显示。这个很有道理，你何必要应用一个不会被看到的表面呢？
        <br /> 
-       <br /> When we apply the tile image, we show the tile from the tile sheet relative to the camera so the tiles will scroll. 
+       <br /> 
+	   当我们应用图像时，我们从精灵图中获得贴图并以相对于camera的位置进行平铺，这样贴图就能滚动了。
       </div> 
       <pre class="tutCode prettyprint linenums:91 lang-cpp">int Tile::get_type()
 {
@@ -221,37 +231,38 @@ SDL_Rect Tile::get_box()
 }
 </pre> 
       <div class="tutText">
-        These functions right here simply retrieve the tile's type and collision box. 
+		这里的函数简单地获取贴图的类型和碰撞盒子。
       </div> 
       <pre class="tutCode prettyprint linenums:100 lang-cpp">bool set_tiles( Tile *tiles[] )
 {
-    //The tile offsets
+    //贴图坐标
     int x = 0, y = 0;
     
-    //Open the map
+    //打开地图
     std::ifstream map( &quot;lazy.map&quot; );
     
-    //If the map couldn't be loaded
+    //如果地图不能加载
     if( map == NULL )
     {
         return false;    
     }
 </pre> 
       <div class="tutText">
-        Here's our function to set the tiles. 
+		这里是我们设置贴图的函数。
        <br /> 
-       <br /> At the top we have two offset variables. They're used to keep track of where to place the tiles. Then we open up our map file. 
+       <br /> 
+	   在顶部，我们有两个坐标变量。它们是用于跟踪放置贴图的位置。然后我们打开我们的地图文件。
       </div> 
-      <pre class="tutCode prettyprint linenums:113 lang-cpp">    //Initialize the tiles
+      <pre class="tutCode prettyprint linenums:113 lang-cpp">    //初始化贴图
     for( int t = 0; t &lt; TOTAL_TILES; t++ )
     {
-        //Determines what kind of tile will be made
+        //决定创建哪种类型的贴图
         int tileType = -1;
     
-        //Read tile from map file
+        //从map文件读取贴图
         map &gt;&gt; tileType;
         
-        //If the was a problem in reading the map
+        //如果读取地图出现问题
         if( map.fail() == true )
         {
             //Stop loading map
@@ -260,69 +271,73 @@ SDL_Rect Tile::get_box()
         }
 </pre> 
       <div class="tutText">
-        Now it's time to go through and set the tiles. 
+		现在是时候遍历并设置贴图了。
        <br /> 
-       <br /> First we read an integer from the file. If there was a problem in reading the file we close the file and return false. 
        <br /> 
-       <br /> Here's the contents of the &quot;lazy.map&quot; file: 
+	   首先我们从文件里读入一个整数。如果读取文件时出现问题，我们关闭文件并返回false。
+       <br /> 
+       <br /> 
+	   这是&quot;lazy.map&quot;文件中的内容：
        <br /> 
        <b> 00 01 02 00 01 02 00 01 02 00 01 02 00 01 02 00 <br /> 01 02 00 01 02 00 01 02 00 01 02 00 01 02 00 01 <br /> 02 00 11 04 04 04 04 04 04 04 04 04 04 05 01 02 <br /> 00 01 10 03 03 03 03 03 03 03 03 03 03 06 02 00 <br /> 01 02 10 03 08 08 08 08 08 08 08 03 03 06 00 01 <br /> 02 00 10 06 00 01 02 00 01 02 00 10 03 06 01 02 <br /> 00 01 10 06 01 11 05 01 02 00 01 10 03 06 02 00 <br /> 01 02 10 06 02 09 07 02 00 01 02 10 03 06 00 01 <br /> 02 00 10 06 00 01 02 00 01 02 00 10 03 06 01 02 <br /> 00 01 10 03 04 04 04 05 02 00 01 09 08 07 02 00 <br /> 01 02 09 08 08 08 08 07 00 01 02 00 01 02 00 01 <br /> 02 00 01 02 00 01 02 00 01 02 00 01 02 00 01 02 <br /> </b> 
-       <br /> It's just a bunch of numbers. Each number corresponds with a type of tile. It's a simple, maybe even crude way to save a tile map, but it works. 
+       <br /> 
+	   这只是一串数字。每个数字与一个贴图类型相对应。这是一个简单，但可能粗糙的保存平铺地图的方式，不过这种方式是可以工作的。
       </div> 
-      <pre class="tutCode prettyprint linenums:129 lang-cpp">        //If the number is a valid tile number
+      <pre class="tutCode prettyprint linenums:129 lang-cpp">        //如果数字是合法的贴图类型
         if( ( tileType &gt;= 0 ) &amp;&amp; ( tileType &lt; TILE_SPRITES ) )
         {
             tiles[ t ] = new Tile( x, y, tileType );    
         }
-        //If we don't recognize the tile type
+        //如果我们不能识别这个数
         else 
         {
-            //Stop loading map
+            //停止加载地图
             map.close();
             return false;
         }
 </pre> 
       <div class="tutText">
-        Now that we read the number from the file, we have to set the proper tile. First we check if the number from the file is a valid tile type. If it is then we place the tile. 
+		既然我们从文件中读入了数字，我们就必须设置合理的贴图。首先我们检查文件中的数字是否是合法的贴图类型。如果是的，我们放置贴图。
        <br /> 
-       <br /> If the number read in from the file doesn't match one of our tiles types, we close the file and return false. 
+       <br />
+	   如果从文件中读入的数字不符合任何贴图类型，我们关闭文件并返回false。
       </div> 
-      <pre class="tutCode prettyprint linenums:141 lang-cpp">        //Move to next tile spot
+      <pre class="tutCode prettyprint linenums:141 lang-cpp">        //移动到下一个贴图的位置
         x += TILE_WIDTH;
         
-        //If we've gone too far
+        //如果我们已经走得太远
         if( x &gt;= LEVEL_WIDTH )
         {
-            //Move back
+            //返回
             x = 0;
             
-            //Move to the next row
+            //移动到下一行
             y += TILE_HEIGHT;    
         }
     }
 </pre> 
       <div class="tutText">
-        At the end of our tile placement loop we move over to the next tile spot. 
+		在贴图放置循环的最后部分，我们移动到下一个贴图位置。
       </div> 
-      <pre class="tutCode prettyprint linenums:154 lang-cpp">    //Close the file
+      <pre class="tutCode prettyprint linenums:154 lang-cpp">    //关闭文件
     map.close();
     
-    //If the map was loaded fine
+    //如果地图加载正常
     return true;
 }
 </pre> 
       <div class="tutText">
-        When we're done with a file, we have to remember to close it by calling the close() function. 
+		当我们搞定文件读取后，我们必须得记得通过<code>close()</code>函数关闭文件。
       </div> 
       <pre class="tutCode prettyprint linenums:160 lang-cpp">bool touches_wall( SDL_Rect box, Tile *tiles[] )
 {
-    //Go through the tiles
+    //遍历贴图
     for( int t = 0; t &lt; TOTAL_TILES; t++ )
     {
-        //If the tile is a wall type tile
+        //如果贴图是墙壁类型的贴图
         if( ( tiles[ t ]-&gt;get_type() &gt;= TILE_CENTER ) &amp;&amp; ( tiles[ t ]-&gt;get_type() &lt;= TILE_TOPLEFT ) )
         {
-            //If the collision box touches the wall tile
+            //如果碰撞盒子碰到了墙壁贴图
             if( check_collision( box, tiles[ t ]-&gt;get_box() ) == true )
             {
                 return true;    
@@ -330,14 +345,15 @@ SDL_Rect Tile::get_box()
         }
     }
     
-    //If no wall tiles were touched
+    //如果没有墙壁贴图被碰到
     return false;
 }
 </pre> 
       <div class="tutText">
-        touches_wall() goes through the set of tiles and returns true if it finds a wall tile that collides with the given collision box. 
+		<code>touches_wall()</code>遍历贴图的集合并在发现有一个墙壁贴图与给定碰撞盒子发生碰撞时返回true。
        <br /> 
-       <br /> Rather than checking for each individual type of wall tile, we remember how tiles types are numbered: 
+       <br /> 
+	   我们并没有逐个地检查每一种墙壁贴图，我们记得贴图类型是这样标号的：
        <br /> 
        <br /> 0 = TILE_RED 
        <br /> 1 = TILE_GREEN 
@@ -352,114 +368,116 @@ SDL_Rect Tile::get_box()
        <br /> 10 = TILE_LEFT 
        <br /> 11 = TILE_TOPLEFT 
        <br /> 
-       <br /> As you can see, all the wall tiles are numbered between the center tile and the top left tile. So to check if the tile is a wall, we just check if its type is between center and top left. 
+       <br />
+	   就像你看到的那样，所有的墙壁贴图的数字都在TILE_CENTER和TILE_TOPLEFT之间。所以要检查一个贴图是否是墙壁，只需检查它的类型数字是否在TILE_CENTER和TILE_TOPLEFT之间。
       </div> 
       <pre class="tutCode prettyprint linenums:179 lang-cpp">void Dot::move( Tile *tiles[] )
 {
-    //Move the dot left or right
+    //向左或向右移动点
     box.x += xVel;
     
-    //If the dot went too far to the left or right or touched a wall
+    //如果点向左或向右走得太远，或者碰到了墙壁
     if( ( box.x &lt; 0 ) || ( box.x + DOT_WIDTH &gt; LEVEL_WIDTH ) || touches_wall( box, tiles ) )
     {
-        //move back
+        //回退
         box.x -= xVel;    
     }
     
-    //Move the dot up or down
+    //向上或向下移动点
     box.y += yVel;
     
-    //If the dot went too far up or down or touched a wall
+    //如果点向上或向下走得太远，或者碰到了墙壁
     if( ( box.y &lt; 0 ) || ( box.y + DOT_HEIGHT &gt; LEVEL_HEIGHT ) || touches_wall( box, tiles ) )
     {
-        //move back
+        //回退
         box.y -= yVel;    
     }    
 }
 </pre> 
       <div class="tutText">
-        The only change we made to the Dot class is that we check if the dot collides with any wall tiles when we move it. 
+		我们在这里对Dot类的唯一更改是在我们移动点的时候，检查点是否与任何墙壁发生碰撞。
       </div> 
-      <pre class="tutCode prettyprint linenums:201 lang-cpp">    //Quit flag
+      <pre class="tutCode prettyprint linenums:201 lang-cpp">    //退出标志
     bool quit = false;
     
-    //The dot
+    //点
     Dot myDot;
     
-    //The tiles that will be used
+    //将要用到的点
     Tile *tiles[ TOTAL_TILES ];
     
-    //The frame rate regulator
+    //帧率校准器
     Timer fps;
     
-    //Initialize
+    //初始化
     if( init() == false )
     {
         return 1;
     }
     
-    //Load the files
+    //加载文件
     if( load_files() == false )
     {
         return 1;
     }
 
-    //Clip the tile sheet
+    //剪切精灵图
     clip_tiles();
     
-    //Set the tiles
+    //设置贴图
     if( set_tiles( tiles ) == false )
     {
         return 1;    
     }
 </pre> 
-      <div class="tutText">
-        Here's the top of our main() function. 
+      <div class="tutText"> 
+		这是<code>main()</code>函数的最上面的部分。
        <br /> 
-       <br /> Near the top we make an array of pointers to Tiles. Then we initialize and load image files, and we set the clip rectangles for the tile sheet with clip_tiles(). After that we create and set our tiles with set_tiles(). 
+       <br /> 
+	   在靠近最上面的地方，我们创建了一个Tile指针数组。然后我们初始化并加载图片文件，用<code>clip_tiles()</code>函数设置精灵图的剪切矩形。随后，我们使用<code>set_tiles()</code>来创建并设置我们的贴图。
       </div> 
-      <pre class="tutCode prettyprint linenums:233 lang-cpp">    //While the user hasn't quit
+      <pre class="tutCode prettyprint linenums:233 lang-cpp">    //当用户还未推出
     while( quit == false )
     {
-        //Start the frame timer
+        //启动帧计时器
         fps.start();
         
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the dot
+            //为点处理事件
             myDot.handle_input();
             
-            //If the user has Xed out the window
+            //如果用户叉掉了窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the dot
+        //移动点
         myDot.move( tiles );
         
-        //Set the camera
+        //设置摄像头
         myDot.set_camera();
         
-        //Show the tiles
+        //显示贴图
         for( int t = 0; t &lt; TOTAL_TILES; t++ )
         {
             tiles[ t ]-&gt;show();
         }
 
-        //Show the dot on the screen
+        //在屏幕上显示点
         myDot.show();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
         }
         
-        //Cap the frame rate
+        //捕获帧率
         if( fps.get_ticks() &lt; 1000 / FRAMES_PER_SECOND )
         {
             SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
@@ -467,42 +485,43 @@ SDL_Rect Tile::get_box()
     }
 </pre> 
       <div class="tutText">
-        Here's our main loop. Nothing much to explain here, just wanted to show everything in action. 
+		这就是我们的主循环了。没什么需要解释的，只是想用行动展示所有的东西。
       </div> 
       <pre class="tutCode prettyprint linenums:280 lang-cpp">void clean_up( Tile *tiles[] )
 {
-    //Free the surfaces
+    //释放表面
     SDL_FreeSurface( dot );
     SDL_FreeSurface( tileSheet );
     
-    //Free the tiles
+    //释放贴图
     for( int t = 0; t &lt; TOTAL_TILES; t++ )
     {
         delete tiles[ t ];    
     }
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
 }
 </pre> 
       <div class="tutText">
-        Since we dynamically allocated our Tile objects, we have to remember to free them in our clean_up() function. 
+		由于我们动态地分配了我们的Tile对象，我们必须记得在<code>clean_up()</code>函数中释放它们。
        <br /> 
-       <br /> I've made a level editor for this tiling engine. You can check how it works and download the working program on 
-       <a class="tutLink" href="../../articles/article09/index.php">article 9</a>. 
+       <br />
+	   我为这个贴图引擎编写了一个关卡编辑器。你可以在
+	    <a class="tutLink" target="_blank" href="http://lazyfoo.net/articles/article09/index.php"><i class="icon-globe"></i>文章9</a>
+	   中下载并查看它是如何工作的。 
+	   <br /> 
+       <br /> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson29">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson28/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson30/index.php">Next Tutorial</a> 
-       <br /> 
+       本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson29">此处下载</a>。<br> 
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson30/index.html">下一课：Bitmap字体</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
