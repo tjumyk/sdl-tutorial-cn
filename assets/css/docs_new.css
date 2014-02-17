@@ -952,9 +952,6 @@ html {
     -moz-animation: loaderSprite 0.85s steps(17, end) infinite;
     animation: loaderSprite 0.85s steps(17, end) infinite;
 }
-.navbar-inner{
-	background-image: linear-gradient(to bottom,#144CA0 0,#0C1B4B 100%);
-}
 .brand:after{
 	content:"Beta";
 	font-size:16px;

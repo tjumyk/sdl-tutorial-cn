@@ -11,9 +11,6 @@
       e.preventDefault()
     })
 
-    // make code pretty
-    window.prettyPrint && prettyPrint()
-
     // add-ons
     $('.add-on :checkbox').on('click', function () {
       var $this = $(this)
@@ -242,6 +239,9 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 	}
 
 	var setupPjaxPage = function(){
+		// make code pretty
+		window.prettyPrint && prettyPrint();
+		
 		// Add uyan plugin
 		if(typeof UYAN == 'undefined'){ // first load
 			$('div.content').append($('<div id="uyan_frame" style="margin-top:20px"></div><script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1529249"></script>'));
@@ -304,12 +304,12 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 			if(!state)
 				state = {url:document.location.href};
 			state.scroll = window.scrollY;
-			window.history.replaceState(state);
+			window.history.replaceState(state,"","");
 			
 			if(push){
-				console.info('[push]: '+link);
+				//console.info('[push]: '+link);
 				window.history.pushState(null,"",link);
-				window.history.replaceState({url:document.location.href}); // save current absolute url
+				window.history.replaceState({url:document.location.href},"",""); // save current absolute url
 			}
 			document.title = title;
 			$("body").html(body);
@@ -335,7 +335,7 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 			if(y <= 0)
 				y = 1;
 		}
-		console.info('[scroll]: '+y);
+		//console.info('[scroll]: '+y);
 	    $("html, body").animate({scrollTop:y},'500', 'swing');
 	}
 	
