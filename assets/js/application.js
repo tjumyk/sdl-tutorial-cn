@@ -214,3 +214,5 @@ $('.try_new_confirm').on('click',function(e){
 	e.preventDefault();
 	window.location.href = "/sdl-tutorial-cn/jump.html?"+window.location.href;
 });
+if(!navigator.appVersion.match(/chrome/i))
+	$('#installChrome').show();

@@ -242,6 +242,10 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 		// make code pretty
 		window.prettyPrint && prettyPrint();
 		
+		// show browser hint only when not using chrome
+		if(!navigator.appVersion.match(/chrome/i))
+			$('#installChrome').show();
+		
 		// Add uyan plugin
 		if(typeof UYAN == 'undefined'){ // first load
 			$('div.content').append($('<div id="uyan_frame" style="margin-top:20px"></div><script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1529249"></script>'));
