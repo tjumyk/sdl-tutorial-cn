@@ -2,7 +2,7 @@
 <html>
  <head> 
   <meta charset="utf-8" /> 
-  <title>第30课 - Bitmap字体 &middot; SDL中文教程</title> 
+  <title>第30课 - 位图字体 &middot; SDL中文教程</title> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
   <meta name="description" content="" /> 
   <meta name="author" content="" /> 
@@ -43,9 +43,9 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第30课 - Bitmap字体</h1> 
+     <h1 align="center" id="content_title">第30课 - 位图字体</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月17日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson30/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson29/index.html" id="prev_link">上一课</a></li> 
@@ -57,97 +57,103 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Bitmap Fonts</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Good fonting programs can be expensive, and sometimes font APIs (like SDL_ttf) are simply not flexible enough. While time consuming, making your own bitmap font engine can be useful. This tutorial will teach you to make a common style bitmap font. 
+	   好的字体程序可能很昂贵，有些字体API（例如SDL_ttf）并不是那么灵活。与其花费大量时间在这上面，不如自己做一个位图字体引擎。这节课将教你创建一个常见类型的位图字体。
       </div> 
       <div class="tutText">
-        A bitmap font is simply a sprite sheet. 
+		一个位图字体就是个精灵图。
        <br /> 
-       <br /> If we wanted to make &quot;HELLO&quot; show on the screen we would do this: 
+       <br /> 
+	   如果我们想要在屏幕上显示&quot;HELLO&quot;，我们需要这么做；
        <br /> 
        <div class="tutImg"> 
         <img src="sprites.jpg" /> 
-       </div> We would take the &quot;H&quot; sprite, the &quot;E&quot; sprite, two of the &quot;L&quot; sprite, and finally the &quot;O&quot; sprite and then show them on the screen one after the other. 
+       </div> 
+	   我们将取出&quot;H&quot;子图，&quot;E&quot;子图，两个&quot;L&quot;子图，以及最后的一个&quot;O&quot;子图，然后在屏幕上一个接一个地显示它们。
        <br /> 
-       <br /> Now that you know the basic concept, it's time to make a bitmap fonting engine. 
+       <br /> 
+	   既然你已经了解了基本概念，是时候动手建立一个位图字体引擎了。
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//Our bitmap font
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//我们的位图字体
 class BitmapFont
 {
     private:
-    //The font surface
+    //字体表面
     SDL_Surface *bitmap;
 
-    //The individual characters in the surface
+    //表面中独立的字符
     SDL_Rect chars[ 256 ];
 
-    //Spacing Variables
+    //空白变量
     int newLine, space;
 
     public:
-    //The default constructor
+    //默认构造函数
     BitmapFont();
 
-    //Generates the font when the object is made
+    //当已有表面时直接生成字体
     BitmapFont( SDL_Surface *surface );
 
-    //Generates the font
+    //生成字体
     void build_font( SDL_Surface *surface );
 
-    //Shows the text
+    //显示文字
     void show_text( int x, int y, std::string text, SDL_Surface *surface );
 };
 </pre> 
       <div class="tutText">
-        Here is our bitmap font class. 
+	   这里是我们的位图字体类。
        <br /> 
-       <br /> First thing we have is the surface of the bitmap font. Then we have to have an array of rectangles to clip the letters from the bitmap font. We have 256 of them, one for each of the extended ASCII characters. We have two integers, &quot;newLine&quot; and &quot;space&quot; that determine the distance between lines of text and the distance between two words. 
        <br /> 
-       <br /> Then we have our constructors. We also have a build_font() to initialize the font. Finally, we have show_text() to show text on the screen. 
+	   我们拥有的第一个东西是位图字体的表面。然后我们必须有一个矩阵数组来从位图字体中剪切出字母来。我们剪切出256个，每个都是扩展的ASCII字符。我们还有两个整数&quot;newLine&quot;和&quot;space&quot;，它们决定着文本中行间距和单词间距。
+       <br /> 
+       <br /> 
+	   然后我们有构造函数。我们还有个<code>build_font()</code>来初始化字体。最后，我们有<code>show_text()</code>函数，用于在屏幕上显示文字。
       </div> 
       <pre class="tutCode prettyprint linenums:27 lang-cpp">Uint32 get_pixel32( int x, int y, SDL_Surface *surface )
 {
-    //Convert the pixels to 32 bit
+    //转换像素为32位
     Uint32 *pixels = (Uint32 *)surface-&gt;pixels;
     
-    //Get the pixel requested
+    //获取请求的像素
     return pixels[ ( y * surface-&gt;w ) + x ];
 }
 </pre> 
       <div class="tutText">
-        First off we need to make a function that gets an individual pixel from a surface. Why the SDL API doesn't have one built in I'll never know. 
+		首先，我们需要创建一个函数来从表面中取得一个单独的像素。为何SDL没有提供一个这样的API呢？这我就不清楚了。
        <br /> 
-       <br /> First thing we do is convert the pixel pointer from type void to 32bit integer so we can properly access them. After all, a surface's pixels are nothing more than an array of 32bit integers. Then we get or set the requested pixel. 
        <br /> 
-       <br /> You maybe be wondering why I don't just go &quot;return pixels[ x ][ y ]&quot;. 
+	   我们做的第一件事就是将像素指针的类型从void转换成32位整数指针，这样我们才能正确地访问它们。毕竟一个表面的像素仅仅是一个32位整数的数组。随后，我们就能获取或设置请求的像素了。
        <br /> 
-       <br /> The thing is the pixels aren't stored like this: 
+       <br />
+	   你可能想知道为何我不直接用&quot;return pixels[ x ][ y ]&quot;。
+       <br /> 
+       <br /> 
+	   原因是，像素不是像这样存储的：
        <br /> 
        <div class="tutImg"> 
         <img src="2d.jpg" /> 
        </div> 
-       <br /> They're stored like this: 
+       <br /> 它们是像这样存储的：
        <br /> 
        <div class="tutImg"> 
         <img src="1d.jpg" /> 
-       </div> in a single dimensional array. Its because different operating systems store 2D arrays differently (At least I think that's why). 
+       </div> 
+	   以一维数组的方式存储的。因为不同操作系统以不同的方式存储二维数组（至少我认为这是原因）。
        <br /> 
-       <br /> So to retrieve the red pixel from the array we multiply the y offset by the width and add the x offset. 
        <br /> 
-       <br /> These functions only work for 32-bit surfaces. You'll have to make one of your own if you're using a different format. 
+	   所以为了从数组中提取红色的像素信息，我们用y坐标乘以宽度再加上x坐标。
+       <br /> 
+       <br /> 
+	   这些函数只在32位表面上起作用。如果你在使用一个不同格式的表面，你需要自己实现这样的函数。
       </div> 
       <pre class="tutCode prettyprint linenums:35 lang-cpp">BitmapFont::BitmapFont()
 {
-    //Initialize variables
+    //初始化变量
     bitmap = NULL;
     newLine = 0;
     space = 0;
@@ -155,105 +161,116 @@ class BitmapFont
 
 BitmapFont::BitmapFont( SDL_Surface *surface )
 {
-    //Build the font
+    //建立字体
     build_font( surface );
 }
 </pre> 
       <div class="tutText">
-        Here are our constructors. 
+		这是我们的构造函数。
        <br /> 
-       <br /> The first one simply initializes our variables to 0. The second one creates the object and builds the font with the given variables. 
+       <br /> 
+	   其中第一个简单地初始化我们的变量为0。第二个创建对象并用给定的变量来构建字体。
       </div> 
       <pre class="tutCode prettyprint linenums:48 lang-cpp">void BitmapFont::build_font( SDL_Surface *surface )
 {
-    //If surface is NULL
+    //如果表面是NULL
     if( surface == NULL )
     {
         return;
     }
     
-    //Get the bitmap
+    //获取位图
     bitmap = surface;
     
-    //Set the background color
+    //设置背景颜色
     Uint32 bgColor = SDL_MapRGB( bitmap-&gt;format, 0, 0xFF, 0xFF );
 </pre> 
       <div class="tutText">
-        Now it's time to build our font. We have to first check that a valid surface was given to us. 
+		现在是时候构建我们的字体了。不过我们必须先检查一下给我们的表面是否合法。
        <br /> 
-       <br /> Then we get the actual bitmap font surface from the given argument. Then we set the background color. 
+       <br />
+	   然后我们从给定的参数中获得真正的位图字体表面。接着我们设置背景颜色。
       </div> 
-      <pre class="tutCode prettyprint linenums:61 lang-cpp">    //Set the cell dimensions
+      <pre class="tutCode prettyprint linenums:61 lang-cpp">    //设置单元大小
     int cellW = bitmap-&gt;w / 16;
     int cellH = bitmap-&gt;h / 16;
 
-    //New line variables
+    //新行变量
     int top = cellH;
     int baseA = cellH;
 </pre> 
       <div class="tutText">
-        Here we calculate the cell width and height. What are cells? Cells are used to arrange the letters on our bitmap to make it easy to get the individual characters. 
+		这里我们计算单元的宽高。单元是什么？单元是用来在位图上安排字母的位置的，它能让获取单独的字符更加简单。
        <br /> 
-       <br /> A typical bitmap font has the 256 characters in ASCII order. Each of the letters are in a uniformly sized cell and are laid out in 16 columns and 16 rows. It looks like this: 
+       <br /> 
+	   一个常见的位图字体有256个按ASCII排序的字符。每个字母都在一个统一大小的单元中，并且布局成16行16列。它看上去就像这样：
        <br /> 
        <div class="tutImg"> 
         <img src="cells.jpg" /> 
-       </div> The lines lining the cell don't have to be there, they're just there to show how the cells look. To calculate cell width, divide the image width by 16 since there are 16 equal columns. The same thing is done with the height. 
+       </div> 
+	   图中划分单元的线条不必在那里，它们仅仅是用来向你展示单元是什么样的。要计算单元的宽度，由于有16个等宽的列，只需将图像宽度除以16。计算高度采用的是一样的方法。
        <br /> 
-       <br /> The variables &quot;top&quot; and &quot;baseA&quot; are going to be used to calculate how much space we need between lines. You'll see how we use them later. 
+       <br />
+	   变量&quot;top&quot; 和 &quot;baseA&quot;是用来计算行间间距的。你将会看到我们是如何使用它们的。
        <br /> 
-       <br /> Now that we've got our bitmap and set the cells, it's time to clip the individual letters. 
+       <br />
+	   既然我们已经获得了我们的位图并设置好了单元，下面该剪切出每个单独的字母了。
        <br /> 
       </div> 
-      <pre class="tutCode prettyprint linenums:68 lang-cpp">    //The current character we're setting
+      <pre class="tutCode prettyprint linenums:68 lang-cpp">    //我们正在设置的当前字符
     int currentChar = 0;
     
-    //Go through the cell rows
+    //遍历单元行
     for( int rows = 0; rows &lt; 16; rows++ )
     {
-        //Go through the cell columns
+        //遍历单元列
         for( int cols = 0; cols &lt; 16; cols++ )
         {
 </pre> 
       <div class="tutText">
-        First off, we make an integer to keep track of which character we're setting. Then we go through the rows of the cells, then through each individual column. 
+		首先，我们创建一个整数用于跟踪我们正在设置的字符。然后，我们遍历单元行，接着遍历每个单独的列。
+		<br/>
+		<br/>
+		<div class="alert alert-info"><b>译者注</b>：这里翻译得好怪...反正代码都能看懂，就不折腾了...</div>
       </div> 
-      <pre class="tutCode prettyprint linenums:77 lang-cpp">            //Set the character offset
+      <pre class="tutCode prettyprint linenums:77 lang-cpp">            //设置字符坐标
             chars[ currentChar ].x = cellW * cols;
             chars[ currentChar ].y = cellH * rows;
             
-            //Set the dimensions of the character
+            //设置字符大小
             chars[ currentChar ].w = cellW;
             chars[ currentChar ].h = cellH;
 </pre> 
       <div class="tutText">
-        Then we set the default offsets and dimensions of the current character which are the offsets and dimensions of the cell. Certain ASCII values have no character assigned to them so the default values will never change. 
+		随后，我们将当前字符的默认坐标和大小设为单元的坐标和大小。特定的ASCII值没有字符与之对应，所以默认值从不会改变。
        <br /> 
-       <br /> However, most characters will not all have the same x offsets or widths. So we go through the each of the cells to set the unique clip rectangles of each character. 
+       <br /> 
+	   但是，大多数字符不会都有相同的X坐标和宽度。所以我们遍历每个单元来设置每个字符唯一的剪切矩形。
       </div> 
-      <pre class="tutCode prettyprint linenums:84 lang-cpp">            //Find Left Side
-            //Go through pixel columns
+      <pre class="tutCode prettyprint linenums:84 lang-cpp">            //寻找左边界
+            //遍历像素列
             for( int pCol = 0; pCol &lt; cellW; pCol++ )
             {
-                //Go through pixel rows
+                //遍历像素行
                 for( int pRow = 0; pRow &lt; cellH; pRow++ )
                 {
-                    //Get the pixel offsets
+                    //获得像素坐标
                     int pX = ( cellW * cols ) + pCol;
                     int pY = ( cellH * rows ) + pRow;
 </pre> 
       <div class="tutText">
-        Now we go through the pixels in the cell. Notice how our nested for loops are structured. We go through each column, then we go through the column top to bottom. 
+		现在我们遍历单元中的像素。注意我们嵌套的for循环是如何构造的。我们先遍历每一列，然后我们从顶部到底部遍历列中的每一行。
        <br /> 
-       <br /> We calculate the offset by adding the relative pixel offset to the cell's offset. 
+       <br />
+	   我们通过将相对像素坐标和单元坐标相加来计算字符坐标。
       </div> 
-      <pre class="tutCode prettyprint linenums:94 lang-cpp">                    //If a non colorkey pixel is found
+      <pre class="tutCode prettyprint linenums:94 lang-cpp">                    //如果找到一个非关键色的像素
                     if( get_pixel32( pX, pY, bitmap ) != bgColor )
                     {
-                        //Set the x offset
+                        //设置X坐标
                         chars[ currentChar ].x = pX;
                         
-                        //Break the loops
+                        //跳出循环
                         pCol = cellW;
                         pRow = cellH;
                     }
@@ -261,30 +278,31 @@ BitmapFont::BitmapFont( SDL_Surface *surface )
             }
 </pre> 
       <div class="tutText">
-        As we're going through the pixels in the cell, we scan for a pixel that is not of the background color like so: 
+		当我们在单元中遍历像素时，我们寻找一个非背景色的像素，就像这样：
        <br /> 
        <div class="tutImg"> 
         <img src="fishing.gif" /> 
-       </div> When a non background pixel is found that means we found the x offset of the character. We set the x offset of the sprite then crudely break the loop. 
+       </div>
+	   当一个非背景色像素被找到，这意味着我们找到了这个字符的X坐标。我们设置了这个子图的X像素，然后草草中断了循环。
       </div> 
-      <pre class="tutCode prettyprint linenums:106 lang-cpp">            //Find Right Side
-            //Go through pixel columns
+      <pre class="tutCode prettyprint linenums:106 lang-cpp">            //寻找右边界
+            //遍历像素列
             for( int pCol_w = cellW - 1; pCol_w &gt;= 0; pCol_w-- )
-                //Go through pixel rows
             {
+                //遍历像素行
                 for( int pRow_w = 0; pRow_w &lt; cellH; pRow_w++ )
                 {
-                    //Get the pixel offsets
+                    //获取像素坐标
                     int pX = ( cellW * cols ) + pCol_w;
                     int pY = ( cellH * rows ) + pRow_w;
 
-                    //If a non colorkey pixel is found
+                    //如果一个非关键色像素被找到
                     if( get_pixel32( pX, pY, bitmap ) != bgColor )
                     {
-                        //Set the width
+                        //设置宽度
                         chars[ currentChar ].w = ( pX - chars[ currentChar ].x ) + 1;
 
-                        //Break the loops
+                        //跳出循环
                         pCol_w = -1;
                         pRow_w = cellH;
                     }
@@ -292,29 +310,29 @@ BitmapFont::BitmapFont( SDL_Surface *surface )
             }
 </pre> 
       <div class="tutText">
-        Then we do pretty much the same thing for the width. However, this time we start from the right and move left. When we find a pixel of the character, the width is calculated by subtracting the x offset from the offset of the pixel we found and adding one. 
+		然后我们做基本相同的事情，来得到宽度值。只是这次我们从右边开始并向左移动。当我们找到字符的一个像素时，宽度就可以由我们找到的像素的X坐标减去字符的X坐标，并加上1来计算出来。
       </div> 
-      <pre class="tutCode prettyprint linenums:129 lang-cpp">            //Find Top
-            //Go through pixel rows
+      <pre class="tutCode prettyprint linenums:129 lang-cpp">            //找到上边界
+            //遍历像素行
             for( int pRow = 0; pRow &lt; cellH; pRow++ )
             {
-                //Go through pixel columns
+                //遍历像素列
                 for( int pCol = 0; pCol &lt; cellW; pCol++ )
                 {
-                    //Get the pixel offsets
+                    //获得像素坐标
                     int pX = ( cellW * cols ) + pCol;
                     int pY = ( cellH * rows ) + pRow;
 
-                    //If a non colorkey pixel is found
+                    //如果一个非关键色像素被找到
                     if( get_pixel32( pX, pY, bitmap ) != bgColor )
                     {
-                        //If new top is found
+                        //如果新的上边界被找到
                         if( pRow &lt; top )
                         {
                             top = pRow;
                         }
 
-                        //Break the loops
+                        //跳出循环
                         pCol = cellW;
                         pRow = cellH;
                     }
@@ -322,30 +340,31 @@ BitmapFont::BitmapFont( SDL_Surface *surface )
             }
 </pre> 
       <div class="tutText">
-        Here we scan the cell pixels from top to bottom instead of side to side like before. What we're trying to find is what's the tallest character in our bitmap font. 
+		这里我们扫描单元像素的方向不是像之前的一样，而是从上往下扫描。我们努力寻找的是我们的位图字体中最高的字符。
        <br /> 
-       <br /> We use the &quot;pRow&quot; variable because we want the offset relative to the cell. &quot;pY&quot; is the offset relative to the bitmap surface. 
+       <br />
+	   我们使用&quot;pRow&quot;变量，因为我们需要相对单元的坐标。&quot;pY&quot;是相对于位图表面的坐标。
       </div> 
-      <pre class="tutCode prettyprint linenums:155 lang-cpp">            //Find Bottom of A
+      <pre class="tutCode prettyprint linenums:155 lang-cpp">            //寻找A的下边界
             if( currentChar == 'A' )
             {
-                //Go through pixel rows
+                //遍历像素行
                 for( int pRow = cellH - 1; pRow &gt;= 0; pRow-- )
                 {
-                    //Go through pixel columns
+                    //遍历像素列
                     for( int pCol = 0; pCol &lt; cellW; pCol++ )
                     {
-                        //Get the pixel offsets
+                        //获得像素坐标
                         int pX = ( cellW * cols ) + pCol;
                         int pY = ( cellH * rows ) + pRow;
 
-                        //If a non colorkey pixel is found
+                        //如果一个非关键色像素被找到
                         if( get_pixel32( pX, pY, bitmap ) != bgColor )
                         {
-                            //Bottom of a is found
+                            //A的下边界被找到
                             baseA = pRow;
 
-                            //Break the loops
+                            //跳出循环
                             pCol = cellW;
                             pRow = -1;
                         }
@@ -353,26 +372,28 @@ BitmapFont::BitmapFont( SDL_Surface *surface )
                 }
             }
 
-            //Go to the next character
+            //运行到下一个字符
             currentChar++;
         }
     }
 </pre> 
       <div class="tutText">
-        If the current cell we're scanning belongs to capitial A, we're going to find the bottom of A relative to cell. We're going to use this as our baseline. Certain characters like g, j, and y have their character image go below the baseline. You'll see how we use the baseline later. 
+	   如果当前我们扫描的单元属于大写的A，我们将要寻找A相对于单元的下边界。我们将要将它作为我们的基线。特定的字符，例如g,j和y，都有基线以下的字符图像。你将在后面看到我们如何使用基线。
        <br /> 
-       <br /> Once we're done setting the current character, we increment the counter to move onto the next character. 
        <br /> 
-       <br /> Remember, in order for this function to work properly the bitmap font has to have the 256 characters in ASCII order and laid out in 16 columns and 16 rows. Any other way would require you to create your own building function. 
+	   当我们设置好当前字符，我们增加了计数器的值来继续进行下一个字符的处理。
+       <br /> 
+       <br />
+	   记着，为了让这个函数正常工作，位图字体必须有256个按ASCII顺序排列的字符，并且以16行16列布局。其他任何形式的位图文件都需要你自己实现构建函数。
        <br /> 
       </div> 
-      <pre class="tutCode prettyprint linenums:186 lang-cpp">    //Calculate space
+      <pre class="tutCode prettyprint linenums:186 lang-cpp">    //计算空白符宽度
     space = cellW / 2;
 
-    //Calculate new line
+    //计算新行高度
     newLine = baseA - top;
 
-    //Lop off excess top pixels
+    //砍掉多余的顶部像素
     for( int t = 0; t &lt; 256; t++ )
     {
         chars[ t ].y += top;
@@ -381,63 +402,70 @@ BitmapFont::BitmapFont( SDL_Surface *surface )
 }
 </pre> 
       <div class="tutText">
-        After we're done going through all the cells, we do some extra things to properly space the text. 
+		我们遍历完所有单元后，我们做了一些额外工作来正确地处理文字间的空白。
        <br /> 
-       <br /> We set the space to be half the cell width. &quot;newLine&quot; which is how much space is between lines of text. It's set to be the baseline minus highest known character height. 
        <br /> 
-       <br /> At the end of font loading function, we go through the character clip rectangles and cut off the extra pixels on top. 
+	   我们设置空白符为单元宽度的一半。&quot;newLine&quot;是文本行之间的距离。它通过基线减去已知最高字符的高度进行设定。
+       <br /> 
+       <br /> 
+	   <div class="alert alert-info"><b>译者注</b>：为了翻译方便，这里的<b>空白符</b>特指Space，即' ' 。<br/></div>
+	   在字体加载函数的最后，我们遍历字符剪切矩形并切掉顶部多余的像素。
       </div> 
       <pre class="tutCode prettyprint linenums:199 lang-cpp">void BitmapFont::show_text( int x, int y, std::string text, SDL_Surface *surface )
 {
-    //Temp offsets
+    //临时坐标
     int X = x, Y = y;
 </pre> 
       <div class="tutText">
-        Now here's the function that actually shows the text. 
+		现在这是真正地显示文本的函数。
        <br /> 
-       <br /> First thing we do is get the given offsets and store them in the temp offsets. The offsets given in the arguments serve as base offsets, the temp offsets are where the next sprite will be blitted. 
+       <br /> 
+	   我们做的第一件事就是获取给定的坐标并将它们保存在临时的坐标中。参数中给定的坐标被当作基线坐标，临时坐标是下一个子图将被blit的地方。
       </div> 
-      <pre class="tutCode prettyprint linenums:203 lang-cpp">    //If the font has been built
+      <pre class="tutCode prettyprint linenums:203 lang-cpp">    //如果字体已经构建好
     if( bitmap != NULL )
     {
-        //Go through the text
+        //遍历文本
         for( int show = 0; text[ show ] != '\0'; show++ )
         {
 </pre> 
       <div class="tutText">
-        Then we check if a bitmap was given for us to use. If there is one, we go through the characters in the string. 
+		然后我们检查我们是否有位图可用。如果有，我们就遍历字符串中的字符。
       </div> 
-      <pre class="tutCode prettyprint linenums:209 lang-cpp">            //If the current character is a space
+      <pre class="tutCode prettyprint linenums:209 lang-cpp">            //如果当前字符是空白符
             if( text[ show ] == ' ' )
             {
-                //Move over
+                //向前移动
                 X += space;
             }
             //If the current character is a newline
             else if( text[ show ] == '\n' )
             {
-                //Move down
+                //向下移动
                 Y += newLine;
 
-                //Move back
+                //移回原位
                 X = x;
             }
 </pre> 
       <div class="tutText">
-        First thing we do here is check if the current character is a space or a newline. 
+		这里我们首先检查当前字符是否为空白符或换行符。
        <br /> 
-       <br /> If the character is a space, we move over the space assigned in the build_font() function. If the character is a newline the temp offset goes down the cell height, and then moves back to the base x offset. 
        <br /> 
+	   如果是空白符，我们向前移动<code>build_font()</code>函数中设定的space那么大的空间；如果是换行符，临时坐标会向下移动一个单元的高度，并且然后将X坐标移回初始位置。
+       <br /> 
+	   <br />
+	   <div class="alert alert-warning"><b>译者注</b>：这里说是<b>向下移动一个单元的高度</b>(原文：goes down the cell height)，可代码中明明写的是<code>Y += newLine</code>，并且<code>newLine = baseA - top</code>，这结果不一致啊！高度疑惑中...</div>
       </div> 
       <pre class="tutCode prettyprint linenums:224 lang-cpp">            else
             {
-                //Get the ASCII value of the character
+                //获取字符的ASCII值
                 int ascii = (unsigned char)text[ show ];
                 
-                //Show the character
+                //显示字符
                 apply_surface( X, Y, bitmap, surface, &amp;chars[ ascii ] );
                 
-                //Move over the width of the character with one pixel of padding
+                //向前移动当前字符的宽度，并加上一像素的内边距
                 X += chars[ ascii ].w + 1;
             }
         }
@@ -445,46 +473,49 @@ BitmapFont::BitmapFont( SDL_Surface *surface )
 }
 </pre> 
       <div class="tutText">
-        If the current character is not one of our special characters we apply the character's sprite on the screen. 
+		如果当前字符不是空白符或换行符，我们将该字符的子图应用到屏幕上。
        <br /> 
-       <br /> To show the character first we have to get the ASCII value by type casting the character to an integer. Then we apply the sprite onto the screen. This is easily done since the sprites are in ASCII order. 
+       <br />
+	   为了显示这个字符，我们必须先将其转换成整型以获取其ASCII值。然后我们将它的子图应用到屏幕上。由于子图都是按照ASCII顺序排列的，所以这一步很容易。
        <br /> 
-       <br /> Then the temp offset is moved over the width of the sprite plus one. That way the next sprite will be applied next to the previous sprite with one pixel of padding. 
        <br /> 
-       <br /> We keep looping through this until all the characters are shown. 
+	   接着，临时坐标向前移动了当前子图宽度+1的距离。这样，下一个子图将被应用到上一个子图旁边的位置，并在中间保留了一像素的内边距。
+       <br /> 
+       <br /> 
+	   我们一直执行循环，直到所有字符都显示了出来。
       </div> 
-      <pre class="tutCode prettyprint linenums:238 lang-cpp">    //Create our font
+      <pre class="tutCode prettyprint linenums:238 lang-cpp">    //创建我们的字体
     BitmapFont font( bitmapFont );
     
-    //Fill the screen white
-    SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+    //用白色填充屏幕
+    SDL_FillRect( screen, screen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
     
-    //Show the text
+    //显示文本
     font.show_text( 100, 100, &quot;Bitmap Font:\nABDCEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789&quot;, screen );
     
-    //Update the screen
+    //更新屏幕
     if( SDL_Flip( screen ) == -1 )
     {
         return 1;    
     }
 </pre> 
       <div class="tutText">
-        Here's a basic demonstration of our bitmap class that we do in the main() function. 
+		这是<code>main()</code>函数中，有关我们的位图类的一个基本演示。
        <br /> 
-       <br /> All we do is create a font object, fill screen white, apply some text, and update the screen. 
+       <br /> 
+	   我们所做的就是创建一个字体对象，把屏幕填充成白色，应用一些文本，并更新屏幕。
+	    <br /> 
+       <br /> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson30">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson29/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson31/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson30">此处下载</a>。
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson31/index.html">下一课：像素操纵和表面翻转</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
