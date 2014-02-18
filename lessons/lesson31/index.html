@@ -2,7 +2,7 @@
 <html>
  <head> 
   <meta charset="utf-8" /> 
-  <title>第31课 - 像素处理和表面翻转 &middot; SDL中文教程</title> 
+  <title>第31课 - 像素操纵和表面翻转 &middot; SDL中文教程</title> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
   <meta name="description" content="" /> 
   <meta name="author" content="" /> 
@@ -43,9 +43,9 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第31课 - 像素处理和表面翻转</h1> 
+     <h1 align="center" id="content_title">第31课 - 像素操纵和表面翻转</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月18日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson31/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson30/index.html" id="prev_link">上一课</a></li> 
@@ -57,145 +57,155 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Pixel Manipulation and Surface Flipping</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> SDL has no built in functions to flip surfaces. So we'll just have to flip surfaces ourselves by playing with the pixels. In this tutorial we will read/write pixels to make our own surface flipping function. 
+	   SDL没有内置的表面翻转函数。所以我们要自己通过操纵像素来翻转表面。在本课，我们将读写像素来创建我们自己的表面翻转函数。
       </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">bool load_files()
 {
-    //Load the image
+    //加载图像
     topLeft = load_image( &quot;corner.png&quot; );
     
-    //If there was an problem loading the image
+    //如果加载图像出现问题
     if( topLeft == NULL )
     {
         return false;    
     }
     
-    //If everything loaded fine
+    //如果所有加载完成
     return true;    
 }
 </pre> 
       <div class="tutText">
-        In our loading function we only load one image: 
+		在我们的加载函数中，我们仅仅加载一张图片：
        <br /> 
        <div class="tutImg"> 
         <img src="corner.png" /> 
        </div> 
-       <br /> In order to show all four corners we will have to create them ourselves by flipping the image we loaded. 
+       <br />
+	   为了显示所有的四个角，我们必须通过翻转我们已经加载好的图像来创建它们。
       </div> 
       <pre class="tutCode prettyprint linenums:15 lang-cpp">Uint32 get_pixel32( SDL_Surface *surface, int x, int y )
 {
-    //Convert the pixels to 32 bit
+    //转换像素为32位
     Uint32 *pixels = (Uint32 *)surface-&gt;pixels;
     
-    //Get the requested pixel
+    //获取请求的像素
     return pixels[ ( y * surface-&gt;w ) + x ];
 }
 
 void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel )
 {
-    //Convert the pixels to 32 bit
+    //转换像素为32位
     Uint32 *pixels = (Uint32 *)surface-&gt;pixels;
     
-    //Set the pixel
+    //设置像素
     pixels[ ( y * surface-&gt;w ) + x ] = pixel;
 }
 </pre> 
       <div class="tutText">
-        Here's our functions to get and put pixels. In case you missed the bitmap font tutorial, here's a quick review on how pixel access works: 
+		这里是我们获取和设置像素的函数。如果你错过了"位图字体"那一课，这里有一个有关像素访问是如何工作的快速复习：
        <br /> 
-       <br /> First thing we do is convert the pixel pointer from type void to 32bit integer so we can properly access them. After all, a surface's pixels are nothing more than an array of 32bit integers. Then we get or set the requested pixel. 
        <br /> 
-       <br /> You maybe be wondering why I don't just go &quot;return pixels[ x ][ y ]&quot;. 
+	   我们做的第一件事就是将像素指针的类型从void转换成32位整数指针，这样我们才能正确地访问它们。毕竟一个表面的像素仅仅是一个32位整数的数组。随后，我们就能获取或设置请求的像素了。
        <br /> 
-       <br /> The thing is the pixels aren't stored like this: 
+       <br />
+	   你可能想知道为何我不直接用&quot;return pixels[ x ][ y ]&quot;。
+       <br /> 
+       <br /> 
+	   原因是，像素不是像这样存储的：
        <br /> 
        <div class="tutImg"> 
         <img src="2d.jpg" /> 
        </div> 
-       <br /> They're stored like this: 
+       <br /> 它们是像这样存储的：
        <br /> 
        <div class="tutImg"> 
         <img src="1d.jpg" /> 
-       </div> in a single dimensional array. It's because different operating systems store 2D arrays differently (At least I think that's why). 
+       </div> 
+	   以一维数组的方式存储的。因为不同操作系统以不同的方式存储二维数组（至少我认为这是原因）。
        <br /> 
-       <br /> So to retrieve the red pixel from the array we multiply the y offset by the width and add the x offset. 
        <br /> 
-       <br /> These functions only work for 32-bit surfaces. You'll have to make one of your own if you're using a different format. 
+	   所以为了从数组中提取红色的像素信息，我们用y坐标乘以宽度再加上x坐标。
        <br /> 
-       <br /> You can learn more about pixels in 
-       <a class="tutLink" href="../../articles/article03/index.php">article 3</a>. 
+       <br /> 
+	   这些函数只在32位表面上起作用。如果你在使用一个不同格式的表面，你需要自己实现这样的函数。 
+       <br /> 
+       <br />
+	   你可以在<a class="tutLink" href="http://lazyfoo.net/articles/article03/index.php" target="_blank"><i class="icon-globe"></i>文章3</a>中学到更多有关像素的知识。       
       </div> 
       <pre class="tutCode prettyprint linenums:32 lang-cpp">SDL_Surface *flip_surface( SDL_Surface *surface, int flags )
 {
-    //Pointer to the soon to be flipped surface
+    //指向将要翻转的表面的指针
     SDL_Surface *flipped = NULL;
     
-    //If the image is color keyed
+    //如果图像带有关键色
     if( surface-&gt;flags &amp; SDL_SRCCOLORKEY )
     {
         flipped = SDL_CreateRGBSurface( SDL_SWSURFACE, surface-&gt;w, surface-&gt;h, surface-&gt;format-&gt;BitsPerPixel, surface-&gt;format-&gt;Rmask, surface-&gt;format-&gt;Gmask, surface-&gt;format-&gt;Bmask, 0 );
     }
-    //Otherwise
+    //否则
     else
     {
         flipped = SDL_CreateRGBSurface( SDL_SWSURFACE, surface-&gt;w, surface-&gt;h, surface-&gt;format-&gt;BitsPerPixel, surface-&gt;format-&gt;Rmask, surface-&gt;format-&gt;Gmask, surface-&gt;format-&gt;Bmask, surface-&gt;format-&gt;Amask );
     }
 </pre> 
       <div class="tutText">
-        Now here's our surface flipping function. 
+		现在这里是我们的表面翻转函数。
        <br /> 
-       <br /> At the top we create a blank surface using SDL_CreateRGBSurface(). It may look complicated, but ultimately we're just creating a surface of the same size and format as the surface we are given. 
        <br /> 
-       <br /> Before we can create the blank surface, we have to check if the surface is color keyed. If it is, we set the alpha mask to 0 on the new blank surface. The reason is if the alpha mask is anything but 0, the color key gets ignored. If the source surface is not color keyed, we just copy its alpha mask to the new blank surface. 
+	   在最上面，我们用<code>SDL_CreateRGBSurface()</code>创建了一个空白表面。这看上去可能有点复杂，但最终我们仅仅是创建了一个与给定表面具有相同大小和格式的表面。
        <br /> 
-       <br /> Take a look at the SDL Documentation to see how SDL_CreateRGBSurface() works. 
+       <br /> 
+	   在我们能创建空白表面前，我们必须检查一下这个表面是否带有关键色。如果是的，我们在新的空白表面上设置alpha掩码为0。这是因为如果alpha掩码不是0，关键色会被忽略。如果源表面没有关键色，我们仅仅将其alpha掩码拷贝到新的空白表面上。
+       <br /> 
+       <br /> 
+	   查看一下SDL文档，看看<code>SDL_CreateRGBSurface()</code>函数是如何工作的。
       </div> 
-      <pre class="tutCode prettyprint linenums:47 lang-cpp">    //If the surface must be locked
+      <pre class="tutCode prettyprint linenums:47 lang-cpp">    //如果表面必须被锁定
     if( SDL_MUSTLOCK( surface ) )
     {
-        //Lock the surface
+        //锁定表面
         SDL_LockSurface( surface );
     }
 </pre> 
       <div class="tutText">
-        Before we can start altering pixels we have to check if the surface has to be locked before accessing the pixels using SDL_MUSTLOCK(). If SDL_MUSTLOCK() says we have to lock the surface, we use SDL_LockSurface() to lock the surface. 
+		在我们能开始修改像素前，我们必须用<code>SDL_MUSTLOCK()</code>检查一下这个表面是否在访问像素前必须锁定。如果<code>SDL_MUSTLOCK()</code>告诉我们必须锁定表面，我们就用<code>SDL_LockSurface()</code>来锁定表面。
        <br /> 
-       <br /> Now that the surface is locked it's time to mess with the pixels. 
+       <br />
+	   既然表面已被锁定，是时候玩弄像素了。
       </div> 
-      <pre class="tutCode prettyprint linenums:53 lang-cpp">    //Go through columns
+      <pre class="tutCode prettyprint linenums:53 lang-cpp">    //遍历列
     for( int x = 0, rx = flipped-&gt;w - 1; x &lt; flipped-&gt;w; x++, rx-- )
     {
-        //Go through rows
+        //遍历行
         for( int y = 0, ry = flipped-&gt;h - 1; y &lt; flipped-&gt;h; y++, ry-- )
         {
 </pre> 
       <div class="tutText">
-        Here is our nested loops used for going through the pixels. You may be wondering why we declare 2 integers in our for loops. The reason is that when you flip pixels, you have to read them in one direction and write them in reverse. 
+		这里是我们遍历像素的嵌套循环。你可能想知道为何我们在for循环中声明两个整数。原因是当你翻转像素时，你需要从一个方向读取它们并以相反的方向写入它们。
        <br /> 
-       <br /> In the x loop, we declare &quot;x&quot; and &quot;rx&quot;. &quot;x&quot; is initialized to 0, and &quot;rx&quot; (which stands for reverse x) is initialized to the width minus 1 which is the end of the surface. 
        <br /> 
-       <br /> Then in the middle the condition is normal. At the end &quot;x&quot; is incremented and &quot;rx&quot; is decremented. &quot;x&quot; will start at the beginning and go forward, &quot;rx&quot; starts at the end and goes backward. 
+	   在x循环中，我们声明&quot;x&quot; 和 &quot;rx&quot;。 &quot;x&quot; 被初始化为0，&quot;rx&quot;（代表了相反的x）被初始化为宽度减1，也就是表面的最末端。
        <br /> 
-       <br /> So if the surface's width was 10, the for loop will cycle like so: 
+       <br /> 
+	   然后，中间的条件很普通，最后&quot;x&quot;自增并且&quot;rx&quot;自减。&quot;x&quot; 会从始端开始向前走，&quot;rx&quot; 从末端向回走。
+       <br /> 
+       <br />
+	   所以如果表面的宽度为10，for循环会像这样运行：
        <br /> &quot;x&quot;&nbsp; : 0 1 2 3 4 5 6 7 8 9 
        <br /> &quot;rx&quot; : 9 8 7 6 5 4 3 2 1 0 
        <br /> 
-       <br /> I'm pretty sure you can now figure out what &quot;y&quot; and &quot;ry&quot; do. 
+       <br />
+	   我很确定你可以想明白&quot;y&quot; 和 &quot;ry&quot;是做什么的了。
       </div> 
-      <pre class="tutCode prettyprint linenums:59 lang-cpp">            //Get pixel
+      <pre class="tutCode prettyprint linenums:59 lang-cpp">            //获取像素
             Uint32 pixel = get_pixel32( surface, x, y );
             
-            //Copy pixel
+            //复制像素
             if( ( flags &amp; FLIP_VERTICAL ) &amp;&amp; ( flags &amp; FLIP_HORIZONTAL ) )
             {
                 put_pixel32( flipped, rx, ry, pixel );
@@ -212,51 +222,57 @@ void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel )
     }
 </pre> 
       <div class="tutText">
-        Here's the middle of the nested loops. 
+		这是嵌套循环的中间部分。
        <br /> 
-       <br /> First we read in a pixel from the source surface. Then if the user passed in the FLIP_VERTICAL and the FLIP_HORIZONTAL flags, we write the pixels to the blank surface right to left, bottom to top. 
+       <br />
+	   首先我们从源表面读入像素。然后如果用户传入了FLIP_VERTICAL 和 FLIP_HORIZONTAL标识，我们就从右往左、从下往上将像素写入空白表面上。
        <br /> 
-       <br /> If the user just passed the FLIP_VERTICAL flag, we write the pixels to the blank surface left to right, bottom to top. 
+       <br />
+	   如果用户只是传入了 FLIP_VERTICAL 标识，我们就从左往右、从下往上将像素写入空白表面上。
        <br /> 
        <br /> If the user just passed the FLIP_HORIZONTAL flag, we write the pixels to the blank surface right to left, top to bottom. 
+	   如果用户只是传入了 FLIP_HORIZONTAL 标识，我们就从右往左、从上往下将像素写入空白表面上。
        <br /> 
-       <br /> If you're wondering what the flag values are, they're near the top of the source. 
+       <br />
+	   如果你想知道这些标识是什么，它们就在源码的顶部附近。
       </div> 
-      <pre class="tutCode prettyprint linenums:77 lang-cpp">    //Unlock surface
+      <pre class="tutCode prettyprint linenums:77 lang-cpp">    //解锁表面
     if( SDL_MUSTLOCK( surface ) )
     {
         SDL_UnlockSurface( surface );
     }
     
-    //Copy color key
+    //复制关键色
     if( surface-&gt;flags &amp; SDL_SRCCOLORKEY )
     {
         SDL_SetColorKey( flipped, SDL_RLEACCEL | SDL_SRCCOLORKEY, surface-&gt;format-&gt;colorkey );
     }
 	
-    //Return flipped surface
+    //返回翻转后的表面
     return flipped;
 }
 </pre> 
       <div class="tutText">
-        At the end of our surface flipping function, we check if the surface had to be locked. If it did, we unlock it using SDL_UnlockSurface(). 
+		在表面翻转函数的最后，我们检查表面是否必须被锁定。如果是的，我们就用<code>SDL_UnlockSurface()</code>来解锁表面。
        <br /> 
-       <br /> Then if the surface we had to flip was color keyed, we copy the color key from the original surface to the new flipped surface we made. 
+       <br />
+	   然后如果我们要翻转的表面带有关键色，我们就将源表面的关键色复制到新的翻转后的表面上。
        <br /> 
-       <br /> Lastly we return a pointer to our newly created flipped surface. 
+       <br />
+	   最后我们返回我们新创建的翻转后的表面的指针。
       </div> 
-      <pre class="tutCode prettyprint linenums:92 lang-cpp">    //Flip surfaces
+      <pre class="tutCode prettyprint linenums:92 lang-cpp">    //翻转表面
     topRight = flip_surface( topLeft, FLIP_HORIZONTAL );
     bottomLeft = flip_surface( topLeft, FLIP_VERTICAL );
     bottomRight = flip_surface( topLeft, FLIP_HORIZONTAL | FLIP_VERTICAL );
     
-    //Apply the images to the screen
+    //应用图像到屏幕上
     apply_surface( 0, 0, topLeft, screen );
     apply_surface( 320, 0, topRight, screen );
     apply_surface( 0, 240, bottomLeft, screen );
     apply_surface( 320, 240, bottomRight, screen );
         
-    //Update the screen
+    //更新屏幕
     if( SDL_Flip( screen ) == -1 )
     {
         return 1;    
@@ -264,20 +280,18 @@ void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel )
     
 </pre> 
       <div class="tutText">
-        and here's the surface flipping function in action. Then the surfaces are applied and the screen is updated to show the diamond pattern. 
+		这是表面翻转函数所应用的地方。然后，表面被应用到屏幕上，并且屏幕被更新以显示钻石的图案。
       </div> 
+	  <br/>
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson31">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson30/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson32/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson31">此处下载</a>。
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+       <a class="btn btn-primary" href="../lesson32/index.html">下一课：独立于帧的运动</a>
+    </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
