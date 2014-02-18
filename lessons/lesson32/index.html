@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第32课 - 独立于帧的运动</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年7月8日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月18日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson32/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson31/index.html" id="prev_link">上一课</a></li> 
@@ -57,71 +57,73 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Frame Independent Movement</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 12/28/09</h6> Before we had to cap the frame rate to keep the dot from moving too fast. Here we're going to make the dot move based on time instead of frame rate so it moves the same no matter what the frame rate is. 
+	   在这之前，我们必须捕获帧率来防止点移动得过快。这里，我们将基于时间来移动点，而不再是基于帧率，从而让它无论在哪种帧率下都具有相同的移动速度。
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The attributes of the dot
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//点的特性
 const int DOT_WIDTH = 20;
 const int DOT_HEIGHT = 20;
 const int DOT_VEL = 200;
 </pre> 
       <div class="tutText">
-        Here we define the dot related constants of width, height, and velocity. 
+		这里我们定义了与点相关的宽度、高度和速度常量。
        <br /> 
-       <br /> Now that we're moving in relation to time instead of frame rate we have to change how we handle velocity. Instead of basing velocity per frame we're going to base it per second. In the original motion tutorial we had the dot travel 10 pixels every frame. Since the program ran at 20 frames per second that meant the dot moved at a rate of 200 pixels per second. 
+       <br />
+	   既然我们在做与时间相关的移动，而不是与帧率相关，我们必须改变我们处理速度的方式。我们将基于每秒而不是基于每帧来计算速度。在原本的"运动"教程中，我们让点每帧移动10像素。由于程序运行在20帧每秒的帧率下，点也就是以200像素每秒的速度运动。
        <br /> 
-       <br /> So now the dot's velocity is 200 pixels per second. 
+       <br />
+	   所以现在点的速度是200像素每秒。
       </div> 
-      <pre class="tutCode prettyprint linenums:5 lang-cpp">//The dot
+      <pre class="tutCode prettyprint linenums:5 lang-cpp">//点
 class Dot
 {
     private:
-    //The X and Y offsets of the dot
+    //点的X、Y坐标
     float x, y;
     
-    //The velocity of the dot
+    //点的速度
     float xVel, yVel;
     
     public:
-    //Initializes the variables
+    //初始化变量
     Dot();
     
-    //Takes key presses and adjusts the dot's velocity
+    //处理按键并调整速度
     void handle_input();
     
-    //Moves the dot
+    //移动点
     void move( Uint32 deltaTicks );
     
-    //Shows the dot on the screen
+    //在屏幕上显示点
     void show();
 };
 </pre> 
       <div class="tutText">
-        Here we have yet another revision of our friend the dot class. 
+		这里我们有我们的老朋友Dot类的另一个修订版本。
        <br /> 
-       <br /> Now the offsets and velocity are floating point numbers. This is because there will be cases where the dot will move less than a pixel per frame. 
+       <br />
+	   现在坐标和速度是浮点数。这是因为有可能点在一帧内移动小于1像素的距离。
        <br /> 
-       <br /> Say this program runs at 300 fps on a computer. To move at 200 pps the dot would have to move at 2/3 of a pixel per frame. 
+       <br />
+	   假定这个程序在一台电脑上以300fps的帧率运行。为了让点以200pps的速度移动，点就必须以2/3像素每帧的速度移动。
        <br /> 
-       <br /> We also have a move() function that takes in a delta time. For those of you who haven't taken physics, a delta time is a change in time. We need the change in time since the last frame to determine how much the dot needs to move. 
+       <br />
+	   <div class="alert alert-info"><b>译者注</b>：fps = Frame Per Second，帧每秒； pps = Pixel Per Second，像素每秒。</div>
+	   我们还有一个传入时间差的<code>move()</code>函数。对于那些没有学过物理的童鞋来说，注意一下这里的时间差就是时间的变化值。我们需要获得自上一帧以来经过的时间，从而决定点需要移动多远。
        <br /> 
-       <br /> And of course we have our video and input functions. 
+       <br />
+	   当然我们还有视频和输入函数。
       </div> 
       <pre class="tutCode prettyprint linenums:28 lang-cpp">void Dot::handle_input()
 {
-    //If a key was pressed
+    //如果一个按键被按下
     if( event.type == SDL_KEYDOWN )
     {
-        //Adjust the velocity
+        //调整速度
         switch( event.key.keysym.sym )
         {
             case SDLK_UP: yVel -= DOT_VEL; break;
@@ -130,10 +132,10 @@ class Dot
             case SDLK_RIGHT: xVel += DOT_VEL; break;    
         }
     }
-    //If a key was released
+    //如果一个按键被松开
     else if( event.type == SDL_KEYUP )
     {
-        //Adjust the velocity
+        //调整速度
         switch( event.key.keysym.sym )
         {
             case SDLK_UP: yVel += DOT_VEL; break;
@@ -145,130 +147,139 @@ class Dot
 }
 </pre> 
       <div class="tutText">
-        As you can see the input handling is pretty much the same from last time. 
+		就像你看到的那样，输入处理和以前的差不多。
       </div> 
       <pre class="tutCode prettyprint linenums:55 lang-cpp">void Dot::move( Uint32 deltaTicks )
 {
-    //Move the dot left or right
+    //想左或向右移动点
     x += xVel * ( deltaTicks / 1000.f );
     
-    //If the dot went too far to the left
+    //如果点向左移动得太多
     if( x &lt; 0 )
     {
-        //Move back
+        //移回去
         x = 0;    
     }
-    //or the right
+    //或者向右移动得太多
     else if( x + DOT_WIDTH &gt; SCREEN_WIDTH )
     {
-        //Move back
+        //移回去
         x = SCREEN_WIDTH - DOT_WIDTH;    
     }
     
-    //Move the dot up or down
+    //向上或向下移动点
     y += yVel * ( deltaTicks / 1000.f );
     
-    //If the dot went too far up
+    //如果点向上移动得太多
     if( y &lt; 0 )
     {
-        //Move back
+        //移回去
         y = 0;    
     }
-    //or down
+    //如果点向下移动得太多
     else if( y + DOT_HEIGHT &gt; SCREEN_HEIGHT )
     {
-        //Move back
+        //移回去
         y = SCREEN_HEIGHT - DOT_HEIGHT;    
     }
 }
 </pre> 
       <div class="tutText">
-        Here is where we do our movement. 
+		这里是我们处理移动的地方。
        <br /> 
-       <br /> We take in the delta time which is going to tell us the change in time since the dot last moved. If the program is running at 100 fps, the delta time will be 1/100 of a second. If the program is running at 200 fps, the delta time will be 1/200 of a second. If the program is running at 150 fps, the delta time will be 1/150 of a second, so on and so on. 
        <br /> 
-       <br /> The formula to figure out how much we need to move is: 
-       <h5>velocity in pixels per second * time since last frame in seconds.</h5> So if the program runs at 200 frames per second: 
-       <h5>200 pps * 1/200 seconds = 1 pixel </h5> If the program runs at 100 frames per second: 
-       <h5>200 pps * 1/100 seconds = 2 pixels</h5> and so on and so on. 
+	   我们接收时间差作为参数，它将告诉我们自上一次移动后经过的时间。如果程序是以100fps运行的，时间差就会是1/100秒。如果程序以200fps运行，时间差就会是1/200秒。如果程序以150fps运行，时间差就会是1/150秒……
        <br /> 
-       <br /> Using the time based movement makes sure that the dot always moves at 200 pps. 
+       <br />
+	   计算移动距离的公式是这样：
+       <h5>速度（像素/秒） * 自上一帧经过的时间（秒）</h5>
+	   所以如果程序以200fps运行：
+       <h5>200 pps * 1/200 秒 = 1 像素 </h5>
+	   如果程序以100fps运行：
+       <h5>200 pps * 1/100 秒 = 2 像素 </h5>
+	   ……
        <br /> 
-       <br /> Also notice we changed our method to keep the dot in bounds. Instead of using the undo motion method like before, here whenever the dot goes off the screen we pull it back in. 
+       <br /> 
+	   使用基于时间移动能确保点始终以200pps的速度移动。
+       <br /> 
+       <br />
+	   注意我们改变了我们的函数来确保点在边界内。不像以前那样使用撤销动作，这里我们在点抛出屏幕时把它拉回屏幕内。
       </div> 
       <pre class="tutCode prettyprint linenums:89 lang-cpp">void Dot::show()
 {    
-    //Show the dot
+    //显示点
     apply_surface( (int)x, (int)y, dot, screen );
 }
 </pre> 
       <div class="tutText">
-        Here you see the show() function is pretty much unchanged except for the fact that we do have to type cast the float offsets to integers for blitting. 
+		这里你可以看到<code>show()</code>函数基本没变，除了一点，我们必须将浮点数转换为整数来进行blit。
       </div> 
-      <pre class="tutCode prettyprint linenums:94 lang-cpp">    //Quit flag
+      <pre class="tutCode prettyprint linenums:94 lang-cpp">    //退出标识
     bool quit = false;
     
-    //The dot that will be used
+    //将要用到的点
     Dot myDot;
 
-    //Keeps track of time since last rendering
+    //跟踪自上次渲染所经过的时间
     Timer delta;
     
-    //Initialize
+    //初始化
     if( init() == false )
     {
         return 1;
     }
     
-    //Load the files
+    //加载文件
     if( load_files() == false )
     {
         return 1;
     }
     
-    //Start delta timer
+    //启动时间差计时器
     delta.start();
 </pre> 
       <div class="tutText">
-        Here's the top of our main() function. 
+		这是<code>main()</code>函数的顶部。
        <br /> 
-       <br /> Along with our dot we make a timer object to measure the delta time between frames. We start the timer before we enter our main loop. 
+       <br />
+	   伴随着我们的点，我们还创建了一个计时器对象来测量帧之间的时间差。我们在进入主循环前启动了计时器。
       </div> 
-      <pre class="tutCode prettyprint linenums:117 lang-cpp">    //While the user hasn't quit
+      <pre class="tutCode prettyprint linenums:117 lang-cpp">    //当用户还未退出
     while( quit == false )
     {   
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //Handle events for the dot
+            //为点处理事件
             myDot.handle_input();
             
-            //If the user has Xed out the window
+            //如果用户叉掉了窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
         
-        //Move the dot
+        //移动点
         myDot.move( delta.get_ticks() );
         
-        //Restart delta timer
+        //重启时间差计时器
         delta.start();
 </pre> 
       <div class="tutText">
-        At the top of our main loop we handle events and move the dot. 
+		在我们主循环的顶部，我们处理了事件并移动了点。
        <br /> 
-       <br /> After the dot is moved we restart the delta timer so we can keep track of how long it's been since we last moved. 
+       <br />
+	   点移动后，我们重启了时间差计时器，所以我们可以跟踪自上次移动后经过的时间。
       </div> 
-      <pre class="tutCode prettyprint linenums:139 lang-cpp">        //Fill the screen white
-        SDL_FillRect( screen, ≻reen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+      <pre class="tutCode prettyprint linenums:139 lang-cpp">        //用白色填充屏幕
+        SDL_FillRect( screen, screen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
         
-        //Show the dot on the screen
+        //在屏幕上显示点
         myDot.show();
         
-        //Update the screen
+        //更新屏幕
         if( SDL_Flip( screen ) == -1 )
         {
             return 1;    
@@ -276,22 +287,22 @@ class Dot
     }
 </pre> 
       <div class="tutText">
-        Then we do our graphics as we do normally. 
+		然后我们按正常的方式处理图像。
        <br /> 
-       <br /> As you can see we don't cap the frame rate, but since our movement is based on time it doesn't matter what the frame rate is. 
+       <br /> 
+	   就像你看到的那样，我们没有捕获帧率，但由于我们的运动是基于时间的，所以多少帧率都无所谓。
+	   <br /> 
+       <br /> 
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson32">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson31/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson33/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson32">此处下载</a>。
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+    <a class="btn btn-primary" href="../lesson33/index.html">下一课：多线程</a>
+   </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
