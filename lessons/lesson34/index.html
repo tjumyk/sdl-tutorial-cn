@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第34课 - 信号量</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月18日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson34/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson33/index.html" id="prev_link">上一课</a></li> 
@@ -57,86 +57,81 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Semaphores</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> When you have multiple threads running you have to make sure that they don't try to manipulate the same piece of data at the same time. In this tutorial we'll use semaphores to lock threads to prevent them from crashing into each other. 
+       当多个线程同时运行时你必须确保它们不会在同一时间操作同一份数据，这一课我们将学习使用信号量来预防线程间的相互冲突。 
       </div> 
       <div class="tutText">
-        Before we start there's something that has to be said. In this tutorial we have video functions running in separate threads. You should never do this in a real application. It's just bad software design and in some cases can cause your OS to become unstable. The only reason we're doing it here is because it's a small program and nothing's going to go wrong. We're doing it here just as a simple demonstration of semaphores in action. 
+        首先声明，在这里我们会实现视频多线程播放。实践中你绝不会这样，这是一种不良的设计，有时甚至导致你的系统动荡。我们用到它是因为在这里它只是一个稳定的小玩意，用以演示信号量的操作。 
        <br /> 
-       <br /> Now with that out of the way let's start with the tutorial. In this program we're going to have two threads trying to blit surfaces to screen and update the screen at the same time. Having two threads trying to manipulate the same data at the same time is a recipe for disaster. This is where the semaphores come into play. What the semaphore will do is allow only one thread to manipulate to the screen at a time. 
+       <br /> 现在让我们回到主题上来，下面程序中的两个线程将会同时进行表面位块传输并更新屏幕。两个线程同时对同一数据进行操作是很危险的隐患，这时就要用到信号量了，信号量将会只允许其中一个线程对屏幕进行操作。 
       </div> 
-      <pre class="tutCode prettyprint linenums:1 lang-cpp">//The threads that will be used
+      <pre class="tutCode prettyprint linenums:1 lang-cpp">//将要用到的线程
 SDL_Thread *threadA = NULL;
 SDL_Thread *threadB = NULL;
 
-//The protective semaphore
+//保护性的信号量
 SDL_sem *videoLock = NULL;
 </pre> 
       <div class="tutText">
-        At the top of our program we have our two threads we're going to have running along with our semaphore. 
+        程序最上方定义了两个将用到的线程和一个相关的信号量。 
       </div> 
       <pre class="tutCode prettyprint linenums:7 lang-cpp">bool init()
 {
-    //Initialize all SDL subsystems
+    //初始化所有SDL子系统
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
         return false;    
     }
     
-    //Set up the screen
+    //设置屏幕
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
     
-    //If there was an error in setting up the screen
+    //如果设置屏幕出错
     if( screen == NULL )
     {
         return false;    
     }
     
-    //Initialize SDL_ttf
+    //初始化SDL_ttf
     if( TTF_Init() == -1 )
     {
         return false;    
     }
     
-    //Create the semaphore
+    //创建信号量
     videoLock = SDL_CreateSemaphore( 1 );
     
-    //Set the window caption
+    //设置窗口标题
     SDL_WM_SetCaption( &quot;Testing Threads&quot;, NULL );
     
-    //If everything initialized fine
+    //如果一切初始化良好
     return true;
 }
 </pre> 
       <div class="tutText">
-        Before we can use a semaphore you have to create it using SDL_CreateSemaphore(). 
+        信号量在使用之前必须使用<code>SDL_CreateSemaphore()</code>创建。
        <br /> 
-       <br /> You may be wondering what that 1 argument does. I'll explain later. 
+       <br /> 你也许会对1这个参数感到疑问，后面会解释。 
       </div> 
       <pre class="tutCode prettyprint linenums:39 lang-cpp">int blitter_a( void *data )
 {
-    //Y offset
+    //Y坐标
     int y = 10;
     
-    //Go through the surface
+    //遍历表面
     for( int b = 0; b &lt; 5; b++ )
     {
-        //Wait
+        //等待
         SDL_Delay( 200 );
     
-        //Show surface
+        //显示表面
         show_surface( ( ( SCREEN_WIDTH / 2 ) - text[ b ]-&gt;w ) / 2, y, text[ b ] );
         
-        //Move down
+        //向下移动
         y += 100;
     }
     
@@ -145,19 +140,19 @@ SDL_sem *videoLock = NULL;
 
 int blitter_b( void *data )
 {
-    //Y offset
+    //Y坐标
     int y = 10;
     
-    //Go through the surface
+    //遍历表面
     for( int b = 0; b &lt; 5; b++ )
     {
-        //Wait
+        //等待
         SDL_Delay( 200 );
     
-        //Show surface
+        //显示表面
         show_surface( ( SCREEN_WIDTH / 2 ) + ( ( ( SCREEN_WIDTH / 2 ) - text[ b ]-&gt;w ) / 2 ), y, text[ b ] );
         
-        //Move down
+        //向下移动
         y += 100;
     }
     
@@ -165,139 +160,138 @@ int blitter_b( void *data )
 }
 </pre> 
       <div class="tutText">
-        Here are our threads functions. All they do is go through an array of surfaces and show them on the screen. blitter_a() blits surfaces on the left of the screen and blitter_b() blits surfaces on the right. 
+		上面是线程的函数。它们都是传递一组表面并让其显示在屏幕上。<code>blitter_a()</code>传递表面至屏幕左侧，<code>blitter_b()</code>在右侧。 
        <br /> 
-       <br /> As you can see we're not using our usual apply_surface() function. We're using show_surface(), a modified version of apply_surface() which applies the surface using SDL_BlitSurface() and updates the screen using SDL_Flip() all in one function. You'll see it in a little bit. 
+       <br /> 可以发现，我们并没有使用平时的<code>apply_surface()</code>函数，而是<code>show_surface()</code>，一个修改过的<code>apply_surface()</code>函数。它将<code>SDL_BlitSurface()</code>提交表面和<code>SDL_Flip()</code>更新屏幕实现在一个函数内。待会你会见识到。 
        <br /> 
-       <br /> Since we're going to have the threads run at the same time we have prevent them from trying to manipulate the screen at the same time. To do this we're going to have to protect the show_surface() function using our semaphore. 
+       <br /> 接着我们让多线程同时运行，同时要防止它们同时操作屏幕。为此我们用到信号量来保护<code>show_surface()</code>函数。 
       </div> 
       <pre class="tutCode prettyprint linenums:80 lang-cpp">void show_surface( int x, int y, SDL_Surface* source )
 {
-    //Lock
+    //锁定
     SDL_SemWait( videoLock );
     
-    //Holds offsets
+    //保存坐标
     SDL_Rect offset;
     
-    //Get offsets
+    //获取坐标
     offset.x = x;
     offset.y = y;
     
     //Blit
     SDL_BlitSurface( source, NULL, screen, &amp;offset );
     
-    //Update the screen
+    //更新屏幕
     SDL_Flip( screen );
 
-    //Unlock
+    //解锁
     SDL_SemPost( videoLock );
 }
 </pre> 
       <div class="tutText">
-        Here's our show_surface() function which blits a surface then updates the screen. We also put SDL_SemWait() at the top of our function and SDL_SemPost() at the bottom. 
+        这里show_surface()函数将会传递位表面然后更新屏幕。在头尾分别是<code>SDL_SemWait()</code>和<code>SDL_SemPost()</code>。 		
        <br /> 
-       <br /> What SDL_SemWait() does is lock the semaphore: 
+       <br /> <code>SDL_SemWait()</code>用来锁上信号量： 
        <br /> 
        <div class="tutImg"> 
         <img src="lock.png" /> 
        </div> 
-       <br /> So when another thread tries to get through, it has to wait: 
+       <br /> 当另一个线程尝试进入时，它必须等待： 
        <br /> 
        <div class="tutImg"> 
         <img src="wait.png" /> 
        </div> 
-       <br /> Until SDL_SemPost() is called to unlock the semaphore: 
+       <br /> 直到<code>SDL_SemPost()</code>被调用解锁信号量： 
        <br /> 
        <div class="tutImg"> 
         <img src="unlock.png" /> 
        </div> 
-       <br /> Then the next thread does its thing and locks the semaphore behind it: 
+       <br /> 然后下一个线程执行并锁上信号量： 
        <br /> 
        <div class="tutImg"> 
         <img src="nextthread.png" /> 
        </div> 
-       <br /> Because SDL_BlitSurface() and SDL_Flip() are protected by the semaphore, only one thread can call video functions at a time so there's no conflict. 
+       <br /> 因为<code>SDL_BlitSurface()</code>和<code>SDL_Flip()</code>受信号量保护，所以同一时间只有一个线程能够调用视频函数，不会发生冲突。 
        <br /> 
-       <br /> As I mentioned earlier we passed 1 argument in SDL_CreateSemaphore() in our init() function. That 1 is how many threads can get past the semaphore before it locks. If we wanted to we could have allowed 2 threads to pass, but that would be pointless in this case. Most of the time you will only want one thread to pass through a semaphore before locking. 
+       <br /> 之前提到过<code>init()</code>函数中<code>SDL_CreateSemaphore()</code>的参数1，1代表信号量上锁前最多能有几个线程通过。我们也可以让2个线程通过，这里不再示例。大多数时候信号量上锁前，都只会让一个线程执行。 
       </div> 
-      <pre class="tutCode prettyprint linenums:101 lang-cpp">    //Show the background
+      <pre class="tutCode prettyprint linenums:101 lang-cpp">    //显示背景
     show_surface( 0, 0, background );
         
-    //Create and run the threads
+    //创建并运行线程
     threadA = SDL_CreateThread( blitter_a, NULL );
     threadB = SDL_CreateThread( blitter_b, NULL );
     
-    //Wait for the threads to finish
+    //等待线程结束
     SDL_WaitThread( threadA, NULL );
     SDL_WaitThread( threadB, NULL );
     
-    //While the user hasn't quit
+    //当用户还没退出
     while( quit == false )
     {
-        //If there's an event to handle
+        //如果有事件需要处理
         if( SDL_PollEvent( &amp;event ) )
         {
-            //If the user has Xed out the window
+            //如果用户叉掉了窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }
         }
     }
 </pre> 
       <div class="tutText">
-        In the main() thread after everything is loaded and initialized we show the background on the screen. 
+		在<code>main()</code>线程中，所有东西加载和初始完毕后，背景会呈现在屏幕上。 
        <br /> 
-       <br /> Then we run our two threads and wait for them to finish by using SDL_WaitThread(). After the threads are finished we simply wait for the user to quit. 
+       <br /> 然后我们运行两个线程并且通过<code>SDL_WaitThread()</code>来等待线程结束。线程结束后再等待用户的退出。 
       </div> 
       <pre class="tutCode prettyprint linenums:126 lang-cpp">void clean_up()
 {
-    //Destroy semaphore
+    //清除信号量
     SDL_DestroySemaphore( videoLock );
     
-    //Free the surfaces
+    //释放表面
     SDL_FreeSurface( background );
     
-    //Free text
+    //释放文本
     for( int t = 0; t &lt; 5; t++ )
     {
         SDL_FreeSurface( text[ t ] );
     }
     
-    //Close the font
+    //关闭字体
     TTF_CloseFont( font );
     
-    //Quit SDL_ttf
+    //退出SDL_ttf
     TTF_Quit();
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
 }
 </pre> 
       <div class="tutText">
-        Don't forget to clean up your semaphore when you're done with it. 
+        不要忘记使用完后清除信号量。 
        <br /> 
-       <br /> We do that in our clean up function using SDL_DestroySemaphore(). 
+       <br /> 使用<code>SDL_DestroySemaphore()</code>函数可以清除信号量。 
+	   <br /> 
+       <br />
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson34">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson33/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson35/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson34">此处下载</a>。
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+    <a class="btn btn-primary" href="../lesson35/index.html">下一课：互斥和条件</a>
+   </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
    <footer class="footer"> 
     <p class="pull-right"> <a href="#">返回页首</a> </p> 
-    <p> 翻译及网站编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
+    <p> 翻译：<a target="_blank" href="http://www.renren.com/329628836">碧海潮生</a>&nbsp;&nbsp;编辑：<a href="../../about.html">tjumyk</a>.<br /> 由来自Twitter的<a href="http://getbootstrap.com" target="_blank">Bootstrap </a>强力驱动. </p> 
     <p> 所有内容采用<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
     <p> 引用图标来自<a target="_blank" href="http://glyphicons.com">Glyphicons Free</a>, 采用 <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>许可. </p> 
    </footer> 
