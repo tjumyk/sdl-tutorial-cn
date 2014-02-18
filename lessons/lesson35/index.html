@@ -2,7 +2,7 @@
 <html>
  <head> 
   <meta charset="utf-8" /> 
-  <title>第35课 - 互斥和条件 &middot; SDL中文教程</title> 
+  <title>第35课 - 互斥锁和条件变量 &middot; SDL中文教程</title> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
   <meta name="description" content="" /> 
   <meta name="author" content="" /> 
@@ -43,9 +43,9 @@
   <div class="container"> 
    <div class="row"> 
     <div class="span10 offset1"> 
-     <h1 align="center" id="content_title">第35课 - 互斥和条件</h1> 
+     <h1 align="center" id="content_title">第35课 - 互斥锁和条件变量</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月18日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson35/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson34/index.html" id="prev_link">上一课</a></li> 
@@ -57,108 +57,112 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Mutexes and Conditions</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Here we're going to do some more advanced thread synchronization using mutexes and conditions. 
+	   这里我们将使用互斥锁和条件变量来进行更加高级的线程同步。
+		<br/><br/>
       </div> 
       <div class="tutText">
-        In case you missed the semaphores tutorial let me say this once again: 
-       <br /> In this tutorial we have video functions running in separate threads. You should never do this in a real application. It's just bad software design and in some cases can cause your OS to become unstable. The only reason we're doing it here is because it's a small program and nothing's going to go wrong. We're doing it here just as a simple demonstration of mutexes/conditions in action. Now on with the tutorial. 
+		假如你错过了“信号量”那一课，让我重新陈述一遍：
        <br /> 
-       <br /> In this tutorial we'll have a &quot;producer&quot; thread which will pick one of 5 surfaces and store it in a buffer, then show the &quot;generated&quot; surface on the left side of the screen. 
+	   本课中，我们将在不同的线程中运行视频函数。你绝对不应该在真实应用中这么做。这是坏的软件设计并且在某些情况会导致你的操作系统变得不稳定。我们这里这么做的唯一原因是这是一个小程序并且不会出任何错。我们这里这么做仅仅是作为一个简单的演示程序来演示互斥锁和条件变量。现在开始本课内容。
        <br /> 
-       <br /> Then we'll have a &quot;consumer&quot; thread which shows the surface in the buffer on the right side of the screen then empties the buffer out. 
+       <br />
+	   在本课中，我们将使用一个&quot;生产者（producer）&quot;线程来从5个表面中选取一个并存储在缓冲区中，然后在屏幕左侧显示&quot;生成的&quot;表面。
        <br /> 
-       <br /> Here's the catch: unlike in the previous tutorial where there were 5 blits in order every 1/5 of a second, in this program we're going to have the producer produce 5 times at random and the consumer consume 5 times at random. 
+       <br />
+	   接着我们将有一个&quot;消费者（consumer）&quot;线程来在屏幕右侧显示缓冲区的表面，随后清空缓冲区。
        <br /> 
-       <br /> In the last tutorial we used semaphores to prevent the two threads from trying to manipulate the screen at the same time. Here we're going to use a mutex. A mutex is just a binary semaphore or one that will only let one thread pass through it at a time. In fact the semaphores tutorial could be redone with mutexes instead. All you'd have to do is swap the semaphore with a mutex and swap the lock/unlock functions. 
        <br /> 
-       <br /> Because the threads are doing things at random and they're dependent on each other, using just a mutex isn't enough. What if the consumer tries to consume and the buffer is empty? Or producer tries to produce but the buffer is full? This is where conditions come into play. 
+	   关键在于：不像前面一课中5次blit是每1/5秒按顺序进行的，在这个程序中，生产者随机地生产5次，并且消费者随机地消费5次。
+       <br /> 
+       <br /> 
+	   在上一课中我们使用了信号量来防止两个线程同时操作屏幕。这里我们将要使用互斥锁。一个互斥锁就是个二元信号量，或者一个一次仅允许一个线程通过的信号量。实际上，“信号量”那一课可以改用互斥锁来重新做一遍。你需要做的就是把信号量改为互斥锁并且替换锁定/解锁的函数。
+       <br /> 
+       <br /> 
+	   由于线程是随机地工作的，并且它们彼此独立，仅仅使用一个互斥锁是不够的。如果消费者尝试消费而缓冲区是空的怎么办呢？或者是，生产者尝试生产但缓冲区已经满了呢？这就是条件变量发挥作用的地方了。
       </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">SDL_Surface *images[ 5 ] = { NULL, NULL, NULL, NULL, NULL };
 SDL_Surface *buffer = NULL;
 </pre> 
       <div class="tutText">
-        The buffer contains the surface &quot;produced&quot; by the producer. When the producer produces a surface, it just points to one of 5 surfaces which are loaded at the beginning of the program. 
+		缓冲区包含了生产者&quot;生产&quot;的表面。当生产者生产了一个表面后，它就指向在程序开始时加载好的5个表面中的一个。
        <br /> 
-       <br /> I just want to prevent any confusion on what the buffer is and what it holds. 
+       <br />
+	   我只是想解除任何关于“缓冲区是什么”以及“它存储什么”的疑虑。
       </div> 
-      <pre class="tutCode prettyprint linenums:3 lang-cpp">//The threads that will be used
+      <pre class="tutCode prettyprint linenums:3 lang-cpp">//将要使用的线程
 SDL_Thread *producerThread = NULL;
 SDL_Thread *consumerThread = NULL;
 
-//The protective mutex
+//保护性互斥锁
 SDL_mutex *bufferLock = NULL;
 
-//The conditions
+//条件变量
 SDL_cond *canProduce = NULL;
 SDL_cond *canConsume = NULL;
 </pre> 
       <div class="tutText">
-        Here we have our threads along with our mutex. The mutex will prevent the threads from manipulating the buffer and/or screen at the same time. 
+		这里我们有线程和互斥锁。互斥锁将防止缓冲区和/或屏幕被两个线程同时操纵。
        <br /> 
-       <br /> Then we have the conditions which will tell when the producer can produce and the consumer can consume. 
+       <br /> 
+	   然后我们有条件变量，指示何时生产者可以生成以及消费者可以消费。
       </div> 
       <pre class="tutCode prettyprint linenums:13 lang-cpp">bool init()
 {
-    //Initialize all SDL subsystems
+    //初始化所有SDL子系统
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     {
         return false;    
     }
     
-    //Set up the screen
+    //设置屏幕
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
     
-    //If there was an error in setting up the screen
+    //如果设置屏幕出现问题
     if( screen == NULL )
     {
         return false;    
     }
     
-    //Create the mutex
+    //创建互斥锁
     bufferLock = SDL_CreateMutex();
     
-    //Create Conditions
+    //创建条件变量
     canProduce = SDL_CreateCond();
     canConsume = SDL_CreateCond();
     
-    //Set the window caption
+    //设置窗口标题
     SDL_WM_SetCaption( &quot;Producer / Consumer Test&quot;, NULL );
     
-    //If everything initialized fine
+    //如果一切初始化良好
     return true;
 }
 </pre> 
       <div class="tutText">
-        Before we can use a mutex or condition we have to create them. We do so by calling SDL_CreateMutex() and SDL_CreateCond() in our init() function. 
+		在我们可以使用互斥锁或者条件变量之前，我们必须创建它们。我们通过在我们的<code>init()</code>函数中调用<code>SDL_CreateMutex()</code> 和 <code>SDL_CreateCond()</code>来创建。
       </div> 
       <pre class="tutCode prettyprint linenums:43 lang-cpp">int producer( void *data )
 {
-    //The offset of the blit.
+    //blit的坐标
     int y = 10;
     
-    //Seed random
+    //设定随机数种子
     srand( SDL_GetTicks() );
     
-    //Produce
+    //生产
     for( int p = 0; p &lt; 5; p++ )
     {
-        //Wait
+        //等待
         SDL_Delay( rand() % 1000 );
         
-        //Produce
+        //生产
         produce( 10, y );
         
-        //Move down
+        //向下移动
         y += 90;
     }
     
@@ -167,18 +171,18 @@ SDL_cond *canConsume = NULL;
 
 int consumer( void *data )
 {
-    //The offset of the blit.
+    //blit坐标
     int y = 10;
     
     for( int p = 0; p &lt; 5; p++ )
     {
-        //Wait
+        //等待
         SDL_Delay( rand() % 1000 );
         
-        //Consume
+        //消费
         consume( 330, y );
         
-        //Move down
+        //向下移动
         y += 90;
     }
     
@@ -186,131 +190,137 @@ int consumer( void *data )
 }
 </pre> 
       <div class="tutText">
-        Here we have our producer/consumer thread functions. They produce/consume 5 times at random time intervals. 
+		这里我们有生产者/消费者的线程函数。它们以随机的时间间隔生产/消费5次。
       </div> 
       <pre class="tutCode prettyprint linenums:86 lang-cpp">void produce( int x, int y )
 {
-    //Lock
+    //锁定
     SDL_mutexP( bufferLock );
     
-    //If the buffer is full
+    //如果缓冲区满了
     if( buffer != NULL )
     {
-        //Wait for buffer to be cleared
+        //等待缓冲区被清空
         SDL_CondWait( canProduce, bufferLock );
     }
     
-    //Fill and show buffer
+    //填充并显示缓冲区
     buffer = images[ rand() % 5 ];
     apply_surface( x, y, buffer, screen );
     
-    //Update the screen
+    //更新屏幕
     SDL_Flip( screen );
     
-    //Unlock
+    //解锁
     SDL_mutexV( bufferLock );
     
-    //Signal consumer
+    //向消费者发信号
     SDL_CondSignal( canConsume );
 }
 
 void consume( int x, int y )
 {
-    //Lock
+    //锁定
     SDL_mutexP( bufferLock );
     
-    //If the buffer is empty
+    //如果缓冲区是空的
     if( buffer == NULL )
     {
-        //Wait for buffer to be filled
+        //等待缓冲区被填充
         SDL_CondWait( canConsume, bufferLock );
     }
     
-    //Show and empty buffer
+    //显示并清空缓冲区
     apply_surface( x, y, buffer, screen );
     buffer = NULL;
     
-    //Update the screen
+    //更新屏幕
     SDL_Flip( screen );
     
-    //Unlock
+    //解锁
     SDL_mutexV( bufferLock );
     
-    //Signal producer
+    //向生产者发信号
     SDL_CondSignal( canProduce );
 }
 </pre> 
       <div class="tutText">
-        Here are our producer/consumer functions which are each called 5 times at random. How do they work? Well let's take this example situation: 
+		这里是我们的生产者/消费者函数，都随机地被调用5次。它们是如何工作的？让我们看看这个范例情形：
        <br /> 
-       <br /> Let's say the consumer function is called first. It goes in and calls SDL_mutexP() to lock the mutex: 
+       <br />
+	   假设消费者函数是首先被调用的。它进入函数体并调用<code>SDL_mutexP()</code>锁定了互斥锁。
        <br /> 
        <div class="tutImg"> 
         <img src="lock.png" /> 
        </div> 
-       <br /> Then the producer tries to go in but can't because the mutex is locked. The mutex makes sure that the buffer and/or screen aren't manipulated by two threads at once. 
+       <br />
+	   然后生产者尝试进入但无法完成，因为互斥锁是被锁定的状态。互斥锁确保了缓冲区和/或屏幕不会被两个线程同时操纵。
        <br /> 
        <div class="tutImg"> 
         <img src="wait.png" /> 
        </div> 
-       <br /> But let's say the buffer is empty. Now the consumer calls SDL_CondWait() which makes the thread wait on the &quot;canConsume&quot; condition. It also unlocks the mutex. 
+       <br /> 
+	   但是假如缓冲区是空的。现在消费者调用了<code>SDL_CondWait()</code>，它会让这个线程等待&quot;canConsume&quot;条件。它也解锁了互斥锁。
        <br /> 
        <div class="tutImg"> 
         <img src="condwait.png" /> 
        </div> 
-       <br /> Now the producer can go through and produce. 
+       <br /> 现在生产者可以进入并进行了生产。
        <br /> 
        <div class="tutImg"> 
         <img src="produce.png" /> 
        </div> 
-       <br /> When the producer is done it calls SDL_mutexV() to unlock the mutex. But the consumer thread is still sleeping. 
+       <br /> 
+	   当生产者完成生产后，它调用了<code>SDL_mutexV()</code>来解锁了互斥锁。但是消费者线程还在睡眠。
        <div class="tutImg"> 
         <img src="produced.png" /> 
        </div> 
-       <br /> That's why we call SDL_CondSignal() to signal the consumer waiting on the &quot;canConsume&quot; condition. 
+       <br /> 
+	   那就是为什么我们要调用<code>SDL_CondSignal()</code>来向等待着&quot;canConsume&quot;条件的消费者发信号。
        <div class="tutImg"> 
         <img src="signal.png" /> 
        </div> 
-       <br /> Now that SDL_CondWait() has been signaled, the consumer wakes up, the mutex is relocked and now the consumer does its thing. 
+       <br />
+	   既然<code>SDL_CondWait()</code>收到了信号，消费者就醒来，互斥锁被重新加锁，并且现在消费者开始了消费。
        <div class="tutImg"> 
         <img src="consume.png" /> 
        </div> 
-       <br /> The threads not only stay out of each other's way, they also wait on and signal on each other thanks to mutexes/conditions. 
+       <br /> 
+	   这两个线程不仅避开了互相的路，它们还能互相等待和发送信号，这多亏了互斥锁/条件变量。
       </div> 
       <pre class="tutCode prettyprint linenums:137 lang-cpp">void clean_up()
 {
-    //Destroy mutex
+    //消除互斥锁
     SDL_DestroyMutex( bufferLock );
     
-    //Destroy condition
+    //消除条件变量
     SDL_DestroyCond( canProduce );
     SDL_DestroyCond( canConsume );
     
-    //Free the surfaces
+    //释放表面
     for( int i = 0; i &lt; 5; i++ )
     {
         SDL_FreeSurface( images[ i ] );
     }
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();
 }
 </pre> 
       <div class="tutText">
-        As always, don't forget to free anything dynamically allocated. Here we free our mutex and conditions using SDL_DestroyMutex() and SDL_DestroyCond(). 
+		就如一直做的那样，不要忘了释放任何动态分配的东西。这里我们用<code>SDL_DestroyMutex()</code> 和 <code>SDL_DestroyCond()</code>释放了我们的互斥锁和条件变量。
+		<br/>
+		<br/>
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson35">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson34/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson36/index.php">Next Tutorial</a> 
-       <br /> 
+		本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson35">此处下载</a>。
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+    <a class="btn btn-primary" href="../lesson36/index.html">下一课：在SDL中使用OpenGL</a>
+   </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
