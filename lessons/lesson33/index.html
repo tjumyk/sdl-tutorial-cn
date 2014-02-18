@@ -45,7 +45,7 @@
     <div class="span10 offset1"> 
      <h1 align="center" id="content_title">第33课 - 多线程</h1> 
      <br /> 
-     <p align="center"> <span class="label label-info">更新时间：2012年6月21日</span> </p> 
+     <p align="center"> <span class="label label-info">更新时间：2014年2月18日</span> </p> 
      <ul class="quick-links"> 
       <li><a class="btn btn-info" target="_blank" id="origin_link" href="http://lazyfoo.net/SDL_tutorials/lesson33/index.php">原文链接</a></li> 
       <li><a class="btn" href="../lesson32/index.html" id="prev_link">上一课</a></li> 
@@ -57,17 +57,12 @@
    <!-- Main contents start from here --> 
    <div class="row"> 
     <div class="well span10 offset1"> 
-     <div class="alert alert-warning"> 
-      <strong>译者注：</strong>本页面还未完成翻译，如有兴趣参与本项目，请 
-      <strong><a href="../../about.html">联系我</a></strong>！ 
-     </div> 
      <div class="content">
       <div class="tutPreface"> 
-       <h1 class="tutHead">Multithreading</h1> 
        <div class="tutImg"> 
         <img src="preview.jpg" /> 
        </div> 
-       <h6>Last Updated 3/28/10</h6> Up until now you've been making programs that only do one process at a time. With multithreading, you can make programs that can do multiple processes at once. This tutorial will introduce you to SDL's cross platform multithreading capabilities. 
+	   直到现在，你都在写那种一个时刻只能进行一个操作的程序。有了多线程，你就可以编写一次执行多个操作的程序。本课将向你介绍SDL跨平台的多线程能力。
       </div> 
       <pre class="tutCode prettyprint linenums:1 lang-cpp">#include &quot;SDL/SDL.h&quot;
 #include &quot;SDL/SDL_image.h&quot;
@@ -75,25 +70,26 @@
 #include &lt;string&gt;
 </pre> 
       <div class="tutText">
-        First off we have to remember to include the header for SDL threads. 
+		首先，我们必须记得去包含SDL线程的头文件。
       </div> 
-      <pre class="tutCode prettyprint linenums:5 lang-cpp">//The thread that will be used
+      <pre class="tutCode prettyprint linenums:5 lang-cpp">//将要被使用的线程
 SDL_Thread *thread = NULL;
 
-//Quit flag
+//退出标识
 bool quit = false;
 </pre> 
       <div class="tutText">
-        Here are two important global variables. 
+		这里是两个重要的全局变量。
        <br /> 
-       <br /> First we have the SDL_Thread which is going to be the thread we are going to run. Then we have our &quot;quit&quot; variable, which we usually have as a local variable in main() but this time we need it to be global. 
+       <br />
+	   首先我们有SDL_Thread，它是我们将要运行的线程。然后我们有&quot;quit&quot;变量，它通常用来作为<code>main()</code>函数的局部变量，但这次我们需要它作为全局变量。
       </div> 
       <pre class="tutCode prettyprint linenums:10 lang-cpp">int my_thread( void *data )
 {
-    //While the program is not over
+    //当程序还未结束
     while( quit == false )
     {
-        //Do the caption animation
+        //运行标题动画
         SDL_WM_SetCaption( &quot;Thread is running&quot;, NULL );
         SDL_Delay( 250 );
         
@@ -111,81 +107,85 @@ bool quit = false;
 }
 </pre> 
       <div class="tutText">
-        Here's the function that's going to be our thread. All it does is put a different caption every quarter of a second while the user has not quit. Now you see why the &quot;quit&quot; variable needed to be global. 
+		这里是将要作为我们的线程的函数。它所做的事情是当用户没有退出时，每1/4秒设置一个不同的窗口标题。现在你可以看到为何&quot;quit&quot;变量需要设为全局的了。
        <br /> 
-       <br /> In order for a function to be used as a thread in SDL it has to meet 2 requirements. First off it must return an int. Secondly it must have the argument that is a pointer to a data type of void. If the function does not meet both of these requirements it cannot be used as a thread. 
+       <br /> 
+	   为了让一个函数能在SDL中当作一个线程来使用，它必须满足2个条件。首先是它必须返回一个整数（int）。第二，它必须有一个指向void类型数据的指针作为参数。如果这两个条件没有全部满足，这个函数就不能被用作线程。
       </div> 
-      <pre class="tutCode prettyprint linenums:31 lang-cpp">    //Create and run the thread
+      <pre class="tutCode prettyprint linenums:31 lang-cpp">    //创建并运行线程
     thread = SDL_CreateThread( my_thread, NULL );
 </pre> 
       <div class="tutText">
-        In the main function after everything is initialized and loaded, we call SDL_CreateThread(). 
+		在main函数里，在所有东西都初始化并加载好后，我们调用<code>SDL_CreateThread()</code>。
        <br /> 
-       <br /> SDL_CreateThread() takes in the function in the first argument, turns it into a thread and then runs the newly made thread. It returns a pointer to the thread so we can keep track of it. 
+       <br />
+	   <code>SDL_CreateThread()</code>将函数作为第一个参数，将它变成一个线程，然后运行这个新创建的线程。它返回一个指向这个线程的指针，所以我们可以跟踪这个线程。
       </div> 
-      <pre class="tutCode prettyprint linenums:33 lang-cpp">    //Apply the image to the screen
+      <pre class="tutCode prettyprint linenums:33 lang-cpp">    //将图像应用到屏幕上
     apply_surface( 0, 0, image, screen );
     
-    //Update the screen
+    //更新屏幕
     if( SDL_Flip( screen ) == -1 )
     {
         return 1;    
     }
     
-    //While the user hasn't quit
+    //当用户还未退出
     while( quit == false )
     {
-        //While there's events to handle
+        //当有事件需要处理
         while( SDL_PollEvent( &amp;event ) )
         {
-            //If the user has Xed out the window
+            //如果用户叉掉了窗口
             if( event.type == SDL_QUIT )
             {
-                //Quit the program
+                //退出程序
                 quit = true;
             }    
         }
     }
 </pre> 
       <div class="tutText">
-        Then we show the image on the screen, then wait for the user to quit. 
+		然后我们在屏幕上显示图像，接着等待用户退出。
        <br /> 
-       <br /> While this is going on, the caption is changing in our thread that is currently running parallel to what we're doing. Thanks to SDL's multithreading capabilities, you're able to do these two things simultaneously. 
+       <br />
+	   当这个运行着的时候，窗口标题在我们的线程中进行变化，并且这个线程与我们当前正在运行的任务是平行地运行的。多亏了SDL的多线程能力，你可以同时做这两件事了。
       </div> 
       <pre class="tutCode prettyprint linenums:56 lang-cpp">void clean_up()
 {
-    //Stop the thread
+    //停止线程
     SDL_KillThread( thread );
     
-    //Free the surface
+    //释放表面
     SDL_FreeSurface( image );
     
-    //Quit SDL
+    //退出SDL
     SDL_Quit();    
 }
 </pre> 
       <div class="tutText">
-        Here's our clean up function. 
+		这是我们的清理函数。
        <br /> 
-       <br /> First we call SDL_KillThread() which instantly stops the thread. Typically you should wait for the thread to finish, but in this case it won't do any harm to just stop it. Then we free the surface, and quit SDL. 
+       <br /> 
+	   首先我们调用<code>SDL_KillThread()</code>立即停止线程。一般你应该等待线程完成，但在这种情况下，立即停止并不会有什么损害。然后我们释放表面并退出SDL。
       </div> 
       <div class="tutText">
-        When it comes to using multithreading in games, the general rule is &quot;Don't&quot;. There's so much more you have to deal with than in single threaded programs. With the rise of multicore CPUs, it's tempting to jump right in. 
+		当提到在游戏中使用多线程时，一般的规则是&quot;不&quot;。相比单线程程序，你有大量更多的事情需要处理。随着多核CPU的兴起，人们会忍不住投身于这个领域的开发。
        <br /> 
-       <br /> However there are cases where multithreading can be useful in game. If you're new to game programming, don't use it until you're more experienced. Multithreading can be more of a headache than it's worth. You have to know thread synchronization (which the next two tutorials teach), and how to deal with concurrency. Only when you have a good handle on software architecture should you use this powerful tool. 
+       <br /> 
+	   但是，多线程在游戏中的某些地方还是很有用的。如果你是游戏开发的新手，不要使用多线程，除非当你变得更有经验了。多线程相对其价值来说，可能更是个令人头疼的问题。你必须了解线程同步（这是下面两课将要讲的内容）和处理并发。只有当你对软件架构有好的把握时，你才可以使用这个强大的工具。
+	   <br /> 
+       <br />
       </div> 
       <div class="tutFooter">
-        Download the media and source code for this tutorial 
-       <a class="tutLink" href="../../downloads/index.php@file=SDLTut_lesson33">here</a>. 
-       <br /> 
-       <br /> 
-       <a class="leftNav" href="../lesson32/index.php">Previous Tutorial</a> 
-       <a class="rightNav" href="../lesson34/index.php">Next Tutorial</a> 
-       <br /> 
+        本课所用的多媒体文件和源代码可从<a href="http://lazyfoo.net/downloads/index.php?file=SDLTut_lesson33">此处下载</a>。
       </div>
      </div> 
     </div> 
    </div> 
+   <p align="center">
+    <a class="btn btn-primary" href="../lesson34/index.html">下一课：信号量</a>
+   </p>
    <!-- End of main contents--> 
    <!-- Footer
       ================================================== --> 
