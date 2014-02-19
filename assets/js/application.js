@@ -183,36 +183,85 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 
 }(window.jQuery)
 
-// Add uyan plugin
-$('div.content').append($('<div id="uyan_frame" style="margin-top:20px"></div><script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1529249"></script>'));
+$(document).ready(function(){
+	// Add uyan plugin
+	$('div.content').append($('<div id="uyan_frame" style="margin-top:20px"></div><script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1529249"></script>'));
 
-// Ready for trying new version
-$('ul.nav').append($('<li><a class="try_new" href="#tryNewModal" data-toggle="modal">尝试新版</a></li>'));
-$('body').prepend($(
-'<div id="tryNewModal" class="modal hide fade" tabindex="-1">\
-  <div class="modal-header">\
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\
-    <h3 id="myModalLabel">尝鲜提示</h3>\
-  </div>\
-  <div class="modal-body">\
-    <p>即将进入尝鲜模式，该模式下将临时启用<code>PJAX</code>技术来加载页面，全程无刷新异步加载，大幅减少加载时间。</p>\
-	<p style="text-align:center;font-size:20px;margin:12px">PJAX = PushState + AJAX</p>\
-	<p>另外，该模式将启用最新版本的二代Bootstrap框架(2.3.2)，所以会有小幅<b>界面优化</b>。</p>\
-	<p>但请冷静！由于代码还<b>未稳定</b>，可能存在各种潜在问题。尤其在各种<b>浏览器的兼容</b>方面，作者表示十分伤脑筋。如果遇到问题，敬请谅解并请告知作者！</p>\
-	<p>尝鲜模式在您<b>刷新本站任意页面后自动取消</b>，您可以按顶部导航栏的“尝试新版”按钮再次进入。</p>\
-  </div>\
-  <div class="modal-footer">\
-    <button class="btn" data-dismiss="modal">取消</button>\
-    <button class="btn btn-primary try_new_confirm">确定尝鲜</button>\
-  </div>\
-</div>'));
-/* hot fix : "fade of modal not supported in IE10" */
-if(navigator.appVersion.match(/MSIE 10.0/)){
-	$('.modal').removeClass('fade');
-}
-$('.try_new_confirm').on('click',function(e){
-	e.preventDefault();
-	window.location.href = "/sdl-tutorial-cn/jump.html?"+window.location.href;
+	// Ready for trying new version
+	if(window.history.pushState && window.history.replaceState){
+		$('ul.nav').append($('<li><a class="try_new" href="#tryNewModal" data-toggle="modal">极速模式</a></li>'));
+		$('body').prepend($(
+		'<div id="tryNewModal" class="modal hide fade" tabindex="-1">\
+		  <div class="modal-header">\
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\
+			<h3 id="myModalLabel">试验功能提示</h3>\
+		  </div>\
+		  <div class="modal-body">\
+			<p>即将尝试进入极速模式，该模式下将临时启用<code>PJAX</code>技术来加载页面，全程<b>无刷新异步加载</b>，大幅减少加载时间。</p>\
+			<p style="text-align:center;font-size:20px;margin:12px">PJAX = PushState + AJAX</p>\
+			<p>该模式仅在最新的Chrome、Firefox以及IE10上测试过，其他浏览器慎入。</p>\
+			<p>极速模式在您<b>刷新本站任意页面后自动取消</b>，您可以按顶部导航栏的“极速模式”按钮再次进入。</p>\
+		  </div>\
+		  <div class="modal-footer">\
+			<button class="btn" data-dismiss="modal">取消</button>\
+			<button class="btn btn-primary try_new_confirm">启用极速模式</button>\
+		  </div>\
+		</div>'));
+	}
+	
+	/* hot fix : "fade of modal not supported in IE10" */
+	if(navigator.appVersion.match(/MSIE 10.0/)){
+		$('.modal').removeClass('fade');
+	}
+	$('.try_new_confirm').on('click',function(e){
+		e.preventDefault();
+		window.location.href = "/sdl-tutorial-cn/jump.html?"+window.location.href;
+	});
+	
+	function getSys(){
+		var Sys = {};
+        var ua = navigator.userAgent.toLowerCase();
+        var s;
+        (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
+        (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+        (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+        (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+		return Sys;
+	}
+	
+	var sys = getSys();
+	if(sys.ie && parseFloat(sys.ie)<=8.0){
+		$('.navbar').after($(
+		'<div id="installChrome" class="hidden-phone" style="position:fixed;top:40px;width:100%;z-index:2">\
+          <p class="alert alert-info" align="center">为了您更好的阅读体验，请使用支持最新HTML5及CSS3的现代浏览器。推荐使用 <a target="_blank" href="http://chrome.google.com"><i class="chrome-icon"></i>Chrome(谷歌)浏览器</a>！</p>\
+        </div>'));
+	}
+	
+	function scrollTo(y){
+		if(navigator.userAgent.match(/Android/i)){
+			if(y <= 0)
+				y = 1;
+		}
+		//console.info('[scroll]: '+y);
+	    $("html, body").animate({scrollTop:y},'500', 'swing');
+	}
+	
+	$("a[href]").on('click',function(e){
+		var link = $(this).attr('href');
+		if(link.match(/^#/)){ // inner anchor
+			var href = $(this).attr('href');
+			var anchor = href.substring(1);
+			if(anchor == '')
+				scrollTo(0);
+			else{
+				var offset = $('a[name="'+anchor+'"]').offset();
+				if(offset)
+					scrollTo(offset.top);
+				else
+					scrollTo(0);
+			}
+			e.preventDefault();
+		}
+	});
 });
-if(!navigator.appVersion.match(/chrome/i))
-	$('#installChrome').show();

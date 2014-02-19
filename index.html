@@ -17,22 +17,23 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>    <![endif]-->
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="shortcut icon" href="assets/ico/favicon.ico" >
+	<link rel="shortcut icon" sizes="196x196" href="assets/ico/favicon.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
     <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-32915160-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-  </script>
+     var _gaq = _gaq || [];
+     _gaq.push(['_setAccount', 'UA-32915160-1']);
+     _gaq.push(['_trackPageview']);
+    
+     (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+    </script>
   </head>
   <body data-spy="scroll" data-target=".subnav" data-offset="50">
     <!-- Navbar
@@ -77,49 +78,39 @@
           <li><a target="_blank" href="https://github.com/tjumyk/sdl-tutorial-cn/">在 GitHub上浏览此项目</a></li>
           <li><a target="_blank" href="https://github.com/tjumyk/sdl-tutorial-cn/issues?state=open">提交问题</a></li>
         </ul>
+		
+		<div class="get-qrcode"><img src="assets/img/qrcode.png"></img></div>
       </header>
       <hr style="">
       <div class="marketing">
         <h1>什么是SDL？</h1>
         <p class="marketing-byline">SDL是 “Simple DirectMedia Layer”的缩写，它是一个开源的项目。</p>
         <div class="row">
-          <div class="span4"> <img class="bs-icon" src="assets/img/SDL_logo.png"> </div>
-          <div class="span8">
-            <div class="row">
-              <div class="span4"> <img class="bs-icon" src="assets/img/glyphicons/glyphicons_008_film.png">
-                <h2>为多媒体编程而设计</h2>
-                <p>SDL是一个跨平台的多媒体库，它通过OpenGL和2D视频帧缓冲，提供了针对音频、视频、键盘、鼠标、控制杆及3D硬件的低级别的访问接口。它在MPEG播放软件、模拟器以及许多游戏中得到广泛的应用，其中包含了获得大奖的“文明：权力的呼唤”的Linux 版本。</p>
-              </div>
-              <div class="span4"> <img class="bs-icon" src="assets/img/glyphicons/glyphicons_083_random.png">
-                <h2>优越的跨平台特性</h2>
-                <p>SDL支持以下操作系统：Linux, Windows, Windows CE, BeOS, MacOS, Mac OS X, FreeBSD, NetBSD, OpenBSD, BSD/OS, Solaris, IRIX,以及 QNX。同时代码中包含了针对AmigaOS, Dreamcast, Atari, AIX, OSF/Tru64, RISC OS, SymbianOS, 和OS/2的支持，但这些并不是正式的支持。</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="span4"> <img class="bs-icon" src="assets/img/glyphicons/glyphicons_030_pencil.png">
-                <h2>支持多种程序语言</h2>
-                <p>SDL是用C编写的，但可以原生地配合C++使用，并且它拥有一些其他程序语言的绑定，这包括：Ada, C#, D, Eiffel, Erlang, Euphoria, Go, Guile, Haskell, Java, Lisp, Lua, ML, Objective C, Pascal, Perl, PHP, Pike, Pliant, Python, Ruby, Smalltalk, 以及 Tcl。</p>
-              </div>
-              <div class="span4"> <img class="bs-icon" src="assets/img/glyphicons/glyphicons_274_beer.png">
-                <h2>因为开源，所以自由</h2>
-                <p>SDL采用GNU的LGPL第二版许可发行。该许可允许你自由地链接其动态链接库，甚至可以在商业软件中自由地使用。</p>
-              </div>
-            </div>
+          <div class="span4"> 
+ 		    <img class="bs-icon" src="assets/img/SDL_logo.png"></div>
+          <div class="span4">
+			<img class="bs-icon" src="assets/img/glyphicons/glyphicons_008_film.png">
+			<h2>为多媒体编程而设计</h2>
+			<p>SDL是一个跨平台的多媒体库，它通过OpenGL和2D视频帧缓冲，提供了针对音频、视频、键盘、鼠标、控制杆及3D硬件的低级别的访问接口。它在MPEG播放软件、模拟器以及许多游戏中得到广泛的应用，其中包含了获得大奖的“文明：权力的呼唤”的Linux 版本。</p>
+			<br/>
+			<img class="bs-icon" src="assets/img/glyphicons/glyphicons_083_random.png">
+			<h2>优越的跨平台特性</h2>
+			<p>SDL支持以下操作系统：Linux, Windows, Windows CE, BeOS, MacOS, Mac OS X, FreeBSD, NetBSD, OpenBSD, BSD/OS, Solaris, IRIX,以及 QNX。同时代码中包含了针对AmigaOS, Dreamcast, Atari, AIX, OSF/Tru64, RISC OS, SymbianOS, 和OS/2的支持，但这些并不是正式的支持。</p>
+          </div>            
+		  <div class="span4"> 
+			<img class="bs-icon" src="assets/img/glyphicons/glyphicons_030_pencil.png">
+			<h2>支持多种程序语言</h2>
+			<p>SDL是用C编写的，但可以原生地配合C++使用，并且它拥有一些其他程序语言的绑定，这包括：Ada, C#, D, Eiffel, Erlang, Euphoria, Go, Guile, Haskell, Java, Lisp, Lua, ML, Objective C, Pascal, Perl, PHP, Pike, Pliant, Python, Ruby, Smalltalk, 以及 Tcl。</p>
+			<br/>
+			<img class="bs-icon" src="assets/img/glyphicons/glyphicons_274_beer.png">
+			<h2>因为开源，所以自由</h2>
+			<p>SDL采用GNU的LGPL第二版许可发行。该许可允许你自由地链接其动态链接库，甚至可以在商业软件中自由地使用。</p>
           </div>
         </div>
       </div>
       <!-- Footer
       ================================================== -->
       <footer class="footer">
-        <div id="installChrome" style="display:none" class="row hidden-phone">
-          <p class="alert alert-info" align="center">页面显示混乱或外观太难看？可能是因为您的浏览器已经out了，对HTML5和CSS3没有较好的支持。推荐使用 <a
-
-              target="_blank" href="http://chrome.google.com" rel="tooltip"
-
-              class="tooltip-test" data-original-title="点此安装最新Chrome浏览器"><img
-
-                class="bs-icon" src="assets/img/chrome.png"> Chrome</a>！这是忠告，不是广告...</p>
-        </div>
         <br>
         <br>
         <p class="pull-right"> <a href="#">返回页首</a> </p>
@@ -142,27 +133,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/google-code-prettify/prettify.js"></script>
-    <script src="assets/js/bootstrap-transition.js"></script>
-    <script src="assets/js/bootstrap-alert.js"></script>
-    <script src="assets/js/bootstrap-modal.js"></script>
-    <script src="assets/js/bootstrap-dropdown.js"></script>
-    <script src="assets/js/bootstrap-scrollspy.js"></script>
-    <script src="assets/js/bootstrap-tab.js"></script>
-    <script src="assets/js/bootstrap-tooltip.js"></script>
-    <script src="assets/js/bootstrap-popover.js"></script>
-    <script src="assets/js/bootstrap-button.js"></script>
-    <script src="assets/js/bootstrap-collapse.js"></script>
-    <script src="assets/js/bootstrap-carousel.js"></script>
-    <script src="assets/js/bootstrap-typeahead.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/application.js"></script>
-    <script type="text/javascript" src="assets/js/jquery.qrcode.min.js"></script>
-    <!-- 
-  <script type="text/javascript">    var link = window.location.href.toLowerCase();    var host = window.location.hostname.toLowerCase();     var head = link.split(":", 1)[0];    if(head == "file" || head == "mk" || head == "chrome-extension" || host == "127.0.0.1"){    	$('#btn3').toggleClass("hidden");    	$('#btn1').remove();    	$('#btn2').remove();
-    	if(head == "chrome-extension"){    		$('#installChrome').remove();    	}    }else{//Online    	$('#btn1').toggleClass("hidden");    	$('#btn2').toggleClass("hidden");    	$('#btn3').remove();    } 
-  </script>  -->
-    <script type="text/javascript">
-    $('#qrcode').qrcode({width:160,height:160,text:$('#downloadLink').attr('href')});
-  </script>
-    
   </body>
 </html>

@@ -259,6 +259,26 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 			$('div.content').append($('<div id="uyan_frame" style="margin-top:20px"></div><script type="text/javascript" src="http://api.uyan.cc/?'+params+'"></script>'));
 		}
 		
+		function getSys(){
+			var Sys = {};
+			var ua = navigator.userAgent.toLowerCase();
+			var s;
+			(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
+			(s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+			(s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+			(s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+			(s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+			return Sys;
+		}
+		
+		var sys = getSys();
+		if(sys.ie && parseFloat(sys.ie)<=8.0){
+			$('.navbar').after($(
+			'<div id="installChrome" class="hidden-phone" style="position:fixed;top:40px;width:100%;z-index:2">\
+			  <p class="alert alert-info" align="center">为了您更好的阅读体验，请使用支持最新HTML5及CSS3的现代浏览器。推荐使用 <a target="_blank" href="http://chrome.google.com"><i class="chrome-icon"></i>Chrome(谷歌)浏览器</a>！</p>\
+			</div>'));
+		}
+		
 		$("a[href]").on('click',function(e){
 			var link = $(this).attr('href');
 			if(link.match(/^(http:)/)) // outer link
@@ -328,8 +348,13 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 					var anchor = link.substring(ind+1);
 					if(anchor == '')
 						scrollTo(0);
-					else
-						scrollTo($('a[name="'+anchor+'"]').offset().top);
+					else{
+						var offset = $('a[name="'+anchor+'"]').offset();
+						if(offset)
+							scrollTo(offset.top);
+						else
+							scrollTo(0);
+					}
 				}else
 					scrollTo(0);
 			}else
@@ -353,11 +378,16 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 		var ind = link.indexOf('#');
 		if(ind > 0){
 			var anchor = link.substring(ind+1);
-			console.info('[scroll anchor]: '+anchor);
+			//console.info('[scroll anchor]: '+anchor);
 			if(anchor == '')
 				scrollTo(0);
-			else
-				scrollTo($('a[name="'+anchor+'"]').offset().top);
+			else{
+				var offset = $('a[name="'+anchor+'"]').offset();
+				if(offset)
+					scrollTo(offset.top);
+				else
+					scrollTo(0);
+			}
 		}else
 			scrollTo(0);
 		setupPjaxPage();
@@ -369,7 +399,7 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 		var firstUrl = window.location.href;
 		var firstEvent = true;
 		window.onpopstate = function(e){
-			console.info(e.state);
+			//console.info(e.state);
 			if(firstEvent){
 				firstEvent = false;
 				return;
