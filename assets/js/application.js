@@ -189,24 +189,27 @@ $(document).ready(function(){
 
 	// Ready for trying new version
 	if(window.history.pushState && window.history.replaceState){
-		$('ul.nav').append($('<li><a class="try_new" href="#tryNewModal" data-toggle="modal">极速模式</a></li>'));
-		$('body').prepend($(
-		'<div id="tryNewModal" class="modal hide fade" tabindex="-1">\
-		  <div class="modal-header">\
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\
-			<h3 id="myModalLabel">试验功能提示</h3>\
-		  </div>\
-		  <div class="modal-body">\
-			<p>即将尝试进入极速模式，该模式下将临时启用<code>PJAX</code>技术来加载页面，全程<b>无刷新异步加载</b>，大幅减少加载时间。</p>\
-			<p style="text-align:center;font-size:20px;margin:12px">PJAX = PushState + AJAX</p>\
-			<p>该模式仅在最新的Chrome、Firefox以及IE10上测试过，其他浏览器慎入。</p>\
-			<p>极速模式在您<b>刷新本站任意页面后自动取消</b>，您可以按顶部导航栏的“极速模式”按钮再次进入。</p>\
-		  </div>\
-		  <div class="modal-footer">\
-			<button class="btn" data-dismiss="modal">取消</button>\
-			<button class="btn btn-primary try_new_confirm">启用极速模式</button>\
-		  </div>\
-		</div>'));
+		var nav = $('ul.nav').first();
+		if(nav){
+			nav.append($('<li><a class="try_new" href="#tryNewModal" data-toggle="modal">极速模式</a></li>'));
+			$('body').prepend($(
+			'<div id="tryNewModal" class="modal hide fade" tabindex="-1">\
+			  <div class="modal-header">\
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\
+				<h3 id="myModalLabel">试验功能提示</h3>\
+			  </div>\
+			  <div class="modal-body">\
+				<p>即将尝试进入极速模式，该模式下将临时启用<code>PJAX</code>技术来加载页面，全程<b>无刷新异步加载</b>，大幅减少加载时间。</p>\
+				<p style="text-align:center;font-size:20px;margin:12px">PJAX = PushState + AJAX</p>\
+				<p>该模式仅在最新的Chrome、Firefox以及IE10上测试过，其他浏览器慎入。</p>\
+				<p>极速模式在您<b>刷新本站任意页面后自动取消</b>，您可以按顶部导航栏的“极速模式”按钮再次进入。</p>\
+			  </div>\
+			  <div class="modal-footer">\
+				<button class="btn" data-dismiss="modal">取消</button>\
+				<button class="btn btn-primary try_new_confirm">启用极速模式</button>\
+			  </div>\
+			</div>'));
+		}
 	}
 	
 	/* hot fix : "fade of modal not supported in IE10" */
@@ -264,4 +267,11 @@ $(document).ready(function(){
 			e.preventDefault();
 		}
 	});
+	
+	var href = window.location.href;
+	var ind = href.indexOf('#');
+	if(ind < 0 || ind >= href.length - 1){//no anchor
+		if(window.scrollY == 0 && navigator.userAgent.match(/Android/i))
+			scrollTo(0);
+	}
 });
