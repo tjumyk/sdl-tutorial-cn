@@ -139,7 +139,7 @@ SDL_Rect clip[ 4 ];
        </div>就像这样。<br> 
        <br> 现在，我们已经准备好blit精灵图中单独的子图了。<br></div> 
       <pre class="tutCode prettyprint linenums:45 lang-cpp">    //用白色填充窗口
-    SDL_FillRect( screen, screen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
+    SDL_FillRect( screen, &screen-&gt;clip_rect, SDL_MapRGB( screen-&gt;format, 0xFF, 0xFF, 0xFF ) );
 </pre> 
       <div class="tutText">现在我们使用<code>SDL_FillRect()</code>函数将窗口填充成白色。这个函数的作用是在第一个参数定义的表面上，并在第二个参数定义的区域内，使用第三个参数定义的颜色进行填充操作。<br> 
        <br>这里我们传入的第二个参数是表面的<code>clip_rect</code> ，这实际上是这个表面的整个区域。 
