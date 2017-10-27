@@ -360,7 +360,18 @@ $.ajaxTransport('jsonpi', function(opts, originalOptions, jqXHR) {
 			}else
 				scrollTo(scroll);
 			setupPjaxPage();
-			$('#pjax-loader').fadeOut();
+            // setup ga
+            if(window.ga){
+                ga('set', 'title', document.title);
+                var location_url = document.location.href;
+                var hash_index = location_url.indexOf('#');
+                if(hash_index > 0)
+                    location_url = location_url.substring(0, hash_index);
+                ga('set', 'location', location_url);
+                ga('set', 'page', document.location.pathname);
+                ga('send', 'pageview');
+            }
+            $('#pjax-loader').fadeOut();
 		}).complete(null);
 	}
 	
